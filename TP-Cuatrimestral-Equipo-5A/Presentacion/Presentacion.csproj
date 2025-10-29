@@ -68,9 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FormularioRegistro.aspx" />
+    <Content Include="GestionPacientes.aspx" />
+    <Content Include="GestionPersonal.aspx" />
     <Content Include="GestionUsuarios.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
+    <Content Include="MenuAdministrador.aspx" />
     <Content Include="MenuMedicos.aspx" />
     <Content Include="MenuPrincipal.aspx" />
     <Content Include="MenuRecepcionista.aspx" />
@@ -84,6 +87,20 @@
     </Compile>
     <Compile Include="FormularioRegistro.aspx.designer.cs">
       <DependentUpon>FormularioRegistro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GestionPacientes.aspx.cs">
+      <DependentUpon>GestionPacientes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GestionPacientes.aspx.designer.cs">
+      <DependentUpon>GestionPacientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GestionPersonal.aspx.cs">
+      <DependentUpon>GestionPersonal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GestionPersonal.aspx.designer.cs">
+      <DependentUpon>GestionPersonal.aspx</DependentUpon>
     </Compile>
     <Compile Include="GestionUsuarios.aspx.cs">
       <DependentUpon>GestionUsuarios.aspx</DependentUpon>
@@ -109,17 +126,33 @@
     <Compile Include="MasterPage.Master.designer.cs">
       <DependentUpon>MasterPage.Master</DependentUpon>
     </Compile>
+    <Compile Include="MasterPageAdministrador.Master.cs">
+      <DependentUpon>MasterPageAdministrador.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPageAdministrador.Master.designer.cs">
+      <DependentUpon>MasterPageAdministrador.Master</DependentUpon>
+    </Compile>
     <Compile Include="MasterPageMedicos.Master.cs">
       <DependentUpon>MasterPageMedicos.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="MasterPageMedicos.Master.designer.cs">
       <DependentUpon>MasterPageMedicos.Master</DependentUpon>
     </Compile>
     <Compile Include="MasterPageRecepcionista.Master.cs">
       <DependentUpon>MasterPageRecepcionista.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="MasterPageRecepcionista.Master.designer.cs">
       <DependentUpon>MasterPageRecepcionista.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MenuAdministrador.aspx.cs">
+      <DependentUpon>MenuAdministrador.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MenuAdministrador.aspx.designer.cs">
+      <DependentUpon>MenuAdministrador.aspx</DependentUpon>
     </Compile>
     <Compile Include="MenuMedicos.aspx.cs">
       <DependentUpon>MenuMedicos.aspx</DependentUpon>
@@ -155,6 +188,7 @@
     <Content Include="MasterPage.Master" />
     <Content Include="MasterPageMedicos.Master" />
     <Content Include="MasterPageRecepcionista.Master" />
+    <Content Include="MasterPageAdministrador.Master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
