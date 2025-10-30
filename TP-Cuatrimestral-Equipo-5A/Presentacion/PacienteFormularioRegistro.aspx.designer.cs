@@ -87,33 +87,6 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.TextBox TextTelefono;
 
         /// <summary>
-        /// Control rbMedico.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbMedico;
-
-        /// <summary>
-        /// Control rbPaciente.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbPaciente;
-
-        /// <summary>
-        /// Control rbPersonal.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbPersonal;
-
-        /// <summary>
         /// Control BtnRegistrarse.
         /// </summary>
         /// <remarks>

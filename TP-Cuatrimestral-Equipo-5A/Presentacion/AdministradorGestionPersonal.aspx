@@ -49,7 +49,7 @@
                 <h3 class="ms-3 mb-3">Habilitar cuentas</h3>
 
                 <div class="d-flex justify-content-end mb-3">
-                    <asp:Button Text="Crear Usuario" ID="BtnCrearUsuario" OnClick="BtnCrearUsuario_Click" runat="server" class="btn btn-primary" />
+                    <asp:Button Text="Crear Personal" ID="BtnCrearUsuario" OnClick="BtnCrearUsuario_Click" runat="server" class="btn btn-primary" />
                 </div>
 
                 <table class="table table-hover align-middle text-center shadow-sm rounded">

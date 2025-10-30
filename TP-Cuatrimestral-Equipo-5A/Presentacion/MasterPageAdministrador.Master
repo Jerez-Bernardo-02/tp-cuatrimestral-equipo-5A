@@ -26,8 +26,8 @@
                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                    <div class="navbar-nav me-auto">
                        <a class="nav-link" href="MenuAdministrador.aspx">Gestion Medicos</a>
-                       <a class="nav-link" href="GestionPersonal.aspx">Gestion Personal</a>
-                       <a class="nav-link" href="GestionPacientes.aspx">Gestion Pacientes</a>
+                       <a class="nav-link" href="AdministradorGestionPersonal.aspx">Gestion Personal</a>
+                       <a class="nav-link" href="AdministradorGestionPacientes.aspx">Gestion Pacientes</a>
                        <a class="nav-link" href="#">Configuraciones</a>
                    </div>
                </div>

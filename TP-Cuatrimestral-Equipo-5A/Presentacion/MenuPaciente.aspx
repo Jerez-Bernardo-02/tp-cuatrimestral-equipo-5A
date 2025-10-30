@@ -11,7 +11,12 @@
 
                 <div class="card shadow-sm border-0 mb-3">
                     <div class="card-body">
-                        <asp:Button ID="EditarPerfil" runat="server" Text="Editar Perfil" CssClass="btn btn-primary" />
+                        <asp:Button 
+                            ID="EditarPerfil" 
+                            runat="server" 
+                            Text="Editar Perfil" 
+                            CssClass="btn btn-primary" 
+                            OnClientClick="window.location.href='PacienteFormularioRegistro.aspx'; return false;" />
                     </div>
                 </div>
 

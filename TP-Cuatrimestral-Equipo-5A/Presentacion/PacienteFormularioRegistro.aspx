@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="FormularioRegistro.aspx.cs" Inherits="Presentacion.FormularioRegistro" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="PacienteFormularioRegistro.aspx.cs" Inherits="Presentacion.FormularioRegistro" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -48,27 +48,6 @@
                 <label for="TextTelefono" class="form-label">Teléfono</label>
                 <asp:TextBox runat="server" ID="TextTelefono" CssClass="form-control" placeholder="Teléfono"></asp:TextBox>
             </div>
-        </div>
-
-        <div class="row mb-3">
-            
-                <label class="form-label d-block mb-2">Tipo de usuario</label>
-
-                <div class="form-check w-100 mb-2 ms-2">
-                    <asp:RadioButton ID="rbMedico" runat="server" GroupName="TipoUsuario" CssClass="form-check-input" />
-                    <label for="rbMedico" class="form-check-label ms-2">Médico</label>
-                </div>
-
-                <div class="form-check w-100 mb-2 ms-2">
-                    <asp:RadioButton ID="rbPaciente" runat="server" GroupName="TipoUsuario" CssClass="form-check-input" />
-                    <label for="rbPaciente" class="form-check-label ms-2">Paciente</label>
-                </div>
-
-                <div class="form-check w-100 mb-2 ms-2">
-                    <asp:RadioButton ID="rbPersonal" runat="server" GroupName="TipoUsuario" CssClass="form-check-input" />
-                    <label for="rbPersonal" class="form-check-label ms-2">Personal</label>
-                </div>
-       
         </div>
 
         <div class="row mb-3">

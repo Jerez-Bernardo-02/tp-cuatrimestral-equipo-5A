@@ -67,7 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FormularioRegistro.aspx" />
+    <Content Include="PacienteFormularioRegistro.aspx" />
     <Content Include="AdministradorGestionPacientes.aspx" />
     <Content Include="AdministradorGestionPersonal.aspx" />
     <Content Include="Global.asax" />
@@ -82,12 +82,12 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormularioRegistro.aspx.cs">
-      <DependentUpon>FormularioRegistro.aspx</DependentUpon>
+    <Compile Include="PacienteFormularioRegistro.aspx.cs">
+      <DependentUpon>PacienteFormularioRegistro.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="FormularioRegistro.aspx.designer.cs">
-      <DependentUpon>FormularioRegistro.aspx</DependentUpon>
+    <Compile Include="PacienteFormularioRegistro.aspx.designer.cs">
+      <DependentUpon>PacienteFormularioRegistro.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdministradorGestionPacientes.aspx.cs">
       <DependentUpon>AdministradorGestionPacientes.aspx</DependentUpon>

@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-         <div class="container-fluid">
+      <div class="container-fluid">
     <div class="row">
         <!-- Columna izquierda -->
         <div class="col-md-4">
@@ -12,33 +12,40 @@
                 <div class="card-body">
                     <asp:TextBox ID="txtBuscarPaciente" runat="server"
                                  CssClass="form-control"
-                                 placeholder="Buscar por nombre o Docuemento..."></asp:TextBox>
+                                 placeholder="Buscar por nombre o Docuemento...">
+                    </asp:TextBox>
                 </div>
             </div>
 
             <div class="list-group shadow-sm">
                 <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     <div>
-                        <strong class="mb-0">Paciente 1</strong>
+                        <strong class="mb-0">Paciente 2</strong>
                         <p class="mb-0 small text-muted">Dni.: ********</p>
                     </div>
-                    <i class="bi bi-pencil text-primary" style="font-size:1.2rem; "></i>
+                    <button type="button" class="btn btn-link p-0" onclick="window.location.href='PacienteFormularioRegistro.aspx'">
+                        <i class="bi bi-pencil text-primary" style="font-size:1.2rem;"></i>
+                    </button>
                 </a>
 
                 <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     <div>
-                        <strong class="mb-0">Pacientel 2</strong>
+                        <strong class="mb-0">Paciente 2</strong>
                         <p class="mb-0 small text-muted">Dni.: ********</p>
                     </div>
-                    <i class="bi bi-pencil text-primary" style="font-size:1.2rem;"></i>
+                    <button type="button" class="btn btn-link p-0" onclick="window.location.href='PacienteFormularioRegistro.aspx'">
+                        <i class="bi bi-pencil text-primary" style="font-size:1.2rem;"></i>
+                    </button>
                 </a>
 
                 <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     <div>
-                        <strong class="mb-0">PPaciente 3</strong>
+                        <strong class="mb-0">Paciente 2</strong>
                         <p class="mb-0 small text-muted">Dni.: ********</p>
                     </div>
-                    <i class="bi bi-pencil text-primary" style="font-size:1.2rem; "></i>
+                    <button type="button" class="btn btn-link p-0" onclick="window.location.href='PacienteFormularioRegistro.aspx'">
+                        <i class="bi bi-pencil text-primary" style="font-size:1.2rem;"></i>
+                    </button>
                 </a>
             </div>
         </div>
@@ -49,7 +56,11 @@
                 <h3 class="ms-3 mb-3">Habilitar cuentas</h3>
 
                 <div class="d-flex justify-content-end mb-3">
-                    <asp:Button Text="Crear Usuario" ID="BtnCrearUsuario" OnClick="BtnCrearUsuario_Click" runat="server" class="btn btn-primary" />
+                   
+
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='PacienteFormularioRegistro.aspx'">
+    Crear Paciente
+</button>
                 </div>
 
                 <table class="table table-hover align-middle text-center shadow-sm rounded">
