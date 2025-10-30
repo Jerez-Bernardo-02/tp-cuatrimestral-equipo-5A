@@ -26,7 +26,7 @@
                 <div class="card h-100 shadow" style="width: 18rem;">
                     <img src="https://img.icons8.com/?size=100&id=18914&format=png&color=000000" class="img-fluid w-50 mx-auto mt-3" alt="Imagen">
                     <div class="card-body">
-                        <a href="#" class="btn btn-primary">Registrar Turno</a>
+                        <a href="RecepcionistaTurnos.aspx" class="btn btn-primary">Administrar Turnos</a>
                     </div>
                 </div>
             </div>

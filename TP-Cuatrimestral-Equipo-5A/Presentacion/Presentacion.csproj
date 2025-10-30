@@ -81,6 +81,7 @@
     <Content Include="MedicoTurnos.aspx" />
     <Content Include="RecepcionistaMedicos.aspx" />
     <Content Include="RecepcionistaPacientes.aspx" />
+    <Content Include="RecepcionistaTurnos.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +214,13 @@
     </Compile>
     <Compile Include="RecepcionistaPacientes.aspx.designer.cs">
       <DependentUpon>RecepcionistaPacientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RecepcionistaTurnos.aspx.cs">
+      <DependentUpon>RecepcionistaTurnos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RecepcionistaTurnos.aspx.designer.cs">
+      <DependentUpon>RecepcionistaTurnos.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
