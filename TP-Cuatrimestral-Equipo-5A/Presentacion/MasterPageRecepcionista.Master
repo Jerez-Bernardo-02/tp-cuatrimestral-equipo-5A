@@ -22,6 +22,14 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav me-auto">
+                        <a class="nav-link" href="RecepcionistaPacientes.aspx">Pacientes</a>
+                        <a class="nav-link" href="#">Medicos</a>
+                        <a class="nav-link" href="#">Turnos</a>
+                    </div>
+                    <asp:Label ID="Label1" runat="server" Text="Nombre Recepcionista"></asp:Label>
+                </div>
             </div>
         </nav>
         <div>
