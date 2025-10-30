@@ -4,12 +4,11 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <div class="container-fluid">
         <div class="container-fluid">
 
             <div class="row">
                 <%--Columna izquierda--%>
-           
+
                 <div class="col-md-4">
 
                     <h3 class="mb-3 mt-3">Pacientes</h3>
@@ -19,7 +18,7 @@
                             <asp:TextBox ID="txtBuscarPaciente" runat="server"
                                 CssClass="form-control"
                                 placeholder="Buscar por nombre o DNI...">
-                        </asp:TextBox>
+                            </asp:TextBox>
                         </div>
                     </div>
 
@@ -76,7 +75,7 @@
                                 TextMode="MultiLine"
                                 Rows="4"
                                 placeholder="Escriba aquí las nuevas observaciones...">
-                        </asp:TextBox>
+                            </asp:TextBox>
 
                             <div class="text-end mt-3">
                                 <asp:Button ID="btnGuardarHistorial" runat="server"
@@ -90,9 +89,9 @@
                         <div class="card-body p-4">
                             <h5 class="card-title">Historial de Visitas</h5>
 
-                            <p class ="card-text"> ...</p>
-                            <p class ="card-text"> ...</p>
-                            <p class ="card-text"> ...</p>
+                            <p class="card-text">...</p>
+                            <p class="card-text">...</p>
+                            <p class="card-text">...</p>
 
 
                         </div>
