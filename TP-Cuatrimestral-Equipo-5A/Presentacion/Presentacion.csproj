@@ -75,6 +75,7 @@
     <Content Include="Login.aspx" />
     <Content Include="MenuAdministrador.aspx" />
     <Content Include="MenuMedicos.aspx" />
+    <Content Include="MenuPaciente.aspx" />
     <Content Include="MenuPrincipal.aspx" />
     <Content Include="MenuRecepcionista.aspx" />
     <Content Include="Pacientes.aspx" />
@@ -140,6 +141,13 @@
     <Compile Include="MasterPageMedicos.Master.designer.cs">
       <DependentUpon>MasterPageMedicos.Master</DependentUpon>
     </Compile>
+    <Compile Include="MasterPagePaciente.Master.cs">
+      <DependentUpon>MasterPagePaciente.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPagePaciente.Master.designer.cs">
+      <DependentUpon>MasterPagePaciente.Master</DependentUpon>
+    </Compile>
     <Compile Include="MasterPageRecepcionista.Master.cs">
       <DependentUpon>MasterPageRecepcionista.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -160,6 +168,13 @@
     </Compile>
     <Compile Include="MenuMedicos.aspx.designer.cs">
       <DependentUpon>MenuMedicos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MenuPaciente.aspx.cs">
+      <DependentUpon>MenuPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MenuPaciente.aspx.designer.cs">
+      <DependentUpon>MenuPaciente.aspx</DependentUpon>
     </Compile>
     <Compile Include="MenuPrincipal.aspx.cs">
       <DependentUpon>MenuPrincipal.aspx</DependentUpon>
@@ -189,6 +204,7 @@
     <Content Include="MasterPageMedicos.Master" />
     <Content Include="MasterPageRecepcionista.Master" />
     <Content Include="MasterPageAdministrador.Master" />
+    <Content Include="MasterPagePaciente.Master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
