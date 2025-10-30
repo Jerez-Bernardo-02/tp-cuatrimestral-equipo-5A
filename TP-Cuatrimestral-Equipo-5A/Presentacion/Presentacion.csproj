@@ -79,6 +79,7 @@
     <Content Include="MenuRecepcionista.aspx" />
     <Content Include="MedicoPacientes.aspx" />
     <Content Include="MedicoTurnos.aspx" />
+    <Content Include="RecepcionistaMedicos.aspx" />
     <Content Include="RecepcionistaPacientes.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -198,6 +199,13 @@
     </Compile>
     <Compile Include="MedicoTurnos.aspx.designer.cs">
       <DependentUpon>MedicoTurnos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RecepcionistaMedicos.aspx.cs">
+      <DependentUpon>RecepcionistaMedicos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RecepcionistaMedicos.aspx.designer.cs">
+      <DependentUpon>RecepcionistaMedicos.aspx</DependentUpon>
     </Compile>
     <Compile Include="RecepcionistaPacientes.aspx.cs">
       <DependentUpon>RecepcionistaPacientes.aspx</DependentUpon>
