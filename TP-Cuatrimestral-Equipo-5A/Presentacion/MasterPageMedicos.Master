@@ -24,8 +24,8 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav me-auto">
-                        <a class="nav-link" href="Turnos.aspx">Turnos</a>
-                        <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
+                        <a class="nav-link" href="MedicoTurnos.aspx">Turnos</a>
+                        <a class="nav-link" href="MedicoPacientes.aspx">Pacientes</a>
                     </div>
                 </div>
             </div>
