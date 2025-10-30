@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPageMedicos.Master" AutoEventWireup="true" CodeBehind="Turnos.aspx.cs" Inherits="Presentacion.Turnos" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPageMedicos.Master" AutoEventWireup="true" CodeBehind="MedicoTurnos.aspx.cs" Inherits="Presentacion.Turnos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

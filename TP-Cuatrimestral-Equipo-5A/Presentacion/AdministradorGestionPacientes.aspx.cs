@@ -13,5 +13,20 @@ namespace Presentacion
         {
 
         }
+
+        protected void BtnHabilitarBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void BtnDeshabilitarBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void BtnCrearUsuario_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPageAdministrador.Master" AutoEventWireup="true" CodeBehind="GestionPacientes.aspx.cs" Inherits="Presentacion.GestionPacientes" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPageAdministrador.Master" AutoEventWireup="true" CodeBehind="AdministradorGestionPacientes.aspx.cs" Inherits="Presentacion.GestionPacientes" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -73,7 +73,7 @@
                                 <span class="badge bg-success-subtle text-success border border-success rounded-pill px-3">Activo</span>
                             </td>
                             <td>
-                                <asp:Button ID="BtnHabilitarBtn" runat="server" CssClass="btn btn-outline-primary btn-sm" OnClick="BtnHabilitarBtn_Click"  />
+                                <asp:Button ID="BtnHabilitarBtn" runat="server" CssClass="btn btn-outline-primary btn-sm" OnClick="BtnHabilitarBtn_Click"/>
                                 <asp:Button ID="BtnDeshabilitarBtn" runat="server" CssClass="btn btn-outline-danger btn-sm" OnClick="BtnDeshabilitarBtn_Click" />
                             </td>
                         </tr>
