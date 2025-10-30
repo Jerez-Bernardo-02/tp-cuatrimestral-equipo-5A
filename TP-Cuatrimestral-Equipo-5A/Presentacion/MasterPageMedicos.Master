@@ -17,15 +17,15 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
 
             <div class="container-fluid ">
-                <a class="navbar-brand" href="#">Nombre Clínica</a>
+                <a class="navbar-brand" href="MenuMedicos.aspx">Nombre Clínica</a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav me-auto">
-                        <a class="nav-link" href="#">Turnos</a>
-                        <a class="nav-link" href="#">Pacientes</a>
+                        <a class="nav-link" href="Turnos.aspx">Turnos</a>
+                        <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
                     </div>
                 </div>
             </div>
