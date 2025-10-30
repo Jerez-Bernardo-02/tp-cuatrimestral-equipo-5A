@@ -36,6 +36,9 @@
                         </asp:GridView>
                     </div>
                 </div>
+                <div class="text-end">
+                    <asp:Button runat="server" ID="btnNuevoTurno" Text="Nuevo Paciente" CssClass="btn btn-success" />
+                </div>
             </div>
         </div>
     </div>

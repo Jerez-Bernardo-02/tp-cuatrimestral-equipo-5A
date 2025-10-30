@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="text-end">
-                    <asp:Button runat="server" ID="btnNuevoTurno" Text="Agregar nuevo turno" CssClass="btn btn-success" />
+                    <asp:Button runat="server" ID="btnNuevoTurno" Text="Nuevo Turno" CssClass="btn btn-success" />
                 </div>
             </div>
         </div>
