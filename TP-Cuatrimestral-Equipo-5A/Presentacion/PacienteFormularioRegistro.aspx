@@ -4,11 +4,11 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container mt-4">
         <h3 class="ms-3 mb-3">Formulario de registro</h3>
-        <h4 class="text-primary ms-3 mb-4">Datos personales</h4>.
+        <h4 class="text-primary ms-3 mb-4">Datos personales</h4>
 
         <div class="d-flex align-items-center mb-4">
             <div class="position-relative" style="width:80px; height:80px;">
-               <asp:Image ID="imgPreview" runat="server" CssClass="rounded-circle w-100 h-100" ImageUrl="~images/default-profile.png" />
+               <asp:Image ID="imgPreview" runat="server" CssClass="rounded-circle w-100 h-100" ImageUrl="FotosPerfil/DefaultUser.png" />
 
                 <asp:FileUpload ID="fuImagen" runat="server" CssClass="d-none" OnChage="Imagen_Changed" />
                 <label for="fuImagen" class="btn btn-link p-0 position-absolute" style="bottom:0; left:100%;">Cambiar foto</label>
