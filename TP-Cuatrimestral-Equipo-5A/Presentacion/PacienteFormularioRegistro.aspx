@@ -4,15 +4,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container mt-4">
         <h3 class="ms-3 mb-3">Formulario de registro</h3>
-        <h4 class="text-primary ms-3 mb-4">Datos personales</h4>.
+        <h4 class="text-primary ms-3 mb-4">Datos personales</h4>
 
         <div class="d-flex align-items-center mb-4">
             <div class="position-relative" style="width:80px; height:80px;">
-               <asp:Image ID="imgPreview" runat="server" CssClass="rounded-circle w-100 h-100" ImageUrl="~images/default-profile.png" />
-
-                <asp:FileUpload ID="fuImagen" runat="server" CssClass="d-none" OnChage="Imagen_Changed" />
-                <label for="fuImagen" class="btn btn-link p-0 position-absolute" style="bottom:0; left:100%;">Cambiar foto</label>
-            </div>
+               
+                 <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="rounded-circle w-100 h-100" alt="imagenPerfil" />
+           </div>
         </div>
 
         <div class="row mb-3">
@@ -51,8 +49,9 @@
         </div>
 
         <div class="row mb-3">
-            <asp:Button Text="Registrarse" ID="BtnRegistrarse" OnClick="BtnRegistrarse_Click" runat="server" class="btn btn-primary" />
-        </div>
-    </div>
-
+             <div class="col-md-4">
+                <asp:Button Text="Registrarse" ID="BtnRegistrarse" OnClick="BtnRegistrarse_Click" runat="server" class="btn btn-primary" />
+            </div>  
+       </div>
+   </div>
 </asp:Content>
