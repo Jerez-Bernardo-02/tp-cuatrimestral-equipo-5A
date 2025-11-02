@@ -8,7 +8,12 @@ namespace Dominio
 {
     public class Paciente : Persona
     {
-        public int Id { get; set; }
+        public int IdPaciente { get; set; }
         public List <HistoriaClinica> HistoriasClinicas { get; set; }
+
+        public Paciente()
+        {
+            HistoriasClinicas  = new List<HistoriaClinica>(); // dejo lista vacía lista para usar
+        }
     }
 }

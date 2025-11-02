@@ -9,7 +9,7 @@ namespace Dominio
 {
     public class Persona
     {
-        int Id {  get; set; }
+        public int Id {  get; set; }
         public string Nombre { get; set; }
         public string Apellido {  get; set; }
         public DateTime FechaNacimiento { get; set; }
@@ -20,6 +20,12 @@ namespace Dominio
         public string UrlImagen { get; set; }
 
         public Usuario Usuario { get; set; }
+
+        //constructor sin parámetros que nos devuelva siempre una Persona con *activo = true* 
+        public Persona()
+        {
+            Activo = true; // solo inicializa Activo = true
+        }
 
 
     }
