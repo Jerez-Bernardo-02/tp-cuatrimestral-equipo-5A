@@ -129,5 +129,33 @@ namespace Negocio
                 throw ex;
             }
         }
+
+
+        public void modificar(Paciente paciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Personas SET Nombre = @nombre, Apellido = @apellido, FechaNacimiento = @fechaNacimiento, Dni = @dni, Email = @email, Telefono = @telefono, UrlImagen = @urlImagen WHERE Id = @id");
+                datos.setearParametro("@nombre", paciente.Nombre);
+                datos.setearParametro("@apellido", paciente.Apellido);
+                datos.setearParametro("@fechaNacimiento", paciente.FechaNacimiento);
+                //datos.setearParametro("@dni", paciente.Documento); // realmente queremos modificar este campo?
+                datos.setearParametro("@email", paciente.Email);
+                datos.setearParametro("@telefono", paciente.Telefono);
+                datos.setearParametro("@UrlImagen", paciente.UrlImagen);
+
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
