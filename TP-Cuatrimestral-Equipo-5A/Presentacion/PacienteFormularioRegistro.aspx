@@ -47,6 +47,12 @@
                 <asp:TextBox runat="server" ID="TextTelefono" CssClass="form-control" placeholder="Teléfono"></asp:TextBox>
             </div>
         </div>
+         <div class="row mb-3">
+            <div class="col-md-6">
+                  <label for="txtMatricula" class="form-label">Matricula</label>
+                    <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="Matricula"></asp:TextBox>
+            </div>  
+         </div>
 
         <div class="row mb-3">
              <div class="col-md-4">

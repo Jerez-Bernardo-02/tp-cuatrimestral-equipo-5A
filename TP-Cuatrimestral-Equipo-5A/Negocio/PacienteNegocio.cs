@@ -10,13 +10,13 @@ namespace Negocio
 {
     public class PacienteNegocio
     {
-        public int agregarPaciente(Paciente nuevo)
+      /*  public int agregarPaciente(Paciente nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 // Parametros (@Clave, valor) clave seria el nombre de la columna y valor el lo que tiene el objeto recibido por parametro en cada atributo
-                datos.setearConsulta(@"INSERT INTO Personas (Nombre, Apellido, FechaNacimiento, Dni, Email,Telefono) output inserted.Id VALUES (@nombre, @apellido,@fechaNacimiento, @dni, @email, @telefono)");
+                datos.setearConsulta(@"INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Dni, Email,Telefono) output inserted.Id VALUES (@nombre, @apellido,@fechaNacimiento, @dni, @email, @telefono)");
                 
                 //seteamos parametros  (@Clave, valor) - activo = true por constructor
                 datos.setearParametro("@nombre", nuevo.Nombre);
@@ -27,8 +27,8 @@ namespace Negocio
                 datos.setearParametro("@telefono", nuevo.Telefono);
 
                 //para obtener el id autogenerado en la BD de Persona
-                int idPersona = datos.ejecutarEscalar();
-                nuevo.Id = idPersona;
+                int id = datos.ejecutarEscalar();
+                nuevo.Id = id;
 
                 //Creo el paciente en la BD con el idPersona anterior
                 datos.setearConsulta(@"INSERT INTO Pacientes (IdPersona) output inserted.Id VALUES (@idPersona)");
@@ -92,7 +92,7 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-        }
+        }*/
         public List<Paciente> listar()
         {
             List<Paciente> lista = new List<Paciente>();
@@ -116,7 +116,7 @@ namespace Negocio
                     aux.Email = (string)datos.Lector["Email"];
                     aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
                     aux.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
-                    aux.Activo = (bool)datos.Lector["Activo"];
+                    
 
                     lista.Add(aux);
                 }
@@ -130,7 +130,7 @@ namespace Negocio
             }
         }
 
-
+        /*
         public void modificar(Paciente paciente)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -156,6 +156,6 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-        }
+        }*/
     }
 }

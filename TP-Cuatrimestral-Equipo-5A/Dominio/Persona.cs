@@ -16,16 +16,11 @@ namespace Dominio
         public string Email { get; set; }
         public string Telefono { get; set; }
         public string Documento {  get; set; }
-        public bool Activo { get; set; }  
         public string UrlImagen { get; set; }
 
         public Usuario Usuario { get; set; }
 
-        //constructor sin parámetros que nos devuelva siempre una Persona con *activo = true* 
-        public Persona()
-        {
-            Activo = true; // solo inicializa Activo = true
-        }
+  
 
 
     }

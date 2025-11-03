@@ -8,7 +8,6 @@ namespace Dominio
 {
     public class Paciente : Persona
     {
-        public int IdPaciente { get; set; }
         public List <HistoriaClinica> HistoriasClinicas { get; set; }
 
         public Paciente()
