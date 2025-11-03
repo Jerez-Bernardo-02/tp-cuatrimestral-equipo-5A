@@ -52,6 +52,47 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public Paciente buscarPacientePorDni(string dni)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT Pe.Nombre, Pe.Apellido, Pe.FechaNacimiento, Pe.Dni, Pe.Email, Pe.Telefono, Pe.UrlImagen,Pe.IdUsuario,Pe.Activo,Pa.IdPersona, Pa.Id FROM Personas Pe INNER JOIN Pacientes Pa ON Pe.Id = Pa.IdPersona WHERE Pe.Dni = @documento");
+                datos.setearParametro("@documento", dni);
+                datos.ejecutarLectura();
+
+                //seteamos parametros  (@Clave, valor) - si hay coicidencia entra
+                if (datos.Lector.Read())
+                {
+                    Paciente paciente = new Paciente();
+                    paciente.Documento = (string)datos.Lector["Dni"];
+                    paciente.Nombre = (string)datos.Lector["Nombre"];
+                    paciente.Apellido = (string)datos.Lector["Apellido"];
+                    paciente.Email = (string)datos.Lector["Email"];
+                    paciente.Telefono = (string)datos.Lector["Telefono"];
+                    paciente.UrlImagen = (string)datos.Lector["UrlImagen"];
+
+                    paciente.Usuario = new Usuario();
+                    paciente.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    paciente.Id = (int)datos.Lector["IdPersona"];
+                    paciente.IdPaciente = (int)datos.Lector["Id"];
+                    paciente.Activo = (bool)datos.Lector["Activo"];
+                    //se retorna el objeto paciente encontrado y seteado
+                    return paciente;
+                }
+                //si no hay coicidencia retorna null
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public List<Paciente> listar()
         {
             List<Paciente> lista = new List<Paciente>();
