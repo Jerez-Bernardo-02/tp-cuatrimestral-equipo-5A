@@ -76,7 +76,7 @@
     <Content Include="MenuMedicos.aspx" />
     <Content Include="MenuPaciente.aspx" />
     <Content Include="MenuPrincipal.aspx" />
-    <Content Include="MenuRecepcionista.aspx" />
+    <Content Include="MenuUsuarios.aspx" />
     <Content Include="MedicoPacientes.aspx" />
     <Content Include="MedicoTurnos.aspx" />
     <Content Include="RecepcionistaMedicos.aspx" />
@@ -151,12 +151,12 @@
     <Compile Include="MenuPrincipal.aspx.designer.cs">
       <DependentUpon>MenuPrincipal.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MenuRecepcionista.aspx.cs">
-      <DependentUpon>MenuRecepcionista.aspx</DependentUpon>
+    <Compile Include="MenuUsuarios.aspx.cs">
+      <DependentUpon>MenuUsuarios.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="MenuRecepcionista.aspx.designer.cs">
-      <DependentUpon>MenuRecepcionista.aspx</DependentUpon>
+    <Compile Include="MenuUsuarios.aspx.designer.cs">
+      <DependentUpon>MenuUsuarios.aspx</DependentUpon>
     </Compile>
     <Compile Include="MedicoPacientes.aspx.cs">
       <DependentUpon>MedicoPacientes.aspx</DependentUpon>

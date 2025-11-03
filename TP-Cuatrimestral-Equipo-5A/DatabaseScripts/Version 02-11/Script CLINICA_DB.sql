@@ -1,0 +1,125 @@
+USE master
+GO
+
+CREATE DATABASE CLINICA_DB
+GO
+
+USE CLINICA_DB
+GO
+
+CREATE TABLE Permisos(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Descripcion VARCHAR(20) NOT NULL
+)
+GO
+
+CREATE TABLE Especialidades(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Descripcion VARCHAR(50) NOT NULL
+)
+GO
+
+CREATE TABLE Estados(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Descripcion VARCHAR(50) NOT NULL
+)
+GO
+
+CREATE TABLE DiasSemana(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Descripcion VARCHAR(20) NOT NULL
+)
+GO
+
+CREATE TABLE Usuarios(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Usuario VARCHAR(20) NOT NULL UNIQUE,
+	Clave VARCHAR(100) NOT NULL,
+	Activo BIT NOT NULL DEFAULT 1,
+	IdPermiso INT NULL FOREIGN KEY REFERENCES Permisos(Id)
+)
+GO
+
+CREATE TABLE Pacientes(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Nombre VARCHAR(30) NOT NULL,
+	Apellido VARCHAR(30) NOT NULL,
+	FechaNacimiento DATE NOT NULL,
+	Email VARCHAR(50) NOT NULL UNIQUE,
+	Telefono VARCHAR(20) NULL,
+	Dni VARCHAR(8) NOT NULL UNIQUE,
+	UrlImagen VARCHAR(200) NULL,
+	IdUsuario INT NULL FOREIGN KEY REFERENCES Usuarios(Id),
+)
+GO
+
+CREATE TABLE Medicos(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Nombre VARCHAR(30) NOT NULL,
+	Apellido VARCHAR(30) NOT NULL,
+	FechaNacimiento DATE NOT NULL,
+	Telefono VARCHAR(20) NULL,
+	Dni VARCHAR(8) NOT NULL UNIQUE,
+	Email VARCHAR(50) NOT NULL UNIQUE,
+	UrlImagen VARCHAR(200) NULL,
+	Matricula VARCHAR(20) NOT NULL UNIQUE,
+	IdUsuario INT NULL FOREIGN KEY REFERENCES Usuarios(Id),
+)
+GO
+
+CREATE TABLE Recepcionistas(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Nombre VARCHAR(30) NOT NULL,
+	Apellido VARCHAR(30) NOT NULL,
+	FechaNacimiento DATE NOT NULL,
+	Email VARCHAR(50) NOT NULL UNIQUE,
+	Telefono VARCHAR(20) NULL,
+	Dni VARCHAR(8) NOT NULL UNIQUE,
+	UrlImagen VARCHAR(200) NULL,
+	IdUsuario INT NULL FOREIGN KEY REFERENCES Usuarios(Id),
+)
+GO
+
+
+CREATE TABLE EspecialidadesPorMedico(
+	IdMedico INT NOT NULL FOREIGN KEY REFERENCES Medicos(Id),
+	IdEspecialidad INT NOT NULL FOREIGN KEY REFERENCES Especialidades(Id)
+	PRIMARY KEY (IdMedico, IdEspecialidad)
+)
+GO
+
+CREATE TABLE HorariosPorMedicos(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	IdDiaSemana INT NOT NULL FOREIGN KEY REFERENCES DiasSemana(Id),
+	HoraEntrada TIME NOT NULL,
+	HoraSalida TIME NOT NULL,
+	IdMedico INT NOT NULL,
+	IdEspecialidad INT NOT NULL,
+	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadPorMedico(IdMedico, IdEspecialidad)
+)
+GO
+
+
+CREATE TABLE Turnos(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Fecha DATETIME NOT NULL,
+	Observaciones VARCHAR(250) NULL,
+	IdPaciente INT NOT NULL FOREIGN KEY REFERENCES Pacientes(Id),
+	IdEstado INT NOT NULL FOREIGN KEY REFERENCES Estados(Id),
+	IdMedico INT NOT NULL,
+	IdEspecialidad INT NOT NULL,
+	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadPorMedico(IdMedico, IdEspecialidad)
+)
+GO
+
+CREATE TABLE HistoriasClinicas(
+	Id INT PRIMARY KEY IDENTITY (1, 1),
+	Fecha DATETIME NOT NULL,
+	IdPaciente INT NOT NULL FOREIGN KEY REFERENCES Pacientes(Id),
+	Descripcion VARCHAR(250) NOT NULL,
+	IdTurno INT NULL FOREIGN KEY REFERENCES Turnos(Id),
+	IdMedico INT NOT NULL,
+	IdEspecialidad INT NOT NULL,
+	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadPorMedico(IdMedico, IdEspecialidad)
+)
+GO
