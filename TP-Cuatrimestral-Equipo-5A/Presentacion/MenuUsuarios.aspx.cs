@@ -13,7 +13,10 @@ namespace Presentacion
         {
             if (!IsPostBack)
             {
-                PanelRecepcionista.Visible = true;
+                PanelPaciente.Visible = false;
+                PanelMedico.Visible = true;
+                PanelRecepcionista.Visible = false;
+                PanelAdministrador.Visible = false;
             }
         }
     }
