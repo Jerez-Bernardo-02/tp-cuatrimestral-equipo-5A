@@ -10,7 +10,7 @@ namespace Negocio
 {
     public class PacienteNegocio
     {
-      /*  public int agregarPaciente(Paciente nuevo)
+        public int agregarPaciente(Paciente nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -18,7 +18,7 @@ namespace Negocio
                 // Parametros (@Clave, valor) clave seria el nombre de la columna y valor el lo que tiene el objeto recibido por parametro en cada atributo
                 datos.setearConsulta(@"INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Dni, Email,Telefono) output inserted.Id VALUES (@nombre, @apellido,@fechaNacimiento, @dni, @email, @telefono)");
                 
-                //seteamos parametros  (@Clave, valor) - activo = true por constructor
+                //seteamos parametros  (@Clave, valor)
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@apellido", nuevo.Apellido);
                 datos.setearParametro("@fechaNacimiento", nuevo.FechaNacimiento);
@@ -26,25 +26,15 @@ namespace Negocio
                 datos.setearParametro("@email", nuevo.Email);
                 datos.setearParametro("@telefono", nuevo.Telefono);
 
-                //para obtener el id autogenerado en la BD de Persona
+                //para obtener el id autogenerado en la BD 
                 int id = datos.ejecutarEscalar();
                 nuevo.Id = id;
 
-                //Creo el paciente en la BD con el idPersona anterior
-                datos.setearConsulta(@"INSERT INTO Pacientes (IdPersona) output inserted.Id VALUES (@idPersona)");
-
-                //seteamos parametros  (@Clave, valor) 
-                datos.setearParametro("@idPersona", nuevo.Id);
-
-                //obtengo y devuelvo el idPaciente autogenerado en la BD por si necesito utilizarlo a futuro
-                int idPaciente = datos.ejecutarEscalar();
-                nuevo.IdPaciente = idPaciente;
-
-                return nuevo.IdPaciente;
+                return nuevo.Id;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw;
                
             }
             finally
@@ -58,7 +48,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT Pe.Nombre, Pe.Apellido, Pe.FechaNacimiento, Pe.Dni, Pe.Email, Pe.Telefono, Pe.UrlImagen,Pe.IdUsuario,Pe.Activo,Pa.IdPersona, Pa.Id FROM Personas Pe INNER JOIN Pacientes Pa ON Pe.Id = Pa.IdPersona WHERE Pe.Dni = @documento");
+                datos.setearConsulta("SELECT Nombre, Apellido, FechaNacimiento, Dni, Email, Telefono, UrlImagen, IdUsuario, Id FROM Pacientes WHERE Dni = @documento");
                 datos.setearParametro("@documento", dni);
                 datos.ejecutarLectura();
 
@@ -70,29 +60,36 @@ namespace Negocio
                     paciente.Nombre = (string)datos.Lector["Nombre"];
                     paciente.Apellido = (string)datos.Lector["Apellido"];
                     paciente.Email = (string)datos.Lector["Email"];
+                    paciente.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
                     paciente.Telefono = (string)datos.Lector["Telefono"];
-                    paciente.UrlImagen = (string)datos.Lector["UrlImagen"];
+                    if (datos.Lector["UrlImagen"] != DBNull.Value)
+                    {
+                        paciente.UrlImagen = (string)datos.Lector["UrlImagen"];
+                    }
+                    else
+                    {
+                        paciente.UrlImagen = null;
+                    }
 
                     paciente.Usuario = new Usuario();
                     paciente.Usuario.Id = (int)datos.Lector["IdUsuario"];
-                    paciente.Id = (int)datos.Lector["IdPersona"];
-                    paciente.IdPaciente = (int)datos.Lector["Id"];
-                    paciente.Activo = (bool)datos.Lector["Activo"];
+                   
+                   
                     //se retorna el objeto paciente encontrado y seteado
                     return paciente;
                 }
                 //si no hay coicidencia retorna null
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
                 datos.cerrarConexion();
             }
-        }*/
+        }
         public List<Paciente> listar()
         {
             List<Paciente> lista = new List<Paciente>();
@@ -130,20 +127,28 @@ namespace Negocio
             }
         }
 
-        /*
+        
         public void modificar(Paciente paciente)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Personas SET Nombre = @nombre, Apellido = @apellido, FechaNacimiento = @fechaNacimiento, Dni = @dni, Email = @email, Telefono = @telefono, UrlImagen = @urlImagen WHERE Id = @id");
+                datos.setearConsulta("UPDATE Pacientes SET Nombre = @nombre, Apellido = @apellido, FechaNacimiento = @fechaNacimiento, Dni = @dni, Email = @email, Telefono = @telefono, UrlImagen = @urlImagen WHERE Id = @id");
                 datos.setearParametro("@nombre", paciente.Nombre);
                 datos.setearParametro("@apellido", paciente.Apellido);
                 datos.setearParametro("@fechaNacimiento", paciente.FechaNacimiento);
                 //datos.setearParametro("@dni", paciente.Documento); // realmente queremos modificar este campo?
                 datos.setearParametro("@email", paciente.Email);
                 datos.setearParametro("@telefono", paciente.Telefono);
-                datos.setearParametro("@UrlImagen", paciente.UrlImagen);
+                if (paciente.UrlImagen != null)
+                {
+                    datos.setearParametro("@UrlImagen", paciente.UrlImagen);
+                }
+                else
+                {
+                    datos.setearParametro("@UrlImagen", DBNull.Value);
+                }
+                datos.setearParametro("@id", paciente.Id);
 
                 datos.ejecutarAccion();
 
@@ -156,6 +161,6 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-        }*/
+        }
     }
 }
