@@ -10,21 +10,6 @@
 </head>
 <body>
     <form id="Login" runat="server">
-        <div class="row justify-content-center">
-            <div class="col-2">
-                <a class="btn btn-primary" href="MenuPaciente.aspx" role="button">Menu Paciente</a>
-            </div>
-            <div class="col-2">
-                <a class="btn btn-primary" href="MenuMedicos.aspx" role="button">Menu Medico</a>
-            </div>
-            <div class="col-2">
-                <a class="btn btn-primary" href="MenuRecepcionista.aspx" role="button">Menu Recepcionista</a>
-            </div>
-            <div class="col-2">
-                <a class="btn btn-primary" href="MenuAdministrador.aspx" role="button">Menu Administrador</a>
-            </div>
-        </div>
-
 
         <%-- Main Container --%>
         <div class="container d-flex justify-content-center align-items-center min-vh-100">
@@ -46,7 +31,7 @@
                             <p>Ingrese sus credenciales para iniciar sesión.</p>
                         </div>
                         <div class="input-group mb-3">
-                            <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control form-control-lg bg-light fs-6" placeholder="Usuario" />
+                            <asp:TextBox runat="server" ID="txtUsuario" CssClass="form-control form-control-lg bg-light fs-6" placeholder="Usuario" />
                         </div>
                             <div class="input-group mb-1">
                             <asp:TextBox runat="server" ID="txtPassword" CssClass="form-control form-control-lg bg-light fs-6" placeholder="Contraseña" TextMode="Password" />
@@ -59,7 +44,7 @@
                             </div>
                             <%-- Un redirect a pestaña de olvido contraseña? --%>
                             <div class="input-group mb-3">
-                                <asp:Button CssClass="btn btn-lg btn-primary w-100 fs-6" ID="btnLogin" runat="server" Text="Ingresar" />
+                                <asp:Button CssClass="btn btn-lg btn-primary w-100 fs-6" ID="btnLogin" OnClick="btnLogin_Click" runat="server" Text="Ingresar" />
                             </div>
 
                             <%-- Crear cuenta --%>
