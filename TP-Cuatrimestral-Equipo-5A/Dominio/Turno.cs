@@ -13,7 +13,7 @@ namespace Dominio
         public string Observaciones { get; set; }
         public Medico Medico { get; set; }
         public Paciente Paciente { get; set; }
-        public int IdEspecialidad { get; set; }
+        public Especialidad Especialidad { get; set; }
         public Estado Estado { get; set; }
 
     }

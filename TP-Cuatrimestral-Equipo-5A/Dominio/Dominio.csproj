@@ -45,7 +45,7 @@
     <Compile Include="Especialidad.cs" />
     <Compile Include="Estado.cs" />
     <Compile Include="HistoriaClinica.cs" />
-    <Compile Include="HorarioPorMedico.cs" />
+    <Compile Include="HorarioMedico.cs" />
     <Compile Include="Medico.cs" />
     <Compile Include="Paciente.cs" />
     <Compile Include="Permiso.cs" />

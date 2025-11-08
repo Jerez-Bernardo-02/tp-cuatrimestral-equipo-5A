@@ -20,8 +20,6 @@ namespace Dominio
 
         public Usuario Usuario { get; set; }
 
-  
-
 
     }
 }
