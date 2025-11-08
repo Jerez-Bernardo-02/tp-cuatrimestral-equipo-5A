@@ -44,18 +44,51 @@ namespace Negocio
             }
         }
 
-        public void eliminarMedico(Medico medico)
+        public void modificarMedico(Medico medico)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("");
+                datos.setearConsulta("UPDATE Medicos SET Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Dni = @Dni, Email = @Email, UrlImagen = @UrlImagen, Matricula = @Matricula WHERE Id = @Id;");
+                datos.setearParametro("@Nombre", medico.Nombre);
+                datos.setearParametro("@Apellido", medico.Apellido);
+                datos.setearParametro("@FechaNacimiento", medico.FechaNacimiento);
+                if (string.IsNullOrEmpty(medico.Telefono))
+                {
+                    datos.setearParametro("@Telefono", DBNull.Value); //debido a que la DB acepta NULL. CONSULTAR CON EQUIPO
+                }
+                else
+                {
+                    datos.setearParametro("@Telefono", medico.Telefono); 
+                }
+           
+                datos.setearParametro("@Dni", medico.Dni);
+                datos.setearParametro("@Email", medico.Email);
+                if (string.IsNullOrEmpty(medico.UrlImagen))
+                {
+                    datos.setearParametro("@UrlImagen", DBNull.Value);//debido a que la DB acepta NULL. CONSULTAR CON EQUIPO
+                }
+                else
+                {
+                    datos.setearParametro("@UrlImagen", medico.UrlImagen);
+                }
+                datos.setearParametro("@Matricula", medico.Matricula);
+                datos.setearParametro("@Id", medico.Id);
+
+
+                datos.ejecutarAccion();
+
+
             }
             catch (Exception)
             {
 
                 throw;
             }
+            finally 
+            {
+                datos.cerrarConexion();
+            } 
 
         }
     }

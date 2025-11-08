@@ -10,7 +10,7 @@ namespace Dominio
     {
         public int Id { get; set; }
         public string NombreUsuario {  get; set; }
-        public string Contrasenia { get; set; }
+        public string Clave { get; set; }
 
         public bool Activo { get; set; }
         public Permiso Permiso { get; set; }
