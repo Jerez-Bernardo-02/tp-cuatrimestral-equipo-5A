@@ -43,5 +43,20 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public void eliminarMedico(Medico medico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }
