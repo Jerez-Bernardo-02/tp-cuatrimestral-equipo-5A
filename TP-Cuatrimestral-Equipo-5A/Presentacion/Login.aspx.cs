@@ -24,7 +24,7 @@ namespace Presentacion
             try
             {
                 usuario.NombreUsuario = txtUsuario.Text;
-                usuario.Contrasenia = txtPassword.Text;
+                usuario.Clave = txtPassword.Text;
 
                 if (negocio.Login(usuario))
                 {

@@ -16,17 +16,32 @@ namespace Negocio
             try
             {
                 // Parametros (@Clave, valor) clave seria el nombre de la columna y valor el lo que tiene el objeto recibido por parametro en cada atributo
-                datos.setearConsulta(@"INSERT INTO Medicos (Nombre, Apellido, FechaNacimiento, Dni, Email,Telefono, Matricula) output inserted.Id VALUES (@nombre, @apellido,@fechaNacimiento, @dni, @email, @telefono, @matricula)");
+                datos.setearConsulta(@"INSERT INTO Medicos (Nombre, Apellido, FechaNacimiento, Dni, Email,Telefono, Matricula, UrlImagen, IdUsuario) output inserted.Id VALUES (@Nombre, @Apellido,@FechaNacimiento, @Dni, @Email, @Telefono, @Matricula, @UrlImagen, @IdUsuario)");
 
                 //seteamos parametros  (@Clave, valor) - activo = true por constructor
-                datos.setearParametro("@nombre", nuevo.Nombre);
-                datos.setearParametro("@apellido", nuevo.Apellido);
-                datos.setearParametro("@fechaNacimiento", nuevo.FechaNacimiento);
-                datos.setearParametro("@dni", nuevo.Documento);
-                datos.setearParametro("@email", nuevo.Email);
-                datos.setearParametro("@telefono", nuevo.Telefono);
-                datos.setearParametro("@matricula", nuevo.Matricula);
-
+                datos.setearParametro("@Nombre", nuevo.Nombre);
+                datos.setearParametro("@Apellido", nuevo.Apellido);
+                datos.setearParametro("@FechaNacimiento", nuevo.FechaNacimiento);
+                datos.setearParametro("@Dni", nuevo.Dni);
+                datos.setearParametro("@Email", nuevo.Email);
+                if (string.IsNullOrEmpty(nuevo.Telefono))
+                {
+                    datos.setearParametro("@Telefono", DBNull.Value); //debido a que la DB acepta NULL. CONSULTAR CON EQUIPO
+                }
+                else
+                {
+                    datos.setearParametro("@Telefono", nuevo.Telefono);
+                }
+                datos.setearParametro("@Matricula", nuevo.Matricula);
+                if (string.IsNullOrEmpty(nuevo.UrlImagen))
+                {
+                    datos.setearParametro("@UrlImagen", DBNull.Value);//debido a que la DB acepta NULL. CONSULTAR CON EQUIPO
+                }
+                else
+                {
+                    datos.setearParametro("@UrlImagen", nuevo.UrlImagen);
+                }
+                datos.setearParametro("@IdUsuario", nuevo.Usuario.Id);
                 //para obtener el id autogenerado en la BD 
                 int id = datos.ejecutarEscalar();
                 nuevo.Id = id;

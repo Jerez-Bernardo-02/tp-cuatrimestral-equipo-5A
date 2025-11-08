@@ -22,7 +22,7 @@ namespace Negocio
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@apellido", nuevo.Apellido);
                 datos.setearParametro("@fechaNacimiento", nuevo.FechaNacimiento);
-                datos.setearParametro("@dni", nuevo.Documento);
+                datos.setearParametro("@dni", nuevo.Dni);
                 datos.setearParametro("@email", nuevo.Email);
                 datos.setearParametro("@telefono", nuevo.Telefono);
 
@@ -56,7 +56,7 @@ namespace Negocio
                 if (datos.Lector.Read())
                 {
                     Paciente paciente = new Paciente();
-                    paciente.Documento = (string)datos.Lector["Dni"];
+                    paciente.Dni = (string)datos.Lector["Dni"];
                     paciente.Nombre = (string)datos.Lector["Nombre"];
                     paciente.Apellido = (string)datos.Lector["Apellido"];
                     paciente.Email = (string)datos.Lector["Email"];
@@ -109,7 +109,7 @@ namespace Negocio
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Apellido = (string)datos.Lector["Apellido"];
                     aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
-                    aux.Documento = (string)datos.Lector["Dni"];
+                    aux.Dni = (string)datos.Lector["Dni"];
                     aux.Email = (string)datos.Lector["Email"];
                     aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
                     aux.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
