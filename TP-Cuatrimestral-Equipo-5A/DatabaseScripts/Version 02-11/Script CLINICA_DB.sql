@@ -95,7 +95,7 @@ CREATE TABLE HorariosPorMedicos(
 	HoraSalida TIME NOT NULL,
 	IdMedico INT NOT NULL,
 	IdEspecialidad INT NOT NULL,
-	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadPorMedico(IdMedico, IdEspecialidad)
+	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadesPorMedico(IdMedico, IdEspecialidad)
 )
 GO
 
@@ -108,7 +108,7 @@ CREATE TABLE Turnos(
 	IdEstado INT NOT NULL FOREIGN KEY REFERENCES Estados(Id),
 	IdMedico INT NOT NULL,
 	IdEspecialidad INT NOT NULL,
-	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadPorMedico(IdMedico, IdEspecialidad)
+	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadesPorMedico(IdMedico, IdEspecialidad)
 )
 GO
 
@@ -120,6 +120,79 @@ CREATE TABLE HistoriasClinicas(
 	IdTurno INT NULL FOREIGN KEY REFERENCES Turnos(Id),
 	IdMedico INT NOT NULL,
 	IdEspecialidad INT NOT NULL,
-	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadPorMedico(IdMedico, IdEspecialidad)
+	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadesPorMedico(IdMedico, IdEspecialidad)
 )
+GO
+
+INSERT INTO Permisos (Descripcion)
+VALUES 
+('Paciente'),
+('Medico'),
+('Recepcionista'),
+('Administrador');
+GO
+
+INSERT INTO DiasSemana (Descripcion)
+VALUES 
+('Lunes'),
+('Martes'),
+('Miércoles'),
+('Jueves'),
+('Viernes'),
+('Sábado'),
+('Domingo');
+GO
+
+INSERT INTO Estados (Descripcion)
+VALUES 
+('Nuevo'),
+('Reprogramado'),
+('Cancelado'),
+('No Asistió'),
+('Cerrado');
+GO
+
+INSERT INTO Especialidades (Descripcion)
+VALUES
+('Clínica Médica'),
+('Cardiología'),
+('Pediatría'),
+('Dermatología'),
+('Traumatología'),
+('Ginecología');
+GO
+
+INSERT INTO Usuarios (Usuario, Clave, IdPermiso)
+VALUES
+('paciente1', '1234', 1),
+('paciente2', '1234', 1),
+('medico1', 'abcd', 2),
+('medico2', 'abcd', 2),
+('recep1', 'qwerty', 3),
+('admin', 'admin123', 4);
+GO
+
+INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Email, Telefono, Dni, UrlImagen, IdUsuario)
+VALUES
+('Juan', 'Pérez', '1990-05-10', 'juan.perez@mail.com', '1122334455', '40123456', NULL, 1),
+('María', 'Gómez', '1985-07-22', 'maria.gomez@mail.com', '1199887766', '37222444', NULL, 2);
+GO
+
+INSERT INTO Medicos (Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, UrlImagen, Matricula, IdUsuario)
+VALUES
+('Carlos', 'Ruiz', '1978-09-14', '1144556677', '30111222', 'carlos.ruiz@clinicadb.com', NULL, 'M-12345', 3),
+('Lucía', 'Fernández', '1982-03-30', '1133445566', '28333444', 'lucia.fernandez@clinicadb.com', NULL, 'M-67890', 4);
+GO
+
+INSERT INTO Recepcionistas (Nombre, Apellido, FechaNacimiento, Email, Telefono, Dni, UrlImagen, IdUsuario)
+VALUES
+('Paula', 'Martínez', '1995-10-02', 'paula.martinez@clinicadb.com', '1145678910', '35999888', NULL, 5);
+GO
+
+INSERT INTO EspecialidadesPorMedico (IdMedico, IdEspecialidad)
+VALUES
+(1, 1),
+(1, 2),
+(2, 3),
+(2, 4);
 GO
