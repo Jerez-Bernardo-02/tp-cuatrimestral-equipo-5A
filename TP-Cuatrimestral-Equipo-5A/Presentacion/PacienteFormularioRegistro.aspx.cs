@@ -40,6 +40,7 @@ namespace Presentacion
             string documento = txtDocumento.Text.Trim();
             string telefono = txtTelefono.Text.Trim();
             string matricula = txtMatricula.Text.Trim(); // solo para médicos
+            // --  FALTA EL USUARIO Y LA CONTRASEÑA.
 
             switch (usuarioActual.Permiso.Descripcion)
             {
