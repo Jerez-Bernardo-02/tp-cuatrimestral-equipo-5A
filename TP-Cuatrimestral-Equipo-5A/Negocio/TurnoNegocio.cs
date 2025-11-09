@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT * FROM Turnos WHERE IdMedico = @idMedico");
+                datos.setearConsulta("SELECT * FROM Turnos INNER JOIN Estados E ON E.Id= IdEstado INNER JOIN Pacientes P ON P.Id=IdPaciente  WHERE IdMedico = @idMedico");
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
                 Turno turno= null;
@@ -29,8 +29,12 @@ namespace Negocio
                     turno.Fecha = (DateTime)datos.Lector["Fecha"];
                     turno.Paciente = new Paciente();
                     turno.Paciente.Id = (int)datos.Lector["IdPaciente"];
+                    turno.Paciente.Nombre = (string)datos.Lector["Nombre"];
+                    turno.Paciente.Apellido = (string)datos.Lector["Apellido"];
                     turno.Estado = new Estado();
                     turno.Estado.Id = (int)datos.Lector["IdEstado"];
+                    turno.Estado.Descripcion = (string)datos.Lector["Descripcion"];
+
                     turno.Especialidad = new Especialidad();
                     turno.Especialidad.Id = (int)datos.Lector["IdEspecialidad"];
                     lista.Add(turno);
