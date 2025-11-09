@@ -35,6 +35,11 @@ namespace Presentacion
 
             if (Seguridad.esMedico(Session["usuario"]))
             {
+                Usuario UsuarioLogeado = (Usuario)Session["usuario"];
+
+                MedicoNegocio medicoNegocio = new MedicoNegocio();
+                Medico medico = medicoNegocio.buscarPorIdUsuario(UsuarioLogeado.Id);
+                Session.Add("medico", medico);
                 PanelMedico.Visible = true;
             }
 

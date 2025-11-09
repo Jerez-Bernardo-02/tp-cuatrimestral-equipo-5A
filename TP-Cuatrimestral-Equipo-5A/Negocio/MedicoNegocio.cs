@@ -1,6 +1,7 @@
 ﻿using Datos;
 using Dominio;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -105,6 +106,42 @@ namespace Negocio
                 datos.cerrarConexion();
             } 
 
+        }
+
+        public Medico buscarPorIdUsuario(int idUsuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT Id, Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, UrlImagen, Matricula  FROM Medicos Where IdUsuario = @idUsuario");
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarLectura();
+                Medico medico = null;
+                if (datos.Lector.Read())
+                {
+                    medico = new Medico();
+                    medico.Id = (int)datos.Lector["Id"];
+                    medico.Nombre = (string)datos.Lector["Nombre"];
+                    medico.Apellido = (string)datos.Lector["Apellido"];
+                    medico.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                    medico.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
+                    medico.Dni = (string)datos.Lector["Dni"];
+                    medico.Email = (string)datos.Lector["Email"];
+                    medico.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
+                    medico.Matricula = (string)datos.Lector["Matricula"];
+                }
+                return medico;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
     }
 }
