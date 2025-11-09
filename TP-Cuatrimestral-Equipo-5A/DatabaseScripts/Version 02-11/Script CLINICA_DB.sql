@@ -124,7 +124,6 @@ CREATE TABLE HistoriasClinicas(
 	FOREIGN KEY (IdMedico, IdEspecialidad) REFERENCES EspecialidadesPorMedico(IdMedico, IdEspecialidad)
 )
 GO
-
 INSERT INTO Permisos (Descripcion)
 VALUES 
 ('Paciente'),
@@ -196,4 +195,17 @@ VALUES
 (1, 2),
 (2, 3),
 (2, 4);
+GO
+
+
+select * from Medicos
+select * from EspecialidadesPorMedico
+select * from usuarios
+select * from pacientes
+SELECT * FROM Turnos
+select * from Estados
+
+INSERT INTO Turnos (Fecha, Observaciones, IdPaciente, IdEstado, IdMedico, IdEspecialidad)
+VALUES
+('2025-08-11T14:10:30', 'Turno de prueba', 2, 1, 1, 2);
 GO
