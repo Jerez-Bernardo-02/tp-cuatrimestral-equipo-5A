@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT * FROM Turnos INNER JOIN Estados E ON E.Id= IdEstado INNER JOIN Pacientes P ON P.Id=IdPaciente  WHERE IdMedico = @idMedico");
+                datos.setearConsulta("SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion  FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id= T.IdEspecialidad INNER JOIN Estados E ON E.Id= T.IdEstado INNER JOIN Pacientes P ON P.Id= T.IdPaciente  WHERE T.IdMedico = @idMedico ORDER BY T.Fecha ASC");
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
                 Turno turno= null;
@@ -27,16 +27,19 @@ namespace Negocio
                     turno = new Turno();
                     turno.Id = (int)datos.Lector["Id"];
                     turno.Fecha = (DateTime)datos.Lector["Fecha"];
+                    turno.Observaciones = (string)datos.Lector["Observaciones"];
                     turno.Paciente = new Paciente();
                     turno.Paciente.Id = (int)datos.Lector["IdPaciente"];
-                    turno.Paciente.Nombre = (string)datos.Lector["Nombre"];
-                    turno.Paciente.Apellido = (string)datos.Lector["Apellido"];
+                    turno.Paciente.Nombre = (string)datos.Lector["NombrePaciente"];
+                    turno.Paciente.Apellido = (string)datos.Lector["ApellidoPaciente"];
                     turno.Estado = new Estado();
                     turno.Estado.Id = (int)datos.Lector["IdEstado"];
-                    turno.Estado.Descripcion = (string)datos.Lector["Descripcion"];
+                    turno.Estado.Descripcion = (string)datos.Lector["EstadoDescripcion"];
 
                     turno.Especialidad = new Especialidad();
                     turno.Especialidad.Id = (int)datos.Lector["IdEspecialidad"];
+                    turno.Especialidad.Descripcion = (string)datos.Lector["EspecialidadDescripcion"];
+
                     lista.Add(turno);
                 }
                 return lista;

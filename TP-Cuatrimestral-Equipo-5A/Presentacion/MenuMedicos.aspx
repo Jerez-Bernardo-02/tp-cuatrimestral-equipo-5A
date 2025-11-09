@@ -5,7 +5,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid">
         <div class="mb-4">
-            <h1 class="display-5">Buenos días Dr. <asp:Label ID="lblNombreMedico" runat="server" Text="Label"></asp:Label>!</h1>
+            <h1 class="display-5">Buenos días Dr.
+                <asp:Label ID="lblNombreMedico" runat="server" Text="Label"></asp:Label>!</h1>
             <p>Resumen de tu jornada.</p>
         </div>
 
@@ -78,9 +79,10 @@
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
+                                <asp:BoundField HeaderText="Especialidad" DataField="Especialidad.Descripcion" />
+
                                 <asp:BoundField HeaderText="Estado" DataField="Estado.Descripcion" />
 
-                                <asp:CommandField HeaderText="Ver Historia clinica" ShowSelectButton="true" SelectText="Ver historia clinica" />
                                 <asp:TemplateField HeaderText="Acciones">
 
                                     <ItemTemplate>
@@ -89,15 +91,15 @@
                                             CommandArgument='<%# Item.Id %>'
                                             CssClass="btn btn-info btn-sm"
                                             ToolTip="Ver Historia Clínica">
-                                <i class="bi bi-eye-fill"></i>
+                                            <i class="bi bi-eye-fill"></i>
                                         </asp:LinkButton>
 
                                         <asp:LinkButton runat="server"
                                             CommandName="ModificarEstado"
                                             CommandArgument='<%# Item.Id %>'
                                             CssClass="btn btn-warning btn-sm"
-                                            ToolTip="Modificar Estado">
-                                <i class="bi bi-pencil-fill"></i>
+                                            ToolTip="Modificar Estado / Ver Observaciones">
+                                            <i class="bi bi-pencil-fill"></i>
                                         </asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateField>
