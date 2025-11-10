@@ -40,6 +40,7 @@ namespace Presentacion
             string documento = txtDocumento.Text.Trim();
             string telefono = txtTelefono.Text.Trim();
             string matricula = txtMatricula.Text.Trim(); // solo para médicos
+            // --  FALTA EL USUARIO Y LA CONTRASEÑA.
 
             switch (usuarioActual.Permiso.Descripcion)
             {
@@ -49,7 +50,7 @@ namespace Presentacion
                     medico.Nombre = nombre;
                     medico.Apellido = apellido;
                     medico.Email = email;
-                    medico.Documento = documento;
+                    medico.Dni = documento;
                     medico.Telefono = telefono;
                     medico.Matricula = matricula;
                     medicoNegocio.agregarMedico(medico);
@@ -62,7 +63,7 @@ namespace Presentacion
                     paciente.Nombre = nombre;
                     paciente.Apellido = apellido;
                     paciente.Email = email;
-                    paciente.Documento = documento;
+                    paciente.Dni = documento;
                     paciente.Telefono = telefono;
                     pacienteNegocio.agregarPaciente(paciente);
                     break;
@@ -73,7 +74,7 @@ namespace Presentacion
                     recepcionista.Nombre = nombre;
                     recepcionista.Apellido = apellido;
                     recepcionista.Email = email;
-                    recepcionista.Documento = documento;
+                    recepcionista.Dni = documento;
                     recepcionista.Telefono = telefono;
                     recepcionistaNegocio.agregarRecepcionista(recepcionista);
                     break;

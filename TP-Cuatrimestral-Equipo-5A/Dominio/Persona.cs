@@ -15,12 +15,10 @@ namespace Dominio
         public DateTime FechaNacimiento { get; set; }
         public string Email { get; set; }
         public string Telefono { get; set; }
-        public string Documento {  get; set; }
+        public string Dni {  get; set; }
         public string UrlImagen { get; set; }
 
         public Usuario Usuario { get; set; }
-
-  
 
 
     }

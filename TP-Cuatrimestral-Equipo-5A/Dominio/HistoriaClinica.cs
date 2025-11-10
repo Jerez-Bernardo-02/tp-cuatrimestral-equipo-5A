@@ -9,8 +9,12 @@ namespace Dominio
     public class HistoriaClinica
     {
         public int Id { get; set; }
+        public string Asunto {  get; set; }
         public string Descripcion { get; set; }
-        public DateTime fecha { get; set; }
+        public DateTime Fecha { get; set; }
+        public Medico Medico { get; set; }
+        public Paciente Paciente { get; set; }
+        public Especialidad Especialidad { get; set; }
 
     }
 }

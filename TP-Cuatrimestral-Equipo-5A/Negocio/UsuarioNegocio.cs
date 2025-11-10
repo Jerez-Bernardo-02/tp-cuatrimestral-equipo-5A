@@ -18,7 +18,7 @@ namespace Negocio
 			{
 				datos.setearConsulta("SELECT U.Id, U.Usuario, U.Clave, U.Activo, P.Descripcion FROM USUARIOS U INNER JOIN Permisos P ON U.IdPermiso = P.Id WHERE Usuario = @usuario AND Clave = @clave");
 				datos.setearParametro("@usuario", usuario.NombreUsuario);
-                datos.setearParametro("@clave", usuario.Contrasenia);
+                datos.setearParametro("@clave", usuario.Clave);
 				datos.ejecutarLectura();
 
 				if (datos.Lector.Read())

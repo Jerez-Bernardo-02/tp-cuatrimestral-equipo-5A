@@ -22,7 +22,7 @@ namespace Negocio
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@apellido", nuevo.Apellido);
                 datos.setearParametro("@fechaNacimiento", nuevo.FechaNacimiento);
-                datos.setearParametro("@dni", nuevo.Documento);
+                datos.setearParametro("@dni", nuevo.Dni);
                 datos.setearParametro("@email", nuevo.Email);
                 datos.setearParametro("@telefono", nuevo.Telefono);
 
