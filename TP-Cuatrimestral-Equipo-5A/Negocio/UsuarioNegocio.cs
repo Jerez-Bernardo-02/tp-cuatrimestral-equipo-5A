@@ -63,5 +63,39 @@ namespace Negocio
             }
         }
 
+        public List<Usuario> listar()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Usuario> lista = new List<Usuario>();
+            try
+            {
+                datos.setearConsulta("SELECT U.Id, U.Usuario, U.Clave, U.Activo, U.IdPermiso, P.Descripcion FROM Usuarios U INNER JOIN Permisos P ON U.IdPermiso = P.Id;");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Usuario usuario = new Usuario();
+                    usuario.Id = (int)datos.Lector["Id"];
+                    usuario.NombreUsuario = (string)datos.Lector["Usuario"];
+                    usuario.Clave = (string)datos.Lector["Clave"];
+                    usuario.Activo = (bool)datos.Lector["Activo"];
+                    usuario.Permiso = new Permiso();
+                    usuario.Permiso.Id = (int)datos.Lector["IdPermiso"];
+                    usuario.Permiso.Descripcion = (string)datos.Lector["Descripcion"];
+                    lista.Add(usuario);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }
