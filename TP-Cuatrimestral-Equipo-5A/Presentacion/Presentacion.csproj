@@ -67,7 +67,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PacienteFormularioRegistro.aspx" />
+    <Content Include="MenuAdminRecepcionista.aspx" />
+    <Content Include="FormularioRegistro.aspx" />
     <Content Include="AdministradorGestionPacientes.aspx" />
     <Content Include="AdministradorGestionPersonal.aspx" />
     <Content Include="Global.asax" />
@@ -85,12 +86,19 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PacienteFormularioRegistro.aspx.cs">
-      <DependentUpon>PacienteFormularioRegistro.aspx</DependentUpon>
+    <Compile Include="MenuAdminRecepcionista.aspx.cs">
+      <DependentUpon>MenuAdminRecepcionista.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PacienteFormularioRegistro.aspx.designer.cs">
-      <DependentUpon>PacienteFormularioRegistro.aspx</DependentUpon>
+    <Compile Include="MenuAdminRecepcionista.aspx.designer.cs">
+      <DependentUpon>MenuAdminRecepcionista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormularioRegistro.aspx.cs">
+      <DependentUpon>FormularioRegistro.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormularioRegistro.aspx.designer.cs">
+      <DependentUpon>FormularioRegistro.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdministradorGestionPacientes.aspx.cs">
       <DependentUpon>AdministradorGestionPacientes.aspx</DependentUpon>

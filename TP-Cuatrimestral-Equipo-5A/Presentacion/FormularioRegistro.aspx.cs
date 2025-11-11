@@ -34,7 +34,11 @@ namespace Presentacion
         {
             try
             {
+                
                 string tipoUsuarioActivar = (string)Session["tipoUsuarioRegistrar"];// Recuperamos el tipo de usuario a registrar desde la session
+                UsuarioNegocio nuevoUsuarioNegocio = new UsuarioNegocio();
+                Usuario nuevoUsuario = new Usuario();
+                int idUsuario;
 
                 string nombre = txtNombre.Text.Trim();
                 string apellido = txtApellido.Text.Trim();
@@ -61,12 +65,10 @@ namespace Presentacion
                         break;
 
                     case "Paciente":
-                        int idUsuario;
+                       
                         PacienteNegocio pacienteNegocio = new PacienteNegocio();// Lógica para registrar paciente
-                        UsuarioNegocio nuevoUsuarioNegocio = new UsuarioNegocio();
                         Paciente paciente = new Paciente();
-                        Usuario nuevoUsuario = new Usuario();
-
+                       
                         //guardo primero el usuario en la BD y traigo el ID de la BD autogenerada 
                         nuevoUsuario.NombreUsuario = usuario;
                         nuevoUsuario.Clave = contrasenia;
@@ -90,7 +92,7 @@ namespace Presentacion
                         pnlResultado.CssClass = "alert alert-success text-center mt-3";
                         pnlResultado.Visible = true;
 
-                        // redirijo al login despues de 3 segundos para que se alcance a leer el pnl
+                        // redirijo al login despues de 3 segundos para que se alcance a leer el pnl al login
                         ClientScript.RegisterStartupScript(this.GetType(), "redirigir","setTimeout(function(){ window.location='Login.aspx'; }, 3000);", true);
 
                         break;
@@ -98,12 +100,32 @@ namespace Presentacion
                     case "Recepcionista":
                         RecepcionistaNegocio recepcionistaNegocio = new RecepcionistaNegocio();// Lógica para registrar recepcionista
                         Recepcionista recepcionista = new Recepcionista();
+
+                        //guardo primero el usuario en la BD y traigo el ID de la BD autogenerada 
+                        nuevoUsuario.NombreUsuario = usuario;
+                        nuevoUsuario.Clave = contrasenia;
+                        nuevoUsuario.Activo = true;
+                        nuevoUsuario.Permiso = new Permiso();
+                        nuevoUsuario.Permiso.Id = 2;
+                        idUsuario = nuevoUsuarioNegocio.agregarUsuario(nuevoUsuario);
+
                         recepcionista.Nombre = nombre;
                         recepcionista.Apellido = apellido;
                         recepcionista.Email = email;
                         recepcionista.Dni = documento;
                         recepcionista.Telefono = telefono;
+                        recepcionista.Usuario = new Usuario();
+                        recepcionista.Usuario.Id = idUsuario;
+                        recepcionista.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
+                        //agrego el Paciente en la BD junto con su Id de usuario
                         recepcionistaNegocio.agregarRecepcionista(recepcionista);
+                        //mostramos mensaje de exito si todo esta ok
+                        lblResultado.Text = "La nueva cuenta de recepcionista fue creada exitosamente.";
+                        pnlResultado.CssClass = "alert alert-success text-center mt-3";
+                        pnlResultado.Visible = true;
+                        // redirijo al login despues de 3 segundos para que se alcance a leer el pnl al mismo menuRecepcionista del Admin
+                        ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='MenuAdminRecepcionista.aspx'; }, 3000);", true);
+
                         break;
 
                     default:

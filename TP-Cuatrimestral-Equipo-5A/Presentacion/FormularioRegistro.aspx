@@ -1,6 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" 
-CodeBehind="PacienteFormularioRegistro.aspx.cs" Inherits="Presentacion.FormularioRegistro" 
-UnobtrusiveValidationMode="None"  %> 
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="FormularioRegistro.aspx.cs" Inherits="Presentacion.FormularioRegistro" UnobtrusiveValidationMode="None"  %> 
 	
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

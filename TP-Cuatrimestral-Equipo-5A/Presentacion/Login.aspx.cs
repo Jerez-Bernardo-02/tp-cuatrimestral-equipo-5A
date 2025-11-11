@@ -58,7 +58,7 @@ namespace Presentacion
             
             Session["tipoUsuarioRegistrar"] = "Paciente";// Guardamos en session el tipo de usuario que se va a registrar, en este caso paciente
   
-            Response.Redirect("PacienteFormularioRegistro.aspx", false);// Redirigimos al formulario de registro para pacientes
+            Response.Redirect("FormularioRegistro.aspx", false);// Redirigimos al formulario de registro para pacientes
 
         }
     }
