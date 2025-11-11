@@ -25,24 +25,11 @@ namespace Negocio
                 datos.setearParametro("@FechaNacimiento", nuevo.FechaNacimiento);
                 datos.setearParametro("@Dni", nuevo.Dni);
                 datos.setearParametro("@Email", nuevo.Email);
-                if (string.IsNullOrEmpty(nuevo.Telefono))
-                {
-                    datos.setearParametro("@Telefono", DBNull.Value); //debido a que la DB acepta NULL. CONSULTAR CON EQUIPO
-                }
-                else
-                {
-                    datos.setearParametro("@Telefono", nuevo.Telefono);
-                }
-                datos.setearParametro("@Matricula", nuevo.Matricula);
-                if (string.IsNullOrEmpty(nuevo.UrlImagen))
-                {
-                    datos.setearParametro("@UrlImagen", DBNull.Value);//debido a que la DB acepta NULL. CONSULTAR CON EQUIPO
-                }
-                else
-                {
-                    datos.setearParametro("@UrlImagen", nuevo.UrlImagen);
-                }
+                //Operador Coalescing o unificacion, es un operador condicional para trabajar nulos, evalua el object de la izquierda, si no es null lo registra, y si es null registra el de la derecha 
+                datos.setearParametro("@Telefono", (object)nuevo.Telefono ?? DBNull.Value);
+                datos.setearParametro("@Matricula", (object)nuevo.Matricula ?? DBNull.Value);
                 datos.setearParametro("@IdUsuario", nuevo.Usuario.Id);
+
                 //para obtener el id autogenerado en la BD 
                 int id = datos.ejecutarEscalar();
                 nuevo.Id = id;
