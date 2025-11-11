@@ -111,5 +111,12 @@ UnobtrusiveValidationMode="None"  %>
                 <asp:Button Text="Registrarse" ID="BtnRegistrarse" OnClick="BtnRegistrarse_Click" runat="server" class="btn btn-primary" />
             </div>  
         </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+                <asp:Panel ID="pnlResultado" runat="server" Visible="false" CssClass="alert alert-success text-center mt-3">
+                    <asp:Label ID="lblResultado" runat="server" Text=""></asp:Label>
+                </asp:Panel>
+            </div>
+        </div>
     </div>
 </asp:Content>
