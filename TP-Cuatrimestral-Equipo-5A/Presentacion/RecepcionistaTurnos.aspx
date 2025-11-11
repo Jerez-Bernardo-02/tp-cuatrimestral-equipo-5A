@@ -2,13 +2,18 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="container-fluid" style="padding-top: 80px;">
+    <div class="container-fluid" style="padding-top: 40px;">
+        <h2 class="card-title mb-5">Turnos registrados</h2>
+
         <div class="row mb-3">
             <div class="col-md-2">
-                <asp:TextBox runat="server" ID="txtEspecialidad" CssClass="form-control" Placeholder="Especialidad"></asp:TextBox>
+                <asp:TextBox runat="server" ID="txtFecha" CssClass="form-control" TextMode="Date"></asp:TextBox>
             </div>
             <div class="col-md-2">
-                <asp:TextBox runat="server" ID="txtFecha" CssClass="form-control" TextMode="Date"></asp:TextBox>
+                <asp:TextBox runat="server" ID="txtDni" CssClass="form-control" PlaceHolder="Dni del Paciente"></asp:TextBox>
+            </div>
+            <div class="col-md-2">
+                <asp:TextBox runat="server" ID="txtEspecialidad" CssClass="form-control" Placeholder="Especialidad"></asp:TextBox>
             </div>
             <div class="col-md-1">
                 <asp:Button runat="server" Text="Filtrar" CssClass="btn btn-primary w-100" />
@@ -18,19 +23,36 @@
             <div class="col-12">
                 <div class="card shadow-sm border-0 mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Turnos registrados</h5>
 
                         <asp:GridView runat="server" ID="dgvTurnos" AutoGenerateColumns="False" CssClass="table table-striped">
                             <Columns>
-                                <asp:BoundField HeaderText="Fecha" />
-                                <asp:BoundField HeaderText="Medico" />
-                                <asp:BoundField HeaderText="Paciente" />
-                                <asp:BoundField HeaderText="Especialidad" />
+                                <asp:BoundField HeaderText="Fecha" Datafield="Fecha"/>
+                                <asp:TemplateField HeaderText="Dni del Paciente">
+                                    <ItemTemplate>
+                                        <%# Eval("Paciente.Dni") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Paciente">
+                                    <ItemTemplate>
+                                        <%# Eval("Paciente.Nombre") + " " + Eval("Paciente.Apellido") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Médico">
+                                    <ItemTemplate>
+                                        <%# Eval("Medico.Apellido") + ", " + Eval("Medico.Nombre") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Especialidad">
+                                    <ItemTemplate>
+                                        <%# Eval("Especialidad.Descripcion") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
 
                                 <asp:TemplateField HeaderText="Acciones">
                                     <ItemTemplate>
-                                        <asp:Button runat="server" Text="Editar" CssClass="btn btn-sm btn-primary" />
-                                        <asp:Button runat="server" Text="Turnos" CssClass="btn btn-sm btn-secondary" />
+                                        <asp:LinkButton runat="server" ID="lnkBtnModificarTurno" Text="Editar" CssClass="btn btn-warning btn-sm" ToolTip="Modificar Turno">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateField>
 

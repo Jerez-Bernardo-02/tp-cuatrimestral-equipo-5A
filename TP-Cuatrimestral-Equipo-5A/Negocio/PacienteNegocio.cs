@@ -97,7 +97,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT  P.Id AS IdPaciente, Pe.Id AS IdPersona, Pe.Nombre, Pe.Apellido, Pe.FechaNacimiento, Pe.Dni, Pe.Email, Pe.Telefono, Pe.UrlImagen, Pe.Activo FROM Pacientes P INNER JOIN Personas Pe ON P.IdPersona = Pe.Id;");
+                datos.setearConsulta("SELECT  P.Id AS IdPaciente, P.Nombre, P.Apellido, P.FechaNacimiento, P.Email, P.Telefono, P.Dni, P.UrlImagen FROM Pacientes P");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())

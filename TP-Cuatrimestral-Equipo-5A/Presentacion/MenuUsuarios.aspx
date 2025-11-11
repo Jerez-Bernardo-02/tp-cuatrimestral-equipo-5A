@@ -96,13 +96,22 @@
 
         <div class="container d-flex align-items-center justify-content-center" style="height: 75vh;">
 
-            <div class="row row-cols-2 g-4">
+            <div class="row row-cols-3 g-4">
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="RecepcionistaPacientes.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Pacientes.png" width="100" height="100" alt="Pacientes">
                             <h5 class="card-text mt-3">Pacientes</h5>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="RecepcionistaMedicos.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
+                        <div class="card-body">
+                            <img src="Imagenes/Icono_Medico.png" width="100" height="100" alt="Medicos">
+                            <h5 class="card-text mt-3">Medicos</h5>
                         </div>
                     </a>
                 </div>
