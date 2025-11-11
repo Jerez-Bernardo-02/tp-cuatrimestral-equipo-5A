@@ -16,8 +16,7 @@ namespace Negocio
             try
             {
                 // Parametros (@Clave, valor) clave seria el nombre de la columna y valor el lo que tiene el objeto recibido por parametro en cada atributo
-                datos.setearConsulta(@"INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Dni, Email,Telefono) output inserted.Id VALUES (@nombre, @apellido,@fechaNacimiento, @dni, @email, @telefono)");
-                
+                datos.setearConsulta(@"INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Dni, Email, Telefono, IdUsuario) OUTPUT INSERTED.Id VALUES (@nombre, @apellido, @fechaNacimiento, @dni, @email, @telefono, @idUsuario)");
                 //seteamos parametros  (@Clave, valor)
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@apellido", nuevo.Apellido);
@@ -25,6 +24,7 @@ namespace Negocio
                 datos.setearParametro("@dni", nuevo.Dni);
                 datos.setearParametro("@email", nuevo.Email);
                 datos.setearParametro("@telefono", nuevo.Telefono);
+                datos.setearParametro("@idUsuario", nuevo.Usuario.Id);
 
                 //para obtener el id autogenerado en la BD 
                 int id = datos.ejecutarEscalar();

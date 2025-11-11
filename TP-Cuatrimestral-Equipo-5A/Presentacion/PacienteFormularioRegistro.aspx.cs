@@ -32,7 +32,8 @@ namespace Presentacion
 
         protected void BtnRegistrarse_Click(object sender, EventArgs e)
         {
-            Usuario usuarioActual = (Usuario)Session["usuario"];
+            
+            string tipoUsuarioActivar = (string)Session["tipoUsuarioRegistrar"];// Recuperamos el tipo de usuario a registrar desde la session
 
             string nombre = txtNombre.Text.Trim();
             string apellido = txtApellido.Text.Trim();
@@ -40,9 +41,11 @@ namespace Presentacion
             string documento = txtDocumento.Text.Trim();
             string telefono = txtTelefono.Text.Trim();
             string matricula = txtMatricula.Text.Trim(); // solo para médicos
+            string usuario = txtUsuario.Text.Trim();    
+            string contrasenia = txtContrasenia.Text.Trim();
             // --  FALTA EL USUARIO Y LA CONTRASEÑA.
 
-            switch (usuarioActual.Permiso.Descripcion)
+            switch (tipoUsuarioActivar)
             {
                 case "Medico":
                     MedicoNegocio medicoNegocio = new MedicoNegocio(); // Lógica para registrar medico
@@ -57,14 +60,29 @@ namespace Presentacion
                     break;
 
                 case "Paciente":
-                    
+                    int idUsuario;
                     PacienteNegocio pacienteNegocio = new PacienteNegocio();// Lógica para registrar paciente
+                    UsuarioNegocio nuevoUsuarioNegocio = new UsuarioNegocio();
                     Paciente paciente = new Paciente();
+                    Usuario nuevoUsuario = new Usuario();
+
+                    //guardo primero el usuario en la BD y traigo el ID de la BD autogenerada 
+                    nuevoUsuario.NombreUsuario = usuario;
+                    nuevoUsuario.Clave = contrasenia;
+                    nuevoUsuario.Activo = true;
+                    nuevoUsuario.Permiso = new Permiso();
+                    nuevoUsuario.Permiso.Id = 4;
+                    idUsuario = nuevoUsuarioNegocio.agregarUsuario(nuevoUsuario);
+
                     paciente.Nombre = nombre;
                     paciente.Apellido = apellido;
                     paciente.Email = email;
                     paciente.Dni = documento;
                     paciente.Telefono = telefono;
+                    paciente.Usuario = new Usuario();
+                    paciente.Usuario.Id = idUsuario;
+                    paciente.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
+                    //agrego el Paciente en la BD junto con su Id de usuario
                     pacienteNegocio.agregarPaciente(paciente);
                     break;
 
@@ -87,31 +105,31 @@ namespace Presentacion
         }
 
 
-        protected void cvEmailDni_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            PersonaNegocio personaNegocio = new PersonaNegocio();
+        /* protected void cvEmailDni_ServerValidate(object source, ServerValidateEventArgs args)
+         {
+             PersonaNegocio personaNegocio = new PersonaNegocio();
 
-            string email = txtEmail.Text.Trim(); // Obtengo los valores de los TextBox del formulario
-            string documento = txtDocumento.Text.Trim();
-            string matricula = txtMatricula.Text.Trim();
+             string email = txtEmail.Text.Trim(); // Obtengo los valores de los TextBox del formulario
+             string documento = txtDocumento.Text.Trim();
+             string matricula = txtMatricula.Text.Trim();
 
-            Usuario usuarioActual = (Usuario)Session["usuario"];// Obtengo el usuario actual (que tiene el permiso)
-            bool existe;
-            if (usuarioActual.Permiso.Descripcion != "Medico")
-            {
-                existe = personaNegocio.ValidarDatosPorPermiso(usuarioActual, email, documento, null);  // Llamo al método de negocio y envio matricula null porque no es medico
-            }
-            else
-            {
-                existe = personaNegocio.ValidarDatosPorPermiso(usuarioActual, email, documento, matricula);  // Llamo al método de negocio y envio matricula porque si es medico
-            }
-                
-            args.IsValid = !existe; // Si existe, la validación falla
-        }
-        protected void cvFechaNacimiento_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            DateTime fecha;
-            args.IsValid = DateTime.TryParse(TextFechaNacimiento.Text, out fecha) && fecha <= DateTime.Today;
-        }
+             Usuario usuarioActual = (Usuario)Session["usuario"];// Obtengo el usuario actual (que tiene el permiso)
+             bool existe;
+             if (usuarioActual.Permiso.Descripcion != "Medico")
+             {
+                 existe = personaNegocio.ValidarDatosPorPermiso(usuarioActual, email, documento, null);  // Llamo al método de negocio y envio matricula null porque no es medico
+             }
+             else
+             {
+                 existe = personaNegocio.ValidarDatosPorPermiso(usuarioActual, email, documento, matricula);  // Llamo al método de negocio y envio matricula porque si es medico
+             }
+
+             args.IsValid = !existe; // Si existe, la validación falla
+         }
+         protected void cvFechaNacimiento_ServerValidate(object source, ServerValidateEventArgs args)
+         {
+             DateTime fecha;
+             args.IsValid = DateTime.TryParse(TextFechaNacimiento.Text, out fecha) && fecha <= DateTime.Today;
+         }*/
     }
 }

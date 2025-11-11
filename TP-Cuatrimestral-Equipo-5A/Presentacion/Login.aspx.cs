@@ -52,5 +52,14 @@ namespace Presentacion
                 Response.Redirect("Error.aspx");
             }
         }
+
+        protected void btnRegistrarse_Click(object sender, EventArgs e)
+        {
+            
+            Session["tipoUsuarioRegistrar"] = "Paciente";// Guardamos en session el tipo de usuario que se va a registrar, en este caso paciente
+  
+            Response.Redirect("PacienteFormularioRegistro.aspx", false);// Redirigimos al formulario de registro para pacientes
+
+        }
     }
 }

@@ -49,7 +49,7 @@
 
                             <%-- Crear cuenta --%>
                             <div class="input-group mb-3">
-                                <asp:Button CssClass="btn btn-lg btn-light w-100 fs-6" ID="btnRegistrarse" runat="server" Text="Registrarse"  />
+                                <asp:Button CssClass="btn btn-lg btn-light w-100 fs-6" ID="btnRegistrarse" onClick="btnRegistrarse_Click" runat="server" Text="Registrarse"  />
                             </div>
                         </div>
 

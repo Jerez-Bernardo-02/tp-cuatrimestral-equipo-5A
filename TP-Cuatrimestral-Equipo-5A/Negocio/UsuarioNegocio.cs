@@ -43,5 +43,37 @@ namespace Negocio
 				datos.cerrarConexion();
 			}
         }
+
+        public int agregarUsuario(Usuario nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // Parametros (@Clave, valor) clave seria el nombre de la columna y valor el lo que tiene el objeto recibido por parametro en cada atributo
+                datos.setearConsulta(@"INSERT INTO Usuarios (Usuario, Clave, Activo, IdPermiso) OUTPUT INSERTED.Id VALUES (@usuario, @clave, @activo, @idPermiso)");
+
+                //seteamos parametros  (@Clave, valor)
+                datos.setearParametro("@usuario", nuevo.NombreUsuario);
+                datos.setearParametro("@clave", nuevo.Clave);
+                datos.setearParametro("@activo", nuevo.Activo);
+                datos.setearParametro("@idPermiso", nuevo.Permiso.Id);
+           
+                //para obtener el id autogenerado en la BD 
+                int id = datos.ejecutarEscalar();
+                nuevo.Id = id;
+
+                return nuevo.Id;
+            }
+            catch (Exception)
+            {
+                throw;
+
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
+
 }
