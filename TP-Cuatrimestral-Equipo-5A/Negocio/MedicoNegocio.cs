@@ -84,26 +84,6 @@ namespace Negocio
 
         }
 
-        public void bajaLogica(int idMedico)
-        {
-            AccesoDatos datos = new AccesoDatos();
-            try
-            {
-                datos.setearConsulta("UPDATE U SET U.Activo = 0 FROM Usuarios U INNER JOIN Medicos M ON M.IdUsuario = U.Id WHERE M.Id = @idMedico;");
-                datos.setearParametro("@idMedico", idMedico);
-                datos.ejecutarAccion();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
         public Medico buscarPorIdUsuario(int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();

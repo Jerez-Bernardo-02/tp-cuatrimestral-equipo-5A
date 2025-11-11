@@ -43,5 +43,25 @@ namespace Negocio
 				datos.cerrarConexion();
 			}
         }
+
+        public void bajaLogica(int idUsuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Usuarios SET Activo = 0 WHERE Id = @idUsuario;");
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }
