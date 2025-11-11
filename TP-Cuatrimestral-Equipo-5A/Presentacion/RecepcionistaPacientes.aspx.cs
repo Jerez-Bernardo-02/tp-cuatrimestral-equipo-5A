@@ -19,5 +19,11 @@ namespace Presentacion
                 dgvPacientes.DataBind();
             }
         }
+
+        protected void btnNuevoPaciente_Click(object sender, EventArgs e)
+        {
+            Session.Add("tipoUsuarioRegistrar", "Paciente");
+            Response.Redirect("FormularioRegistro.aspx");
+        }
     }
 }

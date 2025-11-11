@@ -33,12 +33,12 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.GridView dgvMedicos;
 
         /// <summary>
-        /// Control btnNuevoTurno.
+        /// Control btnNuevoMedico.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnNuevoTurno;
+        protected global::System.Web.UI.WebControls.Button btnNuevoMedico;
     }
 }

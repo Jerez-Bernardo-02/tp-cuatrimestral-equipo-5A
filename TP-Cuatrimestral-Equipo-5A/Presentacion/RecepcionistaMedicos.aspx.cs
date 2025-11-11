@@ -13,5 +13,11 @@ namespace Presentacion
         {
 
         }
+
+        protected void btnNuevoMedico_Click(object sender, EventArgs e)
+        {
+            Session.Add("tipoUsuarioRegistrar", "Medico");
+            Response.Redirect("FormularioRegistro.aspx");
+        }
     }
 }
