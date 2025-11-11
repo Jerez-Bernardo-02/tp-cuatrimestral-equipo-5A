@@ -84,9 +84,9 @@
         <div class="row mb-3">
             <div class="col-md-6" id="divMatricula" runat="server" visible="false">
                 <label for="txtMatricula" class="form-label">Matricula</label>
-                <!--
+              
                 <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="Matricula"></asp:TextBox>
-                <asp:RequiredFieldValidator ID="rfvMatricula" runat="server" ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria para médicos." ForeColor="Red" Enabled="false" />
+                  <!--<asp:RequiredFieldValidator ID="rfvMatricula" runat="server" ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria para médicos." ForeColor="Red" Enabled="false" />
                 -->
             </div>  
         </div>

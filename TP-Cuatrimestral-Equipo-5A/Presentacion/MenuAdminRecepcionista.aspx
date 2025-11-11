@@ -11,7 +11,7 @@
                 <asp:GridView ID="gvRecepcionistas" runat="server" CssClass="table table-striped align-middle text-center"
                     AutoGenerateColumns="false" GridLines="None">
                     <Columns>
-                        <asp:BoundField DataField="NombreCompleto" HeaderText="Nombre" />
+                        <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
                         <asp:TemplateField HeaderText="Acciones">
                             <ItemTemplate>
                                 <asp:Button ID="btnEditar" runat="server" Text="Modificar" 

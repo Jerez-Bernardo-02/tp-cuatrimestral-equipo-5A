@@ -13,21 +13,20 @@ namespace Presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            /*if (!IsPostBack)
+            if (!IsPostBack)
             {
-                Usuario usuarioActual = (Usuario)Session["usuario"];
-                if (usuarioActual.Permiso.Descripcion == "Medico")
+                string usuarioActual = (string)Session["tipoUsuarioRegistrar"];
+                if (usuarioActual == "Medico")
                 {
                     divMatricula.Visible = true; //si es medico, se hace visible el campo txtMatricula
-                    rfvMatricula.Enabled = true; // habilita el RequiredFieldValidator
+                    //rfvMatricula.Enabled = true; // habilita el RequiredFieldValidator
                 }
                 else
                 {
                     divMatricula.Visible = false; // si no es medico, no se ve
-                    rfvMatricula.Enabled = false; // deshabilita el validador
+                    //rfvMatricula.Enabled = false; // deshabilita el validador
                 }
-            }*/
-
+            }
         }
 
         protected void BtnRegistrarse_Click(object sender, EventArgs e)
@@ -55,13 +54,34 @@ namespace Presentacion
                     case "Medico":
                         MedicoNegocio medicoNegocio = new MedicoNegocio(); // Lógica para registrar medico
                         Medico medico = new Medico();
+
+                        //guardo primero el usuario en la BD y traigo el ID de la BD autogenerada
+                        nuevoUsuario.NombreUsuario = usuario;
+                        nuevoUsuario.Clave = contrasenia;
+                        nuevoUsuario.Activo = true;
+                        nuevoUsuario.Permiso = new Permiso();
+                        nuevoUsuario.Permiso.Id = 3;
+                        idUsuario = nuevoUsuarioNegocio.agregarUsuario(nuevoUsuario);
+
                         medico.Nombre = nombre;
                         medico.Apellido = apellido;
                         medico.Email = email;
                         medico.Dni = documento;
                         medico.Telefono = telefono;
                         medico.Matricula = matricula;
+                        medico.Usuario = new Usuario();
+                        medico.Usuario.Id = idUsuario;
+                        medico.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
+                        //agrego el Medico en la BD junto con su Id de usuario
                         medicoNegocio.agregarMedico(medico);
+                        //mostramos mensaje de exito si todo esta ok
+                        lblResultado.Text = "La cuenta del médico fue creada exitosamente.";
+                        pnlResultado.CssClass = "alert alert-success text-center mt-3";
+                        pnlResultado.Visible = true;
+
+                        //OJO MIRAR ESTE COMENTARIO CON COMPAÑEROS PARA REDIRIGIR A TARJETAS CON IMAGENES
+                        // redirijo al login despues de 3 segundos para que se alcance a leer el pnl al menu administrador. Aca debemos AGREGAR LAS TARJETAS DEL MENU CON LAS IMAGENES CORRESPONDIENTES A GESTION DE: MEDICOS,RECEPCIONISTAS,ESPECIALIDADES,PACIENTES 
+                        ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='MenuAdministrador.aspx'; }, 3000);", true);
                         break;
 
                     case "Paciente":
@@ -124,7 +144,7 @@ namespace Presentacion
                         pnlResultado.CssClass = "alert alert-success text-center mt-3";
                         pnlResultado.Visible = true;
                         // redirijo al login despues de 3 segundos para que se alcance a leer el pnl al mismo menuRecepcionista del Admin
-                        ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='MenuAdminRecepcionista.aspx'; }, 3000);", true);
+                        ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='MenuAdminstrador.aspx'; }, 3000);", true);
 
                         break;
 

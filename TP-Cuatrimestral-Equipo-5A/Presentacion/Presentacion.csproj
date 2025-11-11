@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MenuAdminMedico.aspx" />
     <Content Include="MenuAdminRecepcionista.aspx" />
     <Content Include="FormularioRegistro.aspx" />
     <Content Include="AdministradorGestionPacientes.aspx" />
@@ -86,6 +87,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MenuAdminMedico.aspx.cs">
+      <DependentUpon>MenuAdminMedico.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MenuAdminMedico.aspx.designer.cs">
+      <DependentUpon>MenuAdminMedico.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MenuAdminRecepcionista.aspx.cs">
       <DependentUpon>MenuAdminRecepcionista.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
