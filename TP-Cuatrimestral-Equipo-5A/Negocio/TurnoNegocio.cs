@@ -20,14 +20,12 @@ namespace Negocio
                 datos.setearConsulta("SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion  FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id= T.IdEspecialidad INNER JOIN Estados E ON E.Id= T.IdEstado INNER JOIN Pacientes P ON P.Id= T.IdPaciente  WHERE T.IdMedico = @idMedico ORDER BY T.Fecha ASC");
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
-                Turno turno= null;
                 while (datos.Lector.Read())
                 {
-
-                    turno = new Turno();
+                    Turno turno = new Turno();
                     turno.Id = (int)datos.Lector["Id"];
                     turno.Fecha = (DateTime)datos.Lector["Fecha"];
-                    turno.Observaciones = (string)datos.Lector["Observaciones"];
+                    turno.Observaciones = datos.Lector["Observaciones"] != DBNull.Value ? (string)datos.Lector["Observaciones"] : null;
                     turno.Paciente = new Paciente();
                     turno.Paciente.Id = (int)datos.Lector["IdPaciente"];
                     turno.Paciente.Nombre = (string)datos.Lector["NombrePaciente"];

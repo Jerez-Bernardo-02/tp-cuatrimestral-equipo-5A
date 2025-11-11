@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,6 +44,27 @@ namespace Negocio
 			}
         }
 
+        public void bajaLogica(int idUsuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Usuarios SET Activo = 0 WHERE Id = @idUsuario;");
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+                throw;
+
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        
         public int agregarUsuario(Usuario nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -74,6 +95,76 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public List<Usuario> listar()
+        { // Listar todos
+            AccesoDatos datos = new AccesoDatos();
+            List<Usuario> lista = new List<Usuario>();
+            try
+            {
+                datos.setearConsulta("SELECT U.Id, U.Usuario, U.Clave, U.Activo, U.IdPermiso, P.Descripcion FROM Usuarios U INNER JOIN Permisos P ON U.IdPermiso = P.Id;");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Usuario usuario = new Usuario();
+                    usuario.Id = (int)datos.Lector["Id"];
+                    usuario.NombreUsuario = (string)datos.Lector["Usuario"];
+                    usuario.Clave = (string)datos.Lector["Clave"];
+                    usuario.Activo = (bool)datos.Lector["Activo"];
+                    usuario.Permiso = new Permiso();
+                    usuario.Permiso.Id = (int)datos.Lector["IdPermiso"];
+                    usuario.Permiso.Descripcion = (string)datos.Lector["Descripcion"];
+                    lista.Add(usuario);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public List<Usuario> listar(bool estado)
+        { //Sirve tanto para listar activos como inactivos dependiendo de si se pasa true o false
+            AccesoDatos datos = new AccesoDatos();
+            List<Usuario> lista = new List<Usuario>();
+            try
+            {
+                datos.setearConsulta("SELECT U.Id, U.Usuario, U.Clave, U.Activo, U.IdPermiso, P.Descripcion FROM Usuarios U INNER JOIN Permisos P ON U.IdPermiso = P.Id WHERE U.Activo = @estado;");
+                datos.setearParametro("@estado", estado);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Usuario usuario = new Usuario();
+                    usuario.Id = (int)datos.Lector["Id"];
+                    usuario.NombreUsuario = (string)datos.Lector["Usuario"];
+                    usuario.Clave = (string)datos.Lector["Clave"];
+                    usuario.Activo = (bool)datos.Lector["Activo"];
+                    usuario.Permiso = new Permiso();
+                    usuario.Permiso.Id = (int)datos.Lector["IdPermiso"];
+                    usuario.Permiso.Descripcion = (string)datos.Lector["Descripcion"];
+                    lista.Add(usuario);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 
 }
