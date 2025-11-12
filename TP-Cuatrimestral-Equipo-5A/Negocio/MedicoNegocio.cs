@@ -105,6 +105,7 @@ namespace Negocio
                     medico.Dni = (string)datos.Lector["Dni"];
                     medico.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
                     medico.Matricula = (string)datos.Lector["Matricula"];
+                    //falta id usuario (no necesario por ahora)
                 }
                 return medico;
 
@@ -119,6 +120,47 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+
+        public List<Medico> listarPorIdEspecialidad(int idEspecialidad)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Medico> lista = new List<Medico>();
+            try
+            {
+                datos.setearConsulta("SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono, M.Dni, M.Email, M.UrlImagen, M.Matricula, M.IdUsuario FROM EspecialidadesPorMedico EPM INNER JOIN Medicos M on EPM.IdMedico = M.Id WHERE EPM.IdEspecialidad = @idEspecialidad;");
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.ejecutarLectura();
+                Medico medico = null;
+                while (datos.Lector.Read())
+                {
+                    medico = new Medico();
+                    medico.Id = (int)datos.Lector["Id"];
+                    medico.Nombre = (string)datos.Lector["Nombre"];
+                    medico.Apellido = (string)datos.Lector["Apellido"];
+                    medico.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                    medico.Email = (string)datos.Lector["Email"];
+                    medico.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
+                    medico.Dni = (string)datos.Lector["Dni"];
+                    medico.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
+                    medico.Matricula = (string)datos.Lector["Matricula"];
+                    //falta id usuario (no necesario por ahora)
+                    lista.Add(medico);
+                }
+                return lista;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
 
         public List<Medico> listar()
         {
