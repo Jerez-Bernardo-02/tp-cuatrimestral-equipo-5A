@@ -76,7 +76,7 @@
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
     <Content Include="TEMP_MenuAdministrador.aspx" />
-    <Content Include="TEMP_MenuMedicos.aspx" />
+    <Content Include="MedicoResumen.aspx" />
     <Content Include="TEMP_MenuPaciente.aspx" />
     <Content Include="MenuPrincipal.aspx" />
     <Content Include="MenuUsuarios.aspx" />
@@ -154,12 +154,12 @@
     <Compile Include="TEMP_MenuAdministrador.aspx.designer.cs">
       <DependentUpon>TEMP_MenuAdministrador.aspx</DependentUpon>
     </Compile>
-    <Compile Include="TEMP_MenuMedicos.aspx.cs">
-      <DependentUpon>TEMP_MenuMedicos.aspx</DependentUpon>
+    <Compile Include="MedicoResumen.aspx.cs">
+      <DependentUpon>MedicoResumen.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TEMP_MenuMedicos.aspx.designer.cs">
-      <DependentUpon>TEMP_MenuMedicos.aspx</DependentUpon>
+    <Compile Include="MedicoResumen.aspx.designer.cs">
+      <DependentUpon>MedicoResumen.aspx</DependentUpon>
     </Compile>
     <Compile Include="TEMP_MenuPaciente.aspx.cs">
       <DependentUpon>TEMP_MenuPaciente.aspx</DependentUpon>
