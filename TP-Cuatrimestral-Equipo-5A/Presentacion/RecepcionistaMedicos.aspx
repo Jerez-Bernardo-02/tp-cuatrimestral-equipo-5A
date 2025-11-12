@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="text-end">
-                    <asp:Button runat="server" ID="btnNuevoTurno" Text="Nuevo Médico" CssClass="btn btn-success" />
+                    <asp:Button runat="server" ID="btnNuevoMedico" Text="Nuevo Médico" CssClass="btn btn-success" OnClick="btnNuevoMedico_Click"/>
                 </div>
             </div>
         </div>

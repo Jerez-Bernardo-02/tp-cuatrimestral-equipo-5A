@@ -53,5 +53,62 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public List<Turno> listar()
+        {
+            List<Turno> lista = new List<Turno>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT 
+                        T.Id, T.Fecha, T.Observaciones, 
+                        P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.Email AS EmailPaciente, P.Dni AS DniPaciente, 
+                        M.Nombre AS NombreMedico, M.Apellido AS ApellidoMedico, M.Email AS EmailMedico,
+                        E.Descripcion
+                    FROM Turnos T 
+                    INNER JOIN Pacientes P ON T.IdPaciente = P.Id 
+                    INNER JOIN Medicos M ON T.IdMedico = M.Id
+                    INNER JOIN Especialidades E ON T.IdEspecialidad = E.Id
+                    ORDER BY T.Fecha ASC;
+                    ");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Turno aux = new Turno();
+                    
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
+                    aux.Observaciones = (string)datos.Lector["Observaciones"];
+
+                    aux.Paciente = new Paciente();
+                    aux.Paciente.Nombre = (string)datos.Lector["NombrePaciente"];
+                    aux.Paciente.Apellido = (string)datos.Lector["ApellidoPaciente"];
+                    aux.Paciente.Email = (string)datos.Lector["EmailPaciente"];
+                    aux.Paciente.Dni = (string)datos.Lector["DniPaciente"];
+
+                    aux.Medico = new Medico();
+                    aux.Medico.Nombre = (string)datos.Lector["NombreMedico"];
+                    aux.Medico.Apellido = (string)datos.Lector["ApellidoMedico"];
+                    aux.Medico.Email = (string)datos.Lector["EmailMedico"];
+
+                    aux.Especialidad = new Especialidad();
+                    aux.Especialidad.Descripcion = (string)datos.Lector["Descripcion"];
+
+                    lista.Add(aux);
+                }
+                return lista;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
