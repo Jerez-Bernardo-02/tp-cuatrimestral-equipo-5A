@@ -16,7 +16,7 @@ namespace Negocio
 			AccesoDatos datos = new AccesoDatos();
 			try
 			{
-				datos.setearConsulta("SELECT U.Id, U.Usuario, U.Clave, U.Activo, P.Descripcion FROM USUARIOS U INNER JOIN Permisos P ON U.IdPermiso = P.Id WHERE Usuario = @usuario AND Clave = @clave");
+				datos.setearConsulta("SELECT U.Id, U.Usuario, U.Clave, U.Activo, P.Descripcion, P.Id as idUsuario FROM USUARIOS U INNER JOIN Permisos P ON U.IdPermiso = P.Id WHERE Usuario = @usuario AND Clave = @clave");
 				datos.setearParametro("@usuario", usuario.NombreUsuario);
                 datos.setearParametro("@clave", usuario.Clave);
 				datos.ejecutarLectura();
@@ -27,6 +27,7 @@ namespace Negocio
 					usuario.Activo = (bool)datos.Lector["Activo"];
 
 					usuario.Permiso = new Permiso();
+                    usuario.Permiso.Id = (int)datos.Lector["idUsuario"];
 					usuario.Permiso.Descripcion = (string)datos.Lector["Descripcion"];
 
 					return true;

@@ -38,6 +38,11 @@ namespace Presentacion
             try
             {
                 Medico medicoLogueado = (Medico)Session["medico"];
+                if(medicoLogueado == null)
+                {
+                    Response.Redirect("Error.aspx");
+                    return;
+                }
                 int idMedico = medicoLogueado.Id;
 
                 lblNombreMedico.Text = medicoLogueado.Nombre;
