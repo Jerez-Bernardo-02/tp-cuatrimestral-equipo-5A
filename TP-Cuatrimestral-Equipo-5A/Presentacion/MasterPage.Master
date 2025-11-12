@@ -38,7 +38,8 @@
                         <a class="nav-link" href="AdministradorGestionPacientes.aspx">Gestion Pacientes</a>
                         <a class="nav-link" href="#">Configuraciones</a>
                         <a class="nav-link" href="MedicoResumen.aspx">Medicos Resumen</a>
-                        <a class="nav-link" href="MedicoTurnos.aspx">Medico Gestion Turnos</a>
+                        <a class="nav-link" href="MedicoHorarios.aspx">Medico Horarios</a>
+                        <a class="nav-link" href="MedicoTurnos.aspx">Medico Turnos</a>
                         <a class="nav-link" href="MenuPaciente.aspx">Menu Pacientes</a>
                         <a class="nav-link" href="MenuRecepcionista.aspx">Menu Recepcionistas</a>
                         <a class="nav-link" href="RecepcionistaPacientes.aspx">Recepcionista Pacientes</a>

@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="MedicoHorarios.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Reloj.png" width="100" height="100" alt="Mis Horarios">
                             <h5 class="card-text mt-3">Mis Horarios</h5>

@@ -71,6 +71,7 @@
     <Content Include="AdministradorRecepcionistas.aspx" />
     <Content Include="FormularioRegistro.aspx" />
     <Content Include="HistoriaClinica.aspx" />
+    <Content Include="MedicoHorarios.aspx" />
     <Content Include="TEMP_AdministradorGestionPacientes.aspx" />
     <Content Include="TEMP_AdministradorGestionPersonal.aspx" />
     <Content Include="Global.asax" />
@@ -115,6 +116,13 @@
     </Compile>
     <Compile Include="HistoriaClinica.aspx.designer.cs">
       <DependentUpon>HistoriaClinica.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MedicoHorarios.aspx.cs">
+      <DependentUpon>MedicoHorarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MedicoHorarios.aspx.designer.cs">
+      <DependentUpon>MedicoHorarios.aspx</DependentUpon>
     </Compile>
     <Compile Include="TEMP_AdministradorGestionPacientes.aspx.cs">
       <DependentUpon>TEMP_AdministradorGestionPacientes.aspx</DependentUpon>
