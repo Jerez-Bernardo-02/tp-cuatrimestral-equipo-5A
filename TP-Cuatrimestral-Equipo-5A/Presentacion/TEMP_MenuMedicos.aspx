@@ -67,15 +67,14 @@
                         <asp:GridView ID="dgvTurnos" runat="server"
                             CssClass="table table-hover"
                             AutoGenerateColumns="false"
-                            OnSelectedIndexChanged="dgvTurnos_SelectedIndexChanged"
-                            ItemType="Dominio.Turno"
+                            OnRowCommand="dgvTurnos_RowCommand"
                             DataKeyNames="Id">
                             <Columns>
                                 <asp:BoundField HeaderText="Fecha y hora" DataField="Fecha" />
 
                                 <asp:TemplateField HeaderText="Paciente">
                                     <ItemTemplate>
-                                        <asp:Label runat="server" Text='<%# Item.Paciente.Nombre + " " + Item.Paciente.Apellido %>'></asp:Label>
+                                        <asp:Label runat="server" Text='<%# Eval("Paciente.Nombre") + " " + Eval("Paciente.Apellido") %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
@@ -88,7 +87,7 @@
                                     <ItemTemplate>
                                         <asp:LinkButton runat="server"
                                             CommandName="VerHC"
-                                            CommandArgument='<%# Item.Id %>'
+                                            CommandArgument='<%# Eval("Paciente.Id") %>'
                                             CssClass="btn btn-info btn-sm"
                                             ToolTip="Ver Historia Clínica">
                                             <i class="bi bi-eye-fill"></i>
@@ -96,7 +95,7 @@
 
                                         <asp:LinkButton runat="server"
                                             CommandName="ModificarEstado"
-                                            CommandArgument='<%# Item.Id %>'
+                                            CommandArgument='<%# Eval("Id") %>'
                                             CssClass="btn btn-warning btn-sm"
                                             ToolTip="Modificar Estado / Ver Observaciones">
                                             <i class="bi bi-pencil-fill"></i>
