@@ -80,7 +80,6 @@
     <Content Include="TEMP_MenuPaciente.aspx" />
     <Content Include="MenuPrincipal.aspx" />
     <Content Include="MenuUsuarios.aspx" />
-    <Content Include="MedicoPacientes.aspx" />
     <Content Include="MedicoTurnos.aspx" />
     <Content Include="RecepcionistaMedicos.aspx" />
     <Content Include="RecepcionistaPacientes.aspx" />
@@ -182,13 +181,6 @@
     </Compile>
     <Compile Include="MenuUsuarios.aspx.designer.cs">
       <DependentUpon>MenuUsuarios.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="MedicoPacientes.aspx.cs">
-      <DependentUpon>MedicoPacientes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MedicoPacientes.aspx.designer.cs">
-      <DependentUpon>MedicoPacientes.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MedicoTurnos.aspx.cs">

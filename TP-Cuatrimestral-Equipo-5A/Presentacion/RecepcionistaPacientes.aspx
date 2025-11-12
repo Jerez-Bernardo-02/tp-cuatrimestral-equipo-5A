@@ -4,10 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid" style="padding-top: 40px;">
-        <h2 class="card-title mb-5">
-            <asp:Label ID="lblTitulo" runat="server" Text=""></asp:Label>
-        </h2>
-
+        <h2 class="card-title mb-5">Pacientes registrados</h2>
 
         <div class="row mb-3">
             <div class="col-md-2">
