@@ -90,7 +90,7 @@
                 -->
             </div>  
         </div>
-
+        <div id="divDatosAcceso" runat="server">
         <h4 class="text-primary ms-3 mb-4">Datos de acceso</h4>
         <div class="row mb-3">
             <div class="col-md-6">
@@ -102,6 +102,7 @@
                 <label for="txtContrasenia" class="form-label">Contraseña</label>
                 <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" placeholder="Contraseña"></asp:TextBox>
             </div>
+        </div>
         </div>
 
         <div class="row mb-3">

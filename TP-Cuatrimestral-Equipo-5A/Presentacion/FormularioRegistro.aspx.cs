@@ -28,20 +28,27 @@ namespace Presentacion
                 }
                 if (Session["idMedicoEditar"] != null)
                 {
-                    int idMedico = (int)Session["idMedicoEditar"];
+                    int idMedico = int.Parse(Session["idMedicoEditar"].ToString());
                     Medico medico = new Medico();
                     MedicoNegocio negocio = new MedicoNegocio();
                     medico = negocio.buscarPorId(idMedico);
-                    modificarMedico(medico);
+                    medicoAmodificarMedico(medico);
                 }
             }
+            if (Session["idMedicoEditar"] != null)
+            {
+                divMatricula.Visible = true;
+                divDatosAcceso.Visible = false;
+                BtnRegistrarse.Text = "Modificar"; //Cambiamos el texto del boton cuando sea un modificar
+            }
         }
-        private void modificarMedico(Medico medico)
+        private void medicoAmodificarMedico(Medico medico)
         {
             //aca deberia poner los atributos que no queremos modificar en txtNombre.Enabled = true;
             txtNombre.Text = medico.Nombre;
             txtApellido.Text = medico.Apellido;
             txtDocumento.Text = medico.Dni;
+            TextFechaNacimiento.Text = medico.FechaNacimiento.ToString("yyyy-MM-dd");
             txtEmail.Text = medico.Email;
             txtTelefono.Text = medico.Telefono;
             txtMatricula.Text = medico.Matricula;
@@ -53,6 +60,46 @@ namespace Presentacion
         {
             try
             {
+                if (Session["idMedicoEditar"] != null)
+                {
+                    // Modo edición
+                    MedicoNegocio negocio = new MedicoNegocio();
+                 
+                    Medico medico = new Medico();
+                   
+                    int id = int.Parse(Session["idMedicoEditar"].ToString());
+                    medico = negocio.buscarPorId(id);
+
+                    medico.Nombre = txtNombre.Text.Trim();
+                    medico.Apellido = txtApellido.Text.Trim();
+                    medico.Dni = txtDocumento.Text.Trim();
+                    medico.Email = txtEmail.Text.Trim();
+                    medico.Telefono = txtTelefono.Text.Trim();
+                    medico.Matricula = txtMatricula.Text.Trim();
+                   // medico.UrlImagen = null
+                    medico.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
+
+                    medico.Usuario = new Usuario();
+                    if (!string.IsNullOrEmpty(txtContrasenia.Text))
+                    {
+                        medico.Usuario.Clave = txtContrasenia.Text.Trim();
+                    }
+           
+                    negocio.modificarMedico(medico);
+
+                    lblResultado.Text = "Datos del médico actualizados correctamente.";
+                    pnlResultado.CssClass = "alert alert-success text-center mt-3";
+                    pnlResultado.Visible = true;
+
+                    
+                    Session.Remove("idMedicoEditar");// Limpio la sesión
+
+                    
+                    ClientScript.RegisterStartupScript(this.GetType(), "redirigir",
+                        "setTimeout(function(){ window.location='AdministradorMedicos.aspx'; }, 2500);", true); //redirijo al menu admin medicos
+                    return;
+                }
+                divDatosAcceso.Visible = true;
                 string tipoUsuarioActivar = (string)Session["tipoUsuarioRegistrar"];// Recuperamos el tipo de usuario a registrar desde la session
                 UsuarioNegocio nuevoUsuarioNegocio = new UsuarioNegocio();
                 Usuario nuevoUsuario = new Usuario();

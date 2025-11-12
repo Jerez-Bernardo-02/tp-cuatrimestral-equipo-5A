@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,7 +54,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Medicos SET Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Dni = @Dni, Email = @Email, UrlImagen = @UrlImagen, Matricula = @Matricula WHERE Id = @Id;");
+                datos.setearConsulta(@"UPDATE Medicos SET  Nombre = @Nombre,Apellido = @Apellido, FechaNacimiento = @FechaNacimiento,Telefono = @Telefono, Dni = @Dni, Email = @Email,UrlImagen = @UrlImagen,Matricula = @Matricula WHERE Id = @Id; ");
                 //seteamos parametros  (@Clave, valor) - activo = true por constructor
                 datos.setearParametro("@Nombre", medico.Nombre);
                 datos.setearParametro("@Apellido", medico.Apellido);
@@ -63,11 +64,9 @@ namespace Negocio
                 //Operador Coalescing o unificacion, es un operador condicional para trabajar nulos, evalua el object de la izquierda, si no es null lo registra, y si es null registra el de la derecha 
                 datos.setearParametro("@Telefono", (object)medico.Telefono ?? DBNull.Value);
                 datos.setearParametro("@UrlImagen", (object)medico.UrlImagen ?? DBNull.Value);
-                datos.setearParametro("@Matricula", medico.Matricula);
-                datos.setearParametro("@Id", medico.Id); 
-                //Se omite IDUsuario porque nunca se va a modificar.
-
-
+                datos.setearParametro("@Matricula", (object)medico.Matricula ?? DBNull.Value);
+                datos.setearParametro("@Id", medico.Id);
+            
                 datos.ejecutarAccion();
 
 
@@ -125,7 +124,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono, M.Dni, M.Email, M.UrlImagen, M.Matricula, U.usuario, U.clave FROM Medicos M Inner Join Usuarios U ON U.Id = M.IdUsuario Where M.Id = @id");
+                datos.setearConsulta(@"SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono,  M.Dni, M.Email, M.UrlImagen, M.Matricula, U.Id AS IdUsuario, U.Usuario, U.Clave FROM Medicos M INNER JOIN Usuarios U ON U.Id = M.IdUsuario WHERE M.Id = @id");
                 datos.setearParametro("@id", id);
                 datos.ejecutarLectura();
                 Medico medico = null;
@@ -142,7 +141,8 @@ namespace Negocio
                     medico.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
                     medico.Matricula = (string)datos.Lector["Matricula"];
                     medico.Usuario = new Usuario();
-                    medico.Usuario.NombreUsuario = (string)datos.Lector["Usuario"];
+                    medico.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    medico.Usuario.NombreUsuario = (string)datos.Lector["usuario"];
                     medico.Usuario.Clave = (string)datos.Lector["Clave"];
                 }
                 return medico;
