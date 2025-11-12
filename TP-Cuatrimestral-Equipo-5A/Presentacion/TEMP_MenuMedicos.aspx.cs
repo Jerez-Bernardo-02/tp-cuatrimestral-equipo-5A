@@ -15,24 +15,10 @@ namespace Presentacion
         {
             if (!IsPostBack)
             {
-                CargarFiltros();
                 CargarGrilla();
             }
         }
 
-        private void CargarFiltros()
-        {
-            EstadoNegocio EstadoNegocio = new EstadoNegocio();
-
-            ddlEstado.DataSource = EstadoNegocio.Listar();
-            ddlEstado.DataTextField = "Descripcion";
-            ddlEstado.DataValueField = "Id";
-            ddlEstado.DataBind();
-        }
-
-        protected void Filtro_Changed(object sender, EventArgs e)
-        {
-        }
         private void CargarGrilla()
         {
             try
@@ -47,15 +33,9 @@ namespace Presentacion
 
                 lblNombreMedico.Text = medicoLogueado.Nombre;
 
-                string filtroNombre = txtNombrePaciente.Text.Trim(); //Trim limpia los caracteres vacios
-                string filtroApellido = txtApellidoPaciente.Text.Trim();
-                string filtroDni = txtDniPaciente.Text.Trim();
-                string filtroFecha = txtFiltrarFecha.Text;
-                int idEstado = int.Parse(ddlEstado.SelectedValue);
-
                 TurnoNegocio TurnoNegocio = new TurnoNegocio();
 
-                List<Turno> listaFiltrada = TurnoNegocio.ListarTurnosFiltrados(idMedico, filtroNombre, filtroApellido, filtroDni, filtroFecha, idEstado);
+                List<Turno> listaFiltrada = TurnoNegocio.ListarTurnosDelDia(idMedico);
 
                 dgvTurnos.DataSource = listaFiltrada;
                 dgvTurnos.DataBind();

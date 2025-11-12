@@ -12,55 +12,8 @@
 
         <div class="row">
             <div class="col-md-8">
+                <%--Card con borde y sombra que la columna izquierda--%>
                 <div class="card shadow-sm border-0 mb-3">
-
-                    <%--Fila de filtros--%>
-                    <div class="row mt-4 ms-3">
-                        <%--Filtro Nombre--%>
-                        <div class="col-md-2">
-                            <label class="form-label d-block">Nombre</label>
-                            <asp:TextBox ID="txtNombrePaciente" runat="server" CssClass="form-control"
-                                placeholder="Nombre..."
-                                AutoPostBack="true"
-                                OnTextChanged="Filtro_Changed" />
-                        </div>
-
-                        <%--Filtro Apellido--%>
-                        <div class="col-md-2">
-                            <label class="form-label d-block">Apellido</label>
-                            <asp:TextBox ID="txtApellidoPaciente" runat="server" CssClass="form-control"
-                                placeholder="Apellido..."
-                                AutoPostBack="true"
-                                OnTextChanged="Filtro_Changed" />
-                        </div>
-
-                        <%--Filtro DNI--%>
-                        <div class="col-md-2">
-                            <label class="form-label d-block">DNI</label>
-                            <asp:TextBox ID="txtDniPaciente" runat="server" CssClass="form-control"
-                                placeholder="DNI..."
-                                AutoPostBack="true"
-                                OnTextChanged="Filtro_Changed" />
-                        </div>
-
-                        <%--Filtro Fecha--%>
-                        <div class="col-md-3">
-                            <label class="form-label d-block">Filtrar por fecha</label>
-                            <asp:TextBox ID="txtFiltrarFecha" runat="server" TextMode="Date" CssClass="form-control"
-                                AutoPostBack="true"
-                                OnTextChanged="Filtro_Changed" />
-                        </div>
-
-                        <%--Filtro Estado--%>
-                        <div class="col-md-3">
-                            <label class="form-label d-block">Filtrar por estado</label>
-                            <asp:DropDownList ID="ddlEstado" runat="server" CssClass="form-select"
-                                AutoPostBack="true"
-                                OnSelectedIndexChanged="Filtro_Changed">
-                            </asp:DropDownList>
-                        </div>
-                    </div>
-
 
                     <div class="row mt-3 ms-3 me-2">
                         <%--Grilla de turnos--%>
@@ -80,7 +33,7 @@
 
                                 <asp:BoundField HeaderText="Especialidad" DataField="Especialidad.Descripcion" />
 
-                                <asp:BoundField HeaderText="Estado" DataField="Estado.Descripcion" />
+                                <asp:BoundField HeaderText="Observaciones" DataField="Observaciones" />
 
                                 <asp:TemplateField HeaderText="Acciones">
 
@@ -113,6 +66,7 @@
             </div>
 
             <div class="col-md-4">
+                <%--Card con borde y sombra que la columna derecha--%>
                 <div class="card shadow-sm border-0 mb-3">
                     <div class="card-body">
                         <h5 class="card-title fs-5">Resumen del día </h5>
