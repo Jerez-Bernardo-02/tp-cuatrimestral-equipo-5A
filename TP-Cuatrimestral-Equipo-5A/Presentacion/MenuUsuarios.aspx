@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="RecepcionistaPacientes.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Pacientes.png" width="100" height="100" alt="Mis Pacientes">
                             <h5 class="card-text mt-3">Mis Pacientes</h5>

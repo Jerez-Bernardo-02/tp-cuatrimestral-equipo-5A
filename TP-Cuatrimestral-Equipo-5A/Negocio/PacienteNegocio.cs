@@ -135,6 +135,7 @@ namespace Negocio
             try
             {
                 datos.setearConsulta("SELECT P.Id AS IdPaciente, P.Nombre, P.Apellido, P.FechaNacimiento, P.Email, P.Telefono, P.Dni, P.UrlImagen FROM Pacientes P INNER JOIN Turnos T on T.IdPaciente = P.Id WHERE T.IdMedico = @idMedico \r\n");
+                datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
