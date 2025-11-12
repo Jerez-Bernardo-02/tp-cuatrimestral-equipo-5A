@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,9 @@ namespace Presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            RecepcionistaNegocio recepcionistaNegocio = new RecepcionistaNegocio();
+            dgvRecepcionistas.DataSource = recepcionistaNegocio.listar();
+            dgvRecepcionistas.DataBind();
 
         }
 
@@ -24,7 +28,7 @@ namespace Presentacion
 
         protected void btnVolver_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("MenuUsuarios.aspx");
         }
     }
 }

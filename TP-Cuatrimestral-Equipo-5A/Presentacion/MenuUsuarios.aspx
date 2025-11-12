@@ -148,7 +148,7 @@
                 </div>
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow">
+                    <a href="AdministradorMedicos.aspx" class="card text-center text-decoration-none shadow">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Medico.png" width="100" height="100" alt="Medicos">
                             <h5 class="card-text mt-3">Medicos</h5>
@@ -157,7 +157,7 @@
                 </div>
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow">
+                    <a href="AdministradorRecepcionistas.aspx" class="card text-center text-decoration-none shadow">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Recepcionista.png" width="100" height="100" alt="Recepcionistas">
                             <h5 class="card-text mt-3">Recepcionistas</h5>

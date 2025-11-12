@@ -26,14 +26,33 @@ namespace Presentacion
                     divMatricula.Visible = false; // si no es medico, no se ve
                     //rfvMatricula.Enabled = false; // deshabilita el validador
                 }
+                if (Session["idMedicoEditar"] != null)
+                {
+                    int idMedico = (int)Session["idMedicoEditar"];
+                    Medico medico = new Medico();
+                    MedicoNegocio negocio = new MedicoNegocio();
+                    medico = negocio.buscarPorId(idMedico);
+                    modificarMedico(medico);
+                }
             }
+        }
+        private void modificarMedico(Medico medico)
+        {
+            //aca deberia poner los atributos que no queremos modificar en txtNombre.Enabled = true;
+            txtNombre.Text = medico.Nombre;
+            txtApellido.Text = medico.Apellido;
+            txtDocumento.Text = medico.Dni;
+            txtEmail.Text = medico.Email;
+            txtTelefono.Text = medico.Telefono;
+            txtMatricula.Text = medico.Matricula;
+            txtUsuario.Text = medico.Usuario.NombreUsuario;
+            txtContrasenia.Text = medico.Usuario.Clave;
         }
 
         protected void BtnRegistrarse_Click(object sender, EventArgs e)
         {
             try
             {
-                
                 string tipoUsuarioActivar = (string)Session["tipoUsuarioRegistrar"];// Recuperamos el tipo de usuario a registrar desde la session
                 UsuarioNegocio nuevoUsuarioNegocio = new UsuarioNegocio();
                 Usuario nuevoUsuario = new Usuario();

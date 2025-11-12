@@ -8,21 +8,28 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <asp:GridView ID="gvMedicos" runat="server" CssClass="table table-striped align-middle text-center"
-                AutoGenerateColumns="false" GridLines="None">
-                <Columns>
-                    <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
-                    <asp:TemplateField HeaderText="Acciones">
-                        <ItemTemplate>
-                            <asp:Button ID="btnEditar" runat="server" Text="Modificar" 
-                                CssClass="btn btn-outline-secondary btn-sm me-2" />
+             <asp:GridView runat="server" ID="dgvMedicos" DataKeyNames="Id" AutoGenerateColumns="False" CssClass="table table-striped"  OnSelectedIndexChanged="dgvMedicos_SelectedIndexChanged">
+     <Columns>
+         <asp:BoundField HeaderText="Dni" Datafield="Dni"/>
+         <asp:BoundField HeaderText="Nombre" Datafield="Nombre"/>
+         <asp:BoundField HeaderText="Apellido" Datafield="Apellido"/>
+         <asp:BoundField HeaderText="Email" Datafield="Email"/>
+         <asp:BoundField HeaderText="Telefono" Datafield="Telefono"/>
+         <asp:BoundField HeaderText="Matricula" Datafield="Matricula"/>
 
-                            <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" 
-                                CssClass="btn btn-outline-danger btn-sm" />
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                </Columns>
-            </asp:GridView>
+         <asp:TemplateField HeaderText="Acciones">
+             <ItemTemplate>
+                 <asp:LinkButton runat="server" ID="lnkBtnModificarDatos" Text="Editar" CssClass="btn btn-warning btn-sm" CommandName="Select" ToolTip="Modificar datos">
+                     <i class="bi bi-pencil-fill"></i>
+                 </asp:LinkButton>
+                 <asp:LinkButton runat="server" ID="lnkBtnVerTurnos"  Text="Turnos" CssClass="btn btn-sm btn-secondary btn-sm" ToolTip="Ver Turnos Asociados">
+                     <i class="bi bi-eye-fill"></i>
+                 </asp:LinkButton>
+             </ItemTemplate>
+         </asp:TemplateField>
+
+     </Columns>
+ </asp:GridView>
         </div>
     </div>
 

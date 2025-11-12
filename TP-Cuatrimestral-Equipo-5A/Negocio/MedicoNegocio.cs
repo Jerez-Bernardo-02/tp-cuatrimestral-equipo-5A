@@ -120,6 +120,46 @@ namespace Negocio
             }
         }
 
+        public Medico buscarPorId(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono, M.Dni, M.Email, M.UrlImagen, M.Matricula, U.usuario, U.clave FROM Medicos M Inner Join Usuarios U ON U.Id = M.IdUsuario Where M.Id = @id");
+                datos.setearParametro("@id", id);
+                datos.ejecutarLectura();
+                Medico medico = null;
+                if (datos.Lector.Read())
+                {
+                    medico = new Medico();
+                    medico.Id = (int)datos.Lector["Id"];
+                    medico.Nombre = (string)datos.Lector["Nombre"];
+                    medico.Apellido = (string)datos.Lector["Apellido"];
+                    medico.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                    medico.Email = (string)datos.Lector["Email"];
+                    medico.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
+                    medico.Dni = (string)datos.Lector["Dni"];
+                    medico.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
+                    medico.Matricula = (string)datos.Lector["Matricula"];
+                    medico.Usuario = new Usuario();
+                    medico.Usuario.NombreUsuario = (string)datos.Lector["Usuario"];
+                    medico.Usuario.Clave = (string)datos.Lector["Clave"];
+                }
+                return medico;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
         public List<Medico> listar()
         {
             AccesoDatos datos = new AccesoDatos();

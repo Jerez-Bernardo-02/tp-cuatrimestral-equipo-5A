@@ -8,21 +8,27 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                <asp:GridView ID="gvRecepcionistas" runat="server" CssClass="table table-striped align-middle text-center"
-                    AutoGenerateColumns="false" GridLines="None">
-                    <Columns>
-                        <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
+                <asp:GridView runat="server" ID="dgvRecepcionistas" AutoGenerateColumns="False" CssClass="table table-striped">
+                     <Columns>
+                        <asp:BoundField HeaderText="Dni" Datafield="Dni"/>
+                        <asp:BoundField HeaderText="Nombre" Datafield="Nombre"/>
+                        <asp:BoundField HeaderText="Apellido" Datafield="Apellido"/>
+                        <asp:BoundField HeaderText="Email" Datafield="Email"/>
+                        <asp:BoundField HeaderText="Telefono" Datafield="Telefono"/>
+     
                         <asp:TemplateField HeaderText="Acciones">
                             <ItemTemplate>
-                                <asp:Button ID="btnEditar" runat="server" Text="Modificar" 
-                                    CssClass="btn btn-outline-secondary btn-sm me-2" />
-
-                                <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" 
-                                    CssClass="btn btn-outline-danger btn-sm" />
+                                <asp:LinkButton runat="server" ID="lnkBtnModificarDatos" Text="Editar" CssClass="btn btn-warning btn-sm" ToolTip="Modificar datos">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </asp:LinkButton>
+                                <asp:LinkButton runat="server" ID="lnkBtnVerTurnos"  Text="Turnos" CssClass="btn btn-sm btn-secondary btn-sm" ToolTip="Ver Turnos Asociados">
+                                    <i class="bi bi-eye-fill"></i>
+                                </asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>
+
                     </Columns>
-                </asp:GridView>
+               </asp:GridView>
             </div>
         </div>
 

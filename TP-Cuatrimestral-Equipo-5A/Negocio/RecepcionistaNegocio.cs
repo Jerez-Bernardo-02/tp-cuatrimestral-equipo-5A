@@ -44,6 +44,44 @@ namespace Negocio
             }
         }
 
+        public List<Recepcionista> listar()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Recepcionista> lista = new List<Recepcionista>();
+            try
+            {
+                datos.setearConsulta("SELECT Id, Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, UrlImagen, IdUsuario FROM Recepcionistas;");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Recepcionista recepcionista = new Recepcionista();
+                    recepcionista.Id = (int)datos.Lector["Id"];
+                    recepcionista.Nombre = (string)datos.Lector["Nombre"];
+                    recepcionista.Apellido = (string)datos.Lector["Apellido"];
+                    recepcionista.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                    recepcionista.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
+                    recepcionista.Dni = (string)datos.Lector["Dni"];
+                    recepcionista.Email = (string)datos.Lector["Email"];
+                    recepcionista.Usuario = new Usuario();
+                    recepcionista.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    //Falta el nombre de usuario (habría que agregar el campo y hacer el INNER JOIN si lo queremos)
+                    lista.Add(recepcionista);
+                }
+                return lista;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public Recepcionista buscarPorIdUsuario(int idUsuario)
         {
             Recepcionista aux = new Recepcionista();
