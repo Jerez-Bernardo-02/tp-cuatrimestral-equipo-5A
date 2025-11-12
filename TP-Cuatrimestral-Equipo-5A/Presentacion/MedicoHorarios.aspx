@@ -31,11 +31,11 @@
 
                     <%--Horario desde--%>
                     <label class="form-label">Desde</label>
-                    <asp:TextBox ID="txtDesde" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="txtDesde" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Horario hasta--%>
                     <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="txtHasta" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="txtHasta" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Especialidades--%>
                     <asp:DropDownList ID="ddlEspecialidadesLunes" runat="server" CssClass="form-select mt-2">
@@ -79,11 +79,11 @@
 
                     <%--Horario desde--%>
                     <label class="form-label">Desde</label>
-                    <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Horario hasta--%>
                     <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="TextBox2" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox2" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Especialidades--%>
                     <asp:DropDownList ID="ddlEspecialidadesMartes" runat="server" CssClass="form-select mt-2">
@@ -126,11 +126,11 @@
 
                     <%--Horario desde--%>
                     <label class="form-label">Desde</label>
-                    <asp:TextBox ID="TextBox3" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox3" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Horario hasta--%>
                     <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="TextBox4" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox4" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Especialidades--%>
                     <asp:DropDownList ID="ddlEspecialidadesMiercoles" runat="server" CssClass="form-select mt-2">
@@ -173,11 +173,11 @@
 
                     <%--Horario desde--%>
                     <label class="form-label">Desde</label>
-                    <asp:TextBox ID="TextBox5" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox5" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Horario hasta--%>
                     <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="TextBox6" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox6" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Especialidades--%>
                     <asp:DropDownList ID="ddlEspecialidadesJueves" runat="server" CssClass="form-select mt-2">
@@ -220,11 +220,11 @@
 
                     <%--Horario desde--%>
                     <label class="form-label">Desde</label>
-                    <asp:TextBox ID="TextBox7" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox7" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Horario hasta--%>
                     <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="TextBox8" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox8" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Especialidades--%>
                     <asp:DropDownList ID="ddlEspecialidadesViernes" runat="server" CssClass="form-select mt-2">
@@ -267,11 +267,11 @@
 
                     <%--Horario desde--%>
                     <label class="form-label">Desde</label>
-                    <asp:TextBox ID="TextBox9" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox9" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Horario hasta--%>
                     <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="TextBox10" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox10" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Especialidades--%>
                     <asp:DropDownList ID="ddlEspecialidadesSabado" runat="server" CssClass="form-select mt-2">
@@ -314,11 +314,11 @@
 
                     <%--Horario desde--%>
                     <label class="form-label">Desde</label>
-                    <asp:TextBox ID="TextBox11" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox11" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Horario hasta--%>
                     <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="TextBox12" runat="server" CssClass="form-control" Text="" />
+                    <asp:TextBox ID="TextBox12" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Especialidades--%>
                     <asp:DropDownList ID="ddlEspecialidadesDomingo" runat="server" CssClass="form-select mt-2">
