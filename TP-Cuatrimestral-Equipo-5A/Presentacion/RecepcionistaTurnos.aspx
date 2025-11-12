@@ -26,7 +26,17 @@
 
                         <asp:GridView runat="server" ID="dgvTurnos" AutoGenerateColumns="False" CssClass="table table-striped">
                             <Columns>
-                                <asp:BoundField HeaderText="Fecha" Datafield="Fecha"/>
+                                <asp:TemplateField HeaderText="Fecha">
+                                    <itemtemplate>
+                                        <%# Eval("Fecha", "{0:dd/MM/yyyy}") %>
+                                    </itemtemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Horario">
+                                    <ItemTemplate>
+                                        <%# Eval("Fecha", "{0:HH:mm}") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
                                 <asp:TemplateField HeaderText="Dni del Paciente">
                                     <ItemTemplate>
                                         <%# Eval("Paciente.Dni") %>
@@ -39,11 +49,13 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Médico">
                                     <ItemTemplate>
+
                                         <%# Eval("Medico.Apellido") + ", " + Eval("Medico.Nombre") %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Especialidad">
                                     <ItemTemplate>
+
                                         <%# Eval("Especialidad.Descripcion") %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
