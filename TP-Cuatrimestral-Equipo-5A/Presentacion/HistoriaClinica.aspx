@@ -34,7 +34,7 @@
 
     </div>
 
-    <div class="accordion" id="acordeonHC">
+    <div class="accordion ms-3 mt-3 me-3" id="acordeonHC">
         <asp:Repeater runat="server" ID="repeaterHC">
             <ItemTemplate>
                 <div class="accordion-item">
@@ -63,8 +63,5 @@
 
             </ItemTemplate>
         </asp:Repeater>
-
-
-
     </div>
 </asp:Content>

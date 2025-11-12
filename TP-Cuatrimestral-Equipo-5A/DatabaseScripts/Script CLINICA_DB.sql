@@ -206,4 +206,8 @@ GO
 INSERT INTO HistoriasClinicas (Fecha, IdPaciente, Asunto, Descripcion, IdMedico, IdEspecialidad)
 VALUES 
 ('2025-08-11T14:10:30', 2, 'Prueba HC', 'Hola esto es una prueba para verificar que funcione correctamente la funcionalidad de historias clinicas', 1, 2)
+GO
+INSERT INTO HistoriasClinicas (Fecha, IdPaciente, Asunto, Descripcion, IdMedico, IdEspecialidad)
+VALUES 
+('2025-08-15T14:10:30', 2, 'Segunda Prueba HC', 'Hola esto es una prueba para verificar que funcione correctamente la funcionalidad de historias clinicas', 1, 2)
 
