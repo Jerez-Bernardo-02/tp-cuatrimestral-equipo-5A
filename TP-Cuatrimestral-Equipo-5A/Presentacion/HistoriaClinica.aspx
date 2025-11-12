@@ -42,12 +42,12 @@
                     <h2 class="accordion-header">
                         <button class="accordion-button" type="button" 
                             data-bs-toggle="collapse"  <%--indica que es un acordeon--%>
-                            data-bs-target="#collapse-<%# Eval("Id")%>">  <%--vincula el div con el id de la HC--%>
+                            data-bs-target="#collapse-<%# Eval("Id")%>">  <%--vincula el div con el id de la HC para redirigir--%>
                             <strong> <%# Eval("Fecha") %></strong>
                         </button>
                     </h2>
                     <%--Contenido--%>
-                    <div id="collapse-<%# Eval("Id") %>" class="accordion-collapse collapse" 
+                    <div id="collapse-<%# Eval("Id") %>" class="accordion-collapse collapse"  <%--asigna el ID para que el botón lo conozca--%>
                         data-bs-parent="#acordeonHC">
                         <div class="accordion-body">
 
