@@ -65,20 +65,20 @@ namespace Negocio
 
                 if (!string.IsNullOrEmpty(filtroNombre) )
                 {
-                    consulta += " AND (P.Nombre = @filtroNombre)";
+                    consulta += " AND (P.Nombre LIKE '%' + @filtroNombre + '%')";
                     datos.setearParametro("@filtroNombre", filtroNombre);
                 }
                 
                 if (!string.IsNullOrEmpty (filtroApellido))
                 {
-                    consulta += " AND (P.Apellido = @filtroApellido)";
+                    consulta += " AND (P.Apellido LIKE '%' + @filtroApellido + '%')";
                     datos.setearParametro("@filtroApellido", filtroApellido);
 
                 }
 
                 if (!string.IsNullOrEmpty(filtroDni))
                 {
-                    consulta += " AND (P.Dni = @filtroDni)";
+                    consulta += " AND (P.Dni LIKE '%' + @filtroDni + '%')";
                     datos.setearParametro("@filtroDni", filtroDni);
 
                 }
