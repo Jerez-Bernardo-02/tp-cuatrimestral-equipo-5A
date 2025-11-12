@@ -11,34 +11,25 @@ namespace Presentacion
 {
 
 
-    public partial class Pacientes
+    public partial class MenuMedicos
     {
 
         /// <summary>
-        /// Control txtBuscarPaciente.
+        /// Control lblNombreMedico.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBuscarPaciente;
+        protected global::System.Web.UI.WebControls.Label lblNombreMedico;
 
         /// <summary>
-        /// Control txtNuevaObservacion.
+        /// Control dgvTurnos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNuevaObservacion;
-
-        /// <summary>
-        /// Control btnGuardarHistorial.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGuardarHistorial;
+        protected global::System.Web.UI.WebControls.GridView dgvTurnos;
     }
 }

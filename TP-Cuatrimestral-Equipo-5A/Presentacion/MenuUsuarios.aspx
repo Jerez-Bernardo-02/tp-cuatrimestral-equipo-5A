@@ -59,16 +59,16 @@
             <div class="row row-cols-3 g-4">
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="MedicoResumen.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Turnos.png" width="100" height="100" alt="Mis Turnos">
-                            <h5 class="card-text mt-3">Mis Turnos</h5>
+                            <h5 class="card-text mt-3">Resumen Diario</h5>
                         </div>
                     </a>
                 </div>
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="MedicoHorarios.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Reloj.png" width="100" height="100" alt="Mis Horarios">
                             <h5 class="card-text mt-3">Mis Horarios</h5>
@@ -77,10 +77,10 @@
                 </div>
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="MedicoTurnos.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Pacientes.png" width="100" height="100" alt="Mis Pacientes">
-                            <h5 class="card-text mt-3">Mis Pacientes</h5>
+                            <h5 class="card-text mt-3">Gestion de turnos</h5>
                         </div>
                     </a>
                 </div>
