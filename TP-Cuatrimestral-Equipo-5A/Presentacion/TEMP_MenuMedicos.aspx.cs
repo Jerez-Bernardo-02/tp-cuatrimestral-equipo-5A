@@ -62,11 +62,19 @@ namespace Presentacion
                 Response.Redirect("Error.aspx");
             }
         }
-
-
-        public void dgvTurnos_SelectedIndexChanged(object sender, EventArgs e)
+        protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            dgvTurnos.SelectedDataKey.Value.ToString();
+            int idPaciente = Convert.ToInt32(e.CommandArgument);
+
+            if(e.CommandName == "VerHC")
+            {
+                Response.Redirect("HistoriaClinica.aspx?idPaciente=" + idPaciente);
+            }
+            else if (e.CommandName == "ModificarEstado")
+            {
+                //pantalla o modal para modificar el turno.
+            }
+
         }
     }
 

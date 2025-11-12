@@ -70,6 +70,7 @@
     <Content Include="AdministradorMedicos.aspx" />
     <Content Include="AdministradorRecepcionistas.aspx" />
     <Content Include="FormularioRegistro.aspx" />
+    <Content Include="HistoriaClinica.aspx" />
     <Content Include="TEMP_AdministradorGestionPacientes.aspx" />
     <Content Include="TEMP_AdministradorGestionPersonal.aspx" />
     <Content Include="Global.asax" />
@@ -84,6 +85,7 @@
     <Content Include="RecepcionistaMedicos.aspx" />
     <Content Include="RecepcionistaPacientes.aspx" />
     <Content Include="RecepcionistaTurnos.aspx" />
+    <Content Include="SolicitarTurno.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +109,13 @@
     </Compile>
     <Compile Include="FormularioRegistro.aspx.designer.cs">
       <DependentUpon>FormularioRegistro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HistoriaClinica.aspx.cs">
+      <DependentUpon>HistoriaClinica.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HistoriaClinica.aspx.designer.cs">
+      <DependentUpon>HistoriaClinica.aspx</DependentUpon>
     </Compile>
     <Compile Include="TEMP_AdministradorGestionPacientes.aspx.cs">
       <DependentUpon>TEMP_AdministradorGestionPacientes.aspx</DependentUpon>
@@ -209,6 +218,13 @@
     </Compile>
     <Compile Include="RecepcionistaTurnos.aspx.designer.cs">
       <DependentUpon>RecepcionistaTurnos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SolicitarTurno.aspx.cs">
+      <DependentUpon>SolicitarTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SolicitarTurno.aspx.designer.cs">
+      <DependentUpon>SolicitarTurno.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
