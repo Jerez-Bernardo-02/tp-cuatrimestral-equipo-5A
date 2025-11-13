@@ -66,19 +66,21 @@ namespace Negocio
                         T.Id, T.Fecha, T.Observaciones, 
                         P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.Email AS EmailPaciente, P.Dni AS DniPaciente, 
                         M.Nombre AS NombreMedico, M.Apellido AS ApellidoMedico, M.Email AS EmailMedico,
-                        E.Descripcion
+                        E.Descripcion AS DescripcionEspecialidad,
+                        ES.Descripcion AS DescripcionEstado
                     FROM Turnos T 
                     INNER JOIN Pacientes P ON T.IdPaciente = P.Id 
                     INNER JOIN Medicos M ON T.IdMedico = M.Id
                     INNER JOIN Especialidades E ON T.IdEspecialidad = E.Id
+                    INNER JOIN Estados ES ON T.IdEstado = ES.Id
                     ORDER BY T.Fecha ASC;
-                    ");
+                ");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     Turno aux = new Turno();
-                    
+
                     aux.Id = (int)datos.Lector["Id"];
                     aux.Fecha = (DateTime)datos.Lector["Fecha"];
                     aux.Observaciones = (string)datos.Lector["Observaciones"];
@@ -95,16 +97,18 @@ namespace Negocio
                     aux.Medico.Email = (string)datos.Lector["EmailMedico"];
 
                     aux.Especialidad = new Especialidad();
-                    aux.Especialidad.Descripcion = (string)datos.Lector["Descripcion"];
+                    aux.Especialidad.Descripcion = (string)datos.Lector["DescripcionEspecialidad"];
+
+                    aux.Estado = new Estado();
+                    aux.Estado.Descripcion = (string)datos.Lector["DescripcionEstado"];
 
                     lista.Add(aux);
                 }
-                return lista;
 
+                return lista;
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -194,5 +198,93 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public List<Turno> listaFiltrada(string dni = "", DateTime ? fecha = null, int idEstado = 0, int idEspecialidad = 0)
+        {
+            List<Turno> lista = new List<Turno>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = " SELECT T.Id, T.Fecha, T.Observaciones, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.Dni AS DniPaciente, T.IdMedico, M.Nombre AS NombreMedico, M.Apellido AS ApellidoMedico, T.IdEspecialidad, E.Descripcion AS EspecialidadDescripcion, T.IdEstado, ES.Descripcion AS EstadoDescripcion FROM Turnos T INNER JOIN Pacientes P ON T.IdPaciente = P.Id INNER JOIN Medicos M ON T.IdMedico = M.Id INNER JOIN Especialidades E ON T.IdEspecialidad = E.Id INNER JOIN Estados ES ON T.IdEstado = ES.Id WHERE 1=1";
+
+                if (!string.IsNullOrEmpty(dni))
+                {
+                    consulta += " AND P.Dni LIKE '%' + @dni + '%'";
+                    datos.setearParametro("@dni", dni);
+                }
+
+                if (fecha != null)
+                {
+                    consulta += " AND DATEDIFF(day, T.Fecha, @fecha) = 0";
+                    datos.setearParametro("@fecha", fecha.Value);
+                }
+
+                if (idEstado > 0)
+                {
+                    consulta += " AND T.IdEstado = @idEstado";
+                    datos.setearParametro("@idEstado", idEstado);
+                }
+
+                if (idEspecialidad > 0)
+                {
+                    consulta += " AND T.IdEspecialidad = @idEspecialidad";
+                    datos.setearParametro("@idEspecialidad", idEspecialidad);
+                }
+
+                consulta += " ORDER BY T.Fecha ASC";
+
+                datos.setearConsulta(consulta);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Turno turno = new Turno();
+                    turno.Id = (int)datos.Lector["Id"];
+                    turno.Fecha = (DateTime)datos.Lector["Fecha"];
+                    turno.Observaciones = datos.Lector["Observaciones"] != DBNull.Value ? (string)datos.Lector["Observaciones"] : null;
+
+                    turno.Paciente = new Paciente
+                    {
+                        Id = (int)datos.Lector["IdPaciente"],
+                        Nombre = (string)datos.Lector["NombrePaciente"],
+                        Apellido = (string)datos.Lector["ApellidoPaciente"],
+                        Dni = (string)datos.Lector["DniPaciente"]
+                    };
+
+                    turno.Medico = new Medico
+                    {
+                        Id = (int)datos.Lector["IdMedico"],
+                        Nombre = (string)datos.Lector["NombreMedico"],
+                        Apellido = (string)datos.Lector["ApellidoMedico"]
+                    };
+
+                    turno.Especialidad = new Especialidad
+                    {
+                        Id = (int)datos.Lector["IdEspecialidad"],
+                        Descripcion = (string)datos.Lector["EspecialidadDescripcion"]
+                    };
+
+                    turno.Estado = new Estado
+                    {
+                        Id = (int)datos.Lector["IdEstado"],
+                        Descripcion = (string)datos.Lector["EstadoDescripcion"]
+                    };
+
+                    lista.Add(turno);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }
