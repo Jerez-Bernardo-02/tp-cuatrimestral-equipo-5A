@@ -241,6 +241,85 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        
+
+        public List<Medico> listaFiltrada(string Nombre = "", string Apellido = "", string Email = "", string Telefono = "", string Matricula = "")
+        {
+            List<Medico> lista = new List<Medico>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = "SELECT M.Id AS IdMedico, M.Nombre, M.Apellido, M.FechaNacimiento, M.Dni, M.Email, M.Telefono, M.Matricula, U.Id AS IdUsuario, U.Usuario, U.Activo, PR.Id AS IdPermiso, PR.Descripcion AS PermisoDescripcion FROM Medicos M INNER JOIN Usuarios U ON U.Id = M.IdUsuario INNER JOIN Permisos PR ON PR.Id = U.IdPermiso WHERE 1=1";
+
+                if (!string.IsNullOrEmpty(Nombre))
+                {
+                    consulta += "AND (M.Nombre LIKE '%' + @filtroNombre + '%')";
+                    datos.setearParametro("@filtroNombre", Nombre);
+                }
+
+                if (!string.IsNullOrEmpty(Apellido))
+                {
+                    consulta += "AND (M.Apellido LIKE '%' + @filtroApellido + '%')";
+                    datos.setearParametro("@filtroApellido", Apellido);
+                }
+
+                if (!string.IsNullOrEmpty(Email))
+                {
+                    consulta += "AND (M.Email LIKE '%' + @filtroEmail + '%')";
+                    datos.setearParametro("@filtroEmail", Email);
+                }
+
+                if (!string.IsNullOrEmpty(Telefono))
+                {
+                    consulta += "AND (M.Telefono LIKE '%' + @filtroTelefono + '%')";
+                    datos.setearParametro("@filtroTelefono", Telefono);
+                }
+
+                if (!string.IsNullOrEmpty(Matricula))
+                {
+                    consulta += "AND (M.Matricula LIKE '%' + @filtroMatricula + '%')";
+                    datos.setearParametro("@filtroMatricula", Matricula);
+                }
+
+                consulta += " ORDER BY M.Matricula ASC ";
+                datos.setearConsulta(consulta);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Medico aux = new Medico();
+
+                    aux.Id = (int)datos.Lector["IdMedico"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Apellido = (string)datos.Lector["Apellido"];
+                    aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                    aux.Dni = (string)datos.Lector["Dni"];
+                    aux.Email = (string)datos.Lector["Email"];
+                    aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
+                    aux.Matricula = (string)datos.Lector["Matricula"];
+
+                    aux.Usuario = new Usuario();
+                    aux.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    aux.Usuario.Activo = (bool)datos.Lector["Activo"];
+
+                    aux.Usuario.Permiso = new Permiso();
+                    aux.Usuario.Permiso.Id = (int)datos.Lector["IdPermiso"];
+                    aux.Usuario.Permiso.Descripcion = (string)datos.Lector["PermisoDescripcion"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }

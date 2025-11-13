@@ -11,8 +11,6 @@ namespace Presentacion
 {
     public partial class RecepcionistaPacientes : System.Web.UI.Page
     {
-        private Recepcionista recepcionistaLogeado;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
