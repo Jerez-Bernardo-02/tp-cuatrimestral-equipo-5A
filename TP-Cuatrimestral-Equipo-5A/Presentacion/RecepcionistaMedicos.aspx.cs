@@ -50,5 +50,10 @@ namespace Presentacion
             dgvMedicos.DataSource = listaFiltrada;
             dgvMedicos.DataBind();
         }
+
+        protected void btnVolver_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("MenuUsuarios.aspx");
+        }
     }
 }

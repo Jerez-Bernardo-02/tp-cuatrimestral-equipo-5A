@@ -76,5 +76,9 @@ namespace Presentacion
             dgvTurnos.DataBind();
         }
 
+        protected void btnVolver_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("MenuUsuarios.aspx");
+        }
     }
 }

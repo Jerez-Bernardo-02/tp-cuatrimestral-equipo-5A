@@ -54,5 +54,10 @@
 
             </div>
         </div>
+
+        <div>
+            <asp:Button ID="btnVolver" runat="server" Text="Volver al Menu" CssClass="btn btn-primary" OnClick="btnVolver_Click" />
+        </div>
+
     </div>
 </asp:Content>
