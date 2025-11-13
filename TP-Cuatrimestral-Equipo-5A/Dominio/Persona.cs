@@ -20,6 +20,11 @@ namespace Dominio
 
         public Usuario Usuario { get; set; }
 
+        public bool ActivoUsuario //propiedad para poder ser accesible en el gridView (checkBoxField Activo)
+        {
+            get { return Usuario != null && Usuario.Activo; }
+        }
+
 
     }
 }

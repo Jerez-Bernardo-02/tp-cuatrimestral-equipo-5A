@@ -23,6 +23,10 @@ namespace Presentacion
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
+           
+            Session.Remove("idMedicoEditar"); // Limpio cualquier sesión anterior que pueda haber quedado de una edición previa
+            Session.Remove("medicoSeleccionado");
+
             Session["tipoUsuarioRegistrar"] = "Medico";// Guardamos en session el tipo de usuario que se va a registrar, en este caso medicos
 
             Response.Redirect("FormularioRegistro.aspx", false);// Redirigimos al formulario de registro para medicos

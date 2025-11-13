@@ -127,7 +127,7 @@ namespace Negocio
             List<Medico> lista = new List<Medico>();
             try
             {
-                datos.setearConsulta("SELECT Id, Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, UrlImagen, Matricula, IdUsuario FROM Medicos;");
+                datos.setearConsulta("SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono, M.Dni, M.Email, M.UrlImagen, M.Matricula, M.IdUsuario, U.Activo FROM Medicos M INNER JOIN Usuarios U ON M.IdUsuario = U.Id;");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -144,6 +144,7 @@ namespace Negocio
                     medico.Matricula = (string)datos.Lector["Matricula"];
                     medico.Usuario = new Usuario();
                     medico.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    medico.Usuario.Activo = (bool)datos.Lector["Activo"];
                     //Falta el nombre de usuario (habría que agregar el campo y hacer el INNER JOIN si lo queremos)
                     lista.Add(medico);
                 }
@@ -205,7 +206,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta(@"SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono,  M.Dni, M.Email, M.UrlImagen, M.Matricula, U.Id AS IdUsuario, U.Usuario, U.Clave FROM Medicos M INNER JOIN Usuarios U ON U.Id = M.IdUsuario WHERE M.Id = @id");
+                datos.setearConsulta(@"SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono,  M.Dni, M.Email, M.UrlImagen, M.Matricula, U.Id AS IdUsuario, U.Usuario, U.Clave, U.Activo FROM Medicos M INNER JOIN Usuarios U ON U.Id = M.IdUsuario WHERE M.Id = @id");
                 datos.setearParametro("@id", id);
                 datos.ejecutarLectura();
                 Medico medico = null;
@@ -225,6 +226,7 @@ namespace Negocio
                     medico.Usuario.Id = (int)datos.Lector["IdUsuario"];
                     medico.Usuario.NombreUsuario = (string)datos.Lector["usuario"];
                     medico.Usuario.Clave = (string)datos.Lector["Clave"];
+                    medico.Usuario.Activo = (bool)datos.Lector["Activo"];
                 }
                 return medico;
 
@@ -239,8 +241,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
-
-
+        
     }
 }

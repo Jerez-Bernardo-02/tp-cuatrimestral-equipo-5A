@@ -45,13 +45,35 @@ namespace Negocio
 			}
         }
 
-        public void bajaLogica(int idUsuario)
+        public void bajaLogica(int idUsuario, bool activo = false)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Usuarios SET Activo = 0 WHERE Id = @idUsuario;");
+                datos.setearConsulta("UPDATE Usuarios SET Activo = @activo WHERE Id = @idUsuario;");
                 datos.setearParametro("@idUsuario", idUsuario);
+                datos.setearParametro("@activo", activo);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+                throw;
+
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+     
+        public void altaLogica(int idUsuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                
+                datos.setearConsulta("UPDATE Usuarios SET Activo = 1 WHERE Id = @idUsuario;");
+                datos.setearParametro("@IdUsuario", idUsuario);
                 datos.ejecutarAccion();
             }
             catch (Exception)
@@ -65,7 +87,7 @@ namespace Negocio
             }
         }
 
-        
+
         public int agregarUsuario(Usuario nuevo)
         {
             AccesoDatos datos = new AccesoDatos();

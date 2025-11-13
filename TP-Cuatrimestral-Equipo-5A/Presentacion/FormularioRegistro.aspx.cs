@@ -3,6 +3,7 @@ using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -28,19 +29,33 @@ namespace Presentacion
                 }
                 if (Session["idMedicoEditar"] != null)
                 {
+                    divMatricula.Visible = true;
+                    divDatosAcceso.Visible = false;
+                    BtnRegistrarse.Text = "Modificar"; //Cambiamos el texto del boton cuando sea un modificar 
+
                     int idMedico = int.Parse(Session["idMedicoEditar"].ToString());
                     Medico medico = new Medico();
                     MedicoNegocio negocio = new MedicoNegocio();
-                    medico = negocio.buscarPorId(idMedico);
-                    medicoAmodificarMedico(medico);
+                    
+                    medico = negocio.buscarPorId(idMedico);//traigo todos los datos del medico seleccionado
+                    
+                    Session.Add("medicoSeleccionado", medico);//guardo el medico seleccionado en el gridview
+
+                  
+                    if (!medico.ActivoUsuario)
+                    {
+                        btnInactivar.Text = "Reactivar";
+                    }
+                    else
+                    {
+                        btnInactivar.Text = "Inactivar";
+                    }
+                        medicoAmodificarMedico(medico);
+                    
                 }
+                btnInactivar.Visible = Session["idMedicoEditar"] != null;
             }
-            if (Session["idMedicoEditar"] != null)
-            {
-                divMatricula.Visible = true;
-                divDatosAcceso.Visible = false;
-                BtnRegistrarse.Text = "Modificar"; //Cambiamos el texto del boton cuando sea un modificar
-            }
+     
         }
         private void medicoAmodificarMedico(Medico medico)
         {
@@ -259,31 +274,55 @@ namespace Presentacion
                 Response.Redirect("Error.aspx")*/
             }
         }
+
+        protected void btnInactivar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["idMedicoEditar"] != null)
+                {
+                    // Modo edición boton inactivar
+                    /*int id = int.Parse(Session["idMedicoEditar"].ToString());
+                    MedicoNegocio negocio = new MedicoNegocio();
+                    Medico medico = new Medico();
+                    medico = negocio.buscarPorId(id);*/
+                    Medico seleccionado = (Medico)Session["medicoSeleccionado"];
+                    UsuarioNegocio negocioUsuario = new UsuarioNegocio();
+                    negocioUsuario.bajaLogica(seleccionado.Usuario.Id,!seleccionado.ActivoUsuario);
+                    Response.Redirect("AdministradorMedicos.aspx");
+                }
+
+            }catch(Exception ex) {
+                Session.Add("error", ex);
+
+            }
+
+        }
         /* protected void cvEmailDni_ServerValidate(object source, ServerValidateEventArgs args)
-         {
-             PersonaNegocio personaNegocio = new PersonaNegocio();
+{
+    PersonaNegocio personaNegocio = new PersonaNegocio();
 
-             string email = txtEmail.Text.Trim(); // Obtengo los valores de los TextBox del formulario
-             string documento = txtDocumento.Text.Trim();
-             string matricula = txtMatricula.Text.Trim();
+    string email = txtEmail.Text.Trim(); // Obtengo los valores de los TextBox del formulario
+    string documento = txtDocumento.Text.Trim();
+    string matricula = txtMatricula.Text.Trim();
 
-             Usuario usuarioActual = (Usuario)Session["usuario"];// Obtengo el usuario actual (que tiene el permiso)
-             bool existe;
-             if (usuarioActual.Permiso.Descripcion != "Medico")
-             {
-                 existe = personaNegocio.ValidarDatosPorPermiso(usuarioActual, email, documento, null);  // Llamo al método de negocio y envio matricula null porque no es medico
-             }
-             else
-             {
-                 existe = personaNegocio.ValidarDatosPorPermiso(usuarioActual, email, documento, matricula);  // Llamo al método de negocio y envio matricula porque si es medico
-             }
-
-             args.IsValid = !existe; // Si existe, la validación falla
-         }
-         protected void cvFechaNacimiento_ServerValidate(object source, ServerValidateEventArgs args)
-         {
-             DateTime fecha;
-             args.IsValid = DateTime.TryParse(TextFechaNacimiento.Text, out fecha) && fecha <= DateTime.Today;
-         }*/
+    Usuario usuarioActual = (Usuario)Session["usuario"];// Obtengo el usuario actual (que tiene el permiso)
+    bool existe;
+    if (usuarioActual.Permiso.Descripcion != "Medico")
+    {
+        existe = personaNegocio.ValidarDatosPorPermiso(usuarioActual, email, documento, null);  // Llamo al método de negocio y envio matricula null porque no es medico
     }
+    else
+    {
+        existe = personaNegocio.ValidarDatosPorPermiso(usuarioActual, email, documento, matricula);  // Llamo al método de negocio y envio matricula porque si es medico
+    }
+
+    args.IsValid = !existe; // Si existe, la validación falla
 }
+protected void cvFechaNacimiento_ServerValidate(object source, ServerValidateEventArgs args)
+{
+    DateTime fecha;
+    args.IsValid = DateTime.TryParse(TextFechaNacimiento.Text, out fecha) && fecha <= DateTime.Today;
+}*/
+    }
+}                

@@ -56,7 +56,7 @@ namespace Presentacion
         protected void btnRegistrarse_Click(object sender, EventArgs e)
         {
             
-            Session["tipoUsuarioRegistrar"] = "Paciente";// Guardamos en session el tipo de usuario que se va a registrar, en este caso paciente
+            Session["tipoUsuarioActivar"] = "Paciente";// Guardamos en session el tipo de usuario que se va a registrar, en este caso paciente
   
             Response.Redirect("FormularioRegistro.aspx", false);// Redirigimos al formulario de registro para pacientes
 

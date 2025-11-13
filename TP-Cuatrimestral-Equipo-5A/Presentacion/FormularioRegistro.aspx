@@ -108,8 +108,9 @@
         <div class="row mb-3">
             <div class="col-md-4">
                 <asp:Button Text="Registrarse" ID="BtnRegistrarse" OnClick="BtnRegistrarse_Click" runat="server" class="btn btn-primary" />
+                <asp:Button Text="Inactivar" ID="btnInactivar" OnClick="btnInactivar_Click" runat="server" CssClass="btn btn-warning" />
             </div>  
-        </div>
+          
           <div class="row mb-3">
             <div class="col-md-12">
                 <asp:Panel ID="pnlResultado" runat="server" Visible="false" CssClass="alert alert-success text-center mt-3">

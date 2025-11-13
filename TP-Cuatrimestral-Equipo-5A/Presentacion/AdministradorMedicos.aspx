@@ -16,14 +16,11 @@
          <asp:BoundField HeaderText="Email" Datafield="Email"/>
          <asp:BoundField HeaderText="Telefono" Datafield="Telefono"/>
          <asp:BoundField HeaderText="Matricula" Datafield="Matricula"/>
-
+         <asp:CheckBoxField HeaderText="Activo" DataField="ActivoUsuario" />
          <asp:TemplateField HeaderText="Acciones">
              <ItemTemplate>
                  <asp:LinkButton runat="server" ID="lnkBtnModificarDatos" Text="Editar" CssClass="btn btn-warning btn-sm" CommandName="Select" ToolTip="Modificar datos">
                      <i class="bi bi-pencil-fill"></i>
-                 </asp:LinkButton>
-                 <asp:LinkButton runat="server" ID="lnkBtnVerTurnos"  Text="Turnos" CssClass="btn btn-sm btn-secondary btn-sm" ToolTip="Ver Turnos Asociados">
-                     <i class="bi bi-eye-fill"></i>
                  </asp:LinkButton>
              </ItemTemplate>
          </asp:TemplateField>
