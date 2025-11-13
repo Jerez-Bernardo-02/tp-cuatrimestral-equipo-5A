@@ -22,17 +22,20 @@ namespace Presentacion
 
         protected void dgvEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var id = dgvEspecialidades.SelectedDataKey.Value.ToString();// Recupero el ID de la fila seleccionada
 
+            Session["idEspecalidadEditar"] = id;// Guardamos el id en Session
+            Response.Redirect("FormularioEspecialidades.aspx", false); // Redirigimos al formulario de edición
         }
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("FormularioEspecialidades.aspx", false);//Redirigimos al formulario de alta de especialidad
         }
 
         protected void btnVolver_Click(object sender, EventArgs e)
         {
-            Response.Redirect("MenuUsuarios.aspx");
+            Response.Redirect("MenuUsuarios.aspx");//Redirigimos al menuUsuario ppal con tarjeta
         }
     }
 }

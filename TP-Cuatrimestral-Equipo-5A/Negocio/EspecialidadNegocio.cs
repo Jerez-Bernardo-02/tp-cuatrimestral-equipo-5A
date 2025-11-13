@@ -36,5 +36,78 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public void Agregar(Especialidad nueva)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO Especialidades (Descripcion) VALUES (@descripcion)");
+                datos.setearParametro("@descripcion", nueva.Descripcion);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void Modificar(Especialidad esp)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Especialidades SET Descripcion = @descripcion WHERE Id = @id");
+                datos.setearParametro("@descripcion", esp.Descripcion);
+                datos.setearParametro("@id", esp.Id);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public Especialidad BuscarPorId(int id)
+        {
+            Especialidad aux = new Especialidad();
+            AccesoDatos datos = new AccesoDatos();
+           
+
+            try
+            {
+                datos.setearConsulta("SELECT Id, Descripcion, Activo FROM Especialidades WHERE Id = @id");
+                datos.setearParametro("@id", id);
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                   
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Descripcion = (string)datos.Lector["Descripcion"];
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return aux;
+        }
     }
 }
