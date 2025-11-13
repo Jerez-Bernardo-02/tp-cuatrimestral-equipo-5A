@@ -1,0 +1,34 @@
+USE CLINICA_DB;
+GO
+
+DELETE FROM HistoriasClinicas;
+DELETE FROM Turnos;
+DELETE FROM HorariosPorMedicos;
+
+DELETE FROM EspecialidadesPorMedico;
+
+DELETE FROM Pacientes;
+DELETE FROM Medicos;
+DELETE FROM Recepcionistas;
+
+DELETE FROM Usuarios;
+
+DELETE FROM Permisos;
+DELETE FROM Especialidades;
+DELETE FROM Estados;
+DELETE FROM DiasSemana;
+GO
+
+--REINICIO DE CONTADORES IDENTITY (RESEED)
+DBCC CHECKIDENT ('HistoriasClinicas', RESEED, 0);
+DBCC CHECKIDENT ('Turnos', RESEED, 0);
+DBCC CHECKIDENT ('HorariosPorMedicos', RESEED, 0);
+DBCC CHECKIDENT ('Pacientes', RESEED, 0);
+DBCC CHECKIDENT ('Medicos', RESEED, 0);
+DBCC CHECKIDENT ('Recepcionistas', RESEED, 0);
+DBCC CHECKIDENT ('Usuarios', RESEED, 0);
+DBCC CHECKIDENT ('Permisos', RESEED, 0);
+DBCC CHECKIDENT ('Especialidades', RESEED, 0);
+DBCC CHECKIDENT ('Estados', RESEED, 0);
+DBCC CHECKIDENT ('DiasSemana', RESEED, 0);
+GO
