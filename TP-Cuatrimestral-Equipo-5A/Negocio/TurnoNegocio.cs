@@ -286,5 +286,58 @@ namespace Negocio
             }
         }
 
+        public List<Turno> listaTurnosPorPaciente(int idPaciente)
+        {
+            List<Turno> lista = new List<Turno>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT T.Id, T.Fecha, T.Observaciones, P.Id AS IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, M.Id AS IdMedico, M.Nombre AS NombreMedico, M.Apellido AS ApellidoMedico, E.Id AS IdEspecialidad, E.Descripcion AS Especialidad, ET.Id AS IdEstado, ET.Descripcion AS Estado FROM Turnos T INNER JOIN Pacientes P ON P.Id = T.IdPaciente INNER JOIN Medicos M ON M.Id = T.IdMedico INNER JOIN Especialidades E ON E.Id = T.IdEspecialidad INNER JOIN Estados ET ON ET.Id = T.IdEstado WHERE T.IdPaciente = @idPaciente ORDER BY T.Fecha DESC");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Turno aux = new Turno();
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
+                    aux.Observaciones = datos.Lector["Observaciones"] != DBNull.Value ? (string)datos.Lector["Observaciones"] : null;
+
+                    aux.Paciente = new Paciente();
+                    aux.Paciente.Id = (int)datos.Lector["IdPaciente"];
+                    aux.Paciente.Nombre = (string)datos.Lector["NombrePaciente"];
+                    aux.Paciente.Apellido = (string)datos.Lector["ApellidoPaciente"];
+
+                    aux.Medico = new Medico();
+                    aux.Medico.Id = (int)datos.Lector["IdMedico"];
+                    aux.Medico.Nombre = (string)datos.Lector["NombreMedico"];
+                    aux.Medico.Apellido = (string)datos.Lector["ApellidoMedico"];
+
+                    aux.Especialidad = new Especialidad();
+                    aux.Especialidad.Id = (int)datos.Lector["IdEspecialidad"];
+                    aux.Especialidad.Descripcion = (string)datos.Lector["Especialidad"];
+
+                    aux.Estado = new Estado();
+                    aux.Estado.Id = (int)datos.Lector["IdEstado"];
+                    aux.Estado.Descripcion = (string)datos.Lector["Estado"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
     }
 }

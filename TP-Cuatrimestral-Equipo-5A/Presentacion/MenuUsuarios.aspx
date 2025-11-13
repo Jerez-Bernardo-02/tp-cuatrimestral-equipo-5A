@@ -19,7 +19,7 @@
             <div class="row row-cols-3 g-4">
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="SolicitarTurno.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Agregar.png" width="100" height="100" alt="Solicitar Turno">
                             <h5 class="card-text mt-3">Nuevo Turno</h5>
@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="PacienteTurnos.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Turnos.png" width="100" height="100" alt="Mis Turnos">
                             <h5 class="card-text mt-3">Mis Turnos</h5>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="col">
-                    <a href="#" class="card text-center text-decoration-none shadow w-100 h-100">
+                    <a href="FormularioRegistro.aspx" class="card text-center text-decoration-none shadow w-100 h-100">
                         <div class="card-body">
                             <img src="Imagenes/Icono_Paciente.png" width="100" height="100" alt="Mis Datos">
                             <h5 class="card-text mt-3">Mis Datos</h5>

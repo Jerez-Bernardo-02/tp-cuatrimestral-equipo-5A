@@ -9,7 +9,7 @@
 
         <div class="row">
             <div class="col-12">
-                <asp:GridView runat="server" ID="dgvPacienteTurnos" AutoGenerateColumns="False" CssClass="table table-striped" OnSelectedIndexChanged="dgvTurnos_SelectedIndexChanged" OnPageIndexChanging="dgvTurnos_PageIndexChanging" AllowPaging="true" PageSize="10">
+                <asp:GridView runat="server" ID="dgvPacienteTurnos" AutoGenerateColumns="False" CssClass="table table-striped" OnSelectedIndexChanged="dgvPacienteTurnos_SelectedIndexChanged" OnPageIndexChanging="dgvPacienteTurnos_PageIndexChanging" AllowPaging="true" PageSize="10">
                     <Columns>
                         <asp:TemplateField HeaderText="Fecha">
                             <ItemTemplate>
