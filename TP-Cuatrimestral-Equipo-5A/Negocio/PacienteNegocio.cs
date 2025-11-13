@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Datos;
+using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Datos;
-using Dominio;
 
 namespace Negocio
 {
@@ -278,6 +279,85 @@ namespace Negocio
             {
 
                 throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public List<Paciente> listaFiltrada(string Nombre = "", string Apellido = "", string Email = "", string Telefono = "", string Dni = "")
+        {
+            List<Paciente> lista = new List<Paciente>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = "SELECT P.Id AS IdPaciente, P.Nombre, P.Apellido, P.FechaNacimiento, P.Dni, P.Email, P.Telefono, P.UrlImagen, U.Id AS IdUsuario, U.Usuario, U.Activo, PR.Id AS IdPermiso, PR.Descripcion AS PermisoDescripcion FROM Pacientes P INNER JOIN Usuarios U ON U.Id = P.IdUsuario INNER JOIN Permisos PR ON PR.Id = U.IdPermiso WHERE 1=1";
+
+                if (!string.IsNullOrEmpty(Nombre))
+                {
+                    consulta += "AND (P.Nombre LIKE '%' + @filtroNombre + '%')";
+                    datos.setearParametro("@filtroNombre", Nombre);
+                }
+
+                if (!string.IsNullOrEmpty(Apellido))
+                {
+                    consulta += "AND (P.Apellido LIKE '%' + @filtroApellido + '%')";
+                    datos.setearParametro("@filtroApellido", Apellido);
+                }
+
+                if (!string.IsNullOrEmpty(Email))
+                {
+                    consulta += "AND (P.Email LIKE '%' + @filtroEmail + '%')";
+                    datos.setearParametro("@filtroEmail", Email);
+                }
+
+                if (!string.IsNullOrEmpty(Telefono))
+                {
+                    consulta += "AND (P.Telefono LIKE '%' + @filtroTelefono + '%')";
+                    datos.setearParametro("@filtroTelefono", Telefono);
+                }
+
+                if (!string.IsNullOrEmpty(Dni))
+                {
+                    consulta += "AND (P.Dni LIKE '%' + @filtroDni + '%')";
+                    datos.setearParametro("@filtroDni", Dni);
+                }
+
+                consulta += " ORDER BY P.Dni ASC ";
+                datos.setearConsulta(consulta);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Paciente aux = new Paciente();
+
+                    aux.Id = (int)datos.Lector["IdPaciente"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Apellido = (string)datos.Lector["Apellido"];
+                    aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                    aux.Dni = (string)datos.Lector["Dni"];
+                    aux.Email = (string)datos.Lector["Email"];
+                    aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
+                    aux.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
+
+                    aux.Usuario = new Usuario();
+                    aux.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    aux.Usuario.Activo = (bool)datos.Lector["Activo"];
+
+                    aux.Usuario.Permiso = new Permiso();
+                    aux.Usuario.Permiso.Id = (int)datos.Lector["IdPermiso"];
+                    aux.Usuario.Permiso.Descripcion = (string)datos.Lector["PermisoDescripcion"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             finally
             {
