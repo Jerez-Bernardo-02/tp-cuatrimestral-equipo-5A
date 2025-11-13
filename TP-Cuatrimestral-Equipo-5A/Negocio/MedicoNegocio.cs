@@ -145,7 +145,7 @@ namespace Negocio
                     medico.Usuario = new Usuario();
                     medico.Usuario.Id = (int)datos.Lector["IdUsuario"];
                     medico.Usuario.Activo = (bool)datos.Lector["Activo"];
-                    //Falta el nombre de usuario (habría que agregar el campo y hacer el INNER JOIN si lo queremos)
+                    
                     lista.Add(medico);
                 }
                 return lista;

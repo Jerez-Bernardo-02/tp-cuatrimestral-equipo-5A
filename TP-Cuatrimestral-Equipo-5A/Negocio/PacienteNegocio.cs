@@ -237,15 +237,15 @@ namespace Negocio
             }
         }
 
-        public Paciente buscarPorIdPaciente(int idPaciente)
+        public Paciente buscarPorIdPaciente(int id)
         {
             Paciente aux = new Paciente();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("SELECT Id, Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, UrlImagen FROM Pacientes Where Id = @idPaciente");
-                datos.setearParametro("@idPaciente", idPaciente);
+                datos.setearConsulta(@"SELECT P.Id, P.Nombre, P.Apellido, P.FechaNacimiento, P.Telefono, P.Dni, P.Email, P.UrlImagen, U.Id AS IdUsuario, U.Usuario, U.Clave, U.Activo FROM Pacientes P INNER JOIN Usuarios U ON U.Id = P.IdUsuario WHERE P.Id = @id");
+                datos.setearParametro("@id", id);
                 datos.ejecutarLectura();
 
                 if (datos.Lector.Read())
@@ -258,6 +258,11 @@ namespace Negocio
                     aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
                     aux.Dni = (string)datos.Lector["Dni"];
                     aux.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
+                    aux.Usuario = new Usuario();
+                    aux.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    aux.Usuario.NombreUsuario = (string)datos.Lector["Usuario"];
+                    aux.Usuario.Clave = (string)datos.Lector["Clave"];
+                    aux.Usuario.Activo = (bool)datos.Lector["Activo"];
                 }
 
                 return aux;

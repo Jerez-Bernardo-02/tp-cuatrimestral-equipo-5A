@@ -14,48 +14,79 @@ namespace Presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
+      
+             if (!IsPostBack)
+             {
+
+                btnInactivar.Visible = false;//ocultamos el boton de inactivar
+              
                 string usuarioActual = (string)Session["tipoUsuarioRegistrar"];
+                
+
                 if (usuarioActual == "Medico")
-                {
-                    divMatricula.Visible = true; //si es medico, se hace visible el campo txtMatricula
-                    //rfvMatricula.Enabled = true; // habilita el RequiredFieldValidator
+                 {
+                     divMatricula.Visible = true; //si es medico, se hace visible el campo txtMatricula
+                     //rfvMatricula.Enabled = true; // habilita el RequiredFieldValidator
+                 }
+                 else
+                 {
+                     divMatricula.Visible = false; // si no es medico, no se ve
+                     //rfvMatricula.Enabled = false; // deshabilita el validador
+                 }
+                 if (Session["idMedicoEditar"] != null)
+                 {
+                     divMatricula.Visible = true;
+                     divDatosAcceso.Visible = false;
+                     BtnRegistrarse.Text = "Modificar"; //Cambiamos el texto del boton cuando sea un modificar 
+
+                     int idMedico = int.Parse(Session["idMedicoEditar"].ToString());
+                     Medico medico = new Medico();
+                     MedicoNegocio negocio = new MedicoNegocio();
+
+                     medico = negocio.buscarPorId(idMedico);//traigo todos los datos del medico seleccionado
+
+                     Session.Add("medicoSeleccionado", medico);//guardo el medico seleccionado en el gridview
+
+                     btnInactivar.Visible = Session["idMedicoEditar"] != null;
+
+
+                    if (!medico.ActivoUsuario)
+                     {
+                         btnInactivar.Text = "Reactivar";
+                     }
+                     else
+                     {
+                         btnInactivar.Text = "Inactivar";
+                     }
+                         medicoAmodificarMedico(medico);
+                  
                 }
-                else
+                 
+                if (Session["idRecepcionistaEditar"] != null)
                 {
-                    divMatricula.Visible = false; // si no es medico, no se ve
-                    //rfvMatricula.Enabled = false; // deshabilita el validador
-                }
-                if (Session["idMedicoEditar"] != null)
-                {
-                    divMatricula.Visible = true;
+                    divMatricula.Visible = false;
                     divDatosAcceso.Visible = false;
                     BtnRegistrarse.Text = "Modificar"; //Cambiamos el texto del boton cuando sea un modificar 
 
-                    int idMedico = int.Parse(Session["idMedicoEditar"].ToString());
-                    Medico medico = new Medico();
-                    MedicoNegocio negocio = new MedicoNegocio();
-                    
-                    medico = negocio.buscarPorId(idMedico);//traigo todos los datos del medico seleccionado
-                    
-                    Session.Add("medicoSeleccionado", medico);//guardo el medico seleccionado en el gridview
-
-                  
-                    if (!medico.ActivoUsuario)
+                    int idRecepcionista = int.Parse(Session["idRecepcionistaEditar"].ToString());
+                    RecepcionistaNegocio negocio = new RecepcionistaNegocio();
+                    Recepcionista recepcionista = new Recepcionista();
+                    recepcionista = negocio.buscarPorId(idRecepcionista);//traigo todos los datos del medico seleccionado
+                    Session.Add("recepcionistaSeleccionado", recepcionista);//guardo el recepcionista seleccionado en el gridview
+                    btnInactivar.Visible = Session["idRecepcionistaEditar"] != null;
+                    if (!recepcionista.ActivoUsuario)
                     {
-                        btnInactivar.Text = "Reactivar";
+                         btnInactivar.Text = "Reactivar";
                     }
                     else
                     {
                         btnInactivar.Text = "Inactivar";
                     }
-                        medicoAmodificarMedico(medico);
-                    
+                    modificarRecepcionistaOpaciente(recepcionista);
                 }
-                btnInactivar.Visible = Session["idMedicoEditar"] != null;
-            }
-     
+              
+             }
+
         }
         private void medicoAmodificarMedico(Medico medico)
         {
@@ -67,8 +98,20 @@ namespace Presentacion
             txtEmail.Text = medico.Email;
             txtTelefono.Text = medico.Telefono;
             txtMatricula.Text = medico.Matricula;
-            txtUsuario.Text = medico.Usuario.NombreUsuario;
-            txtContrasenia.Text = medico.Usuario.Clave;
+            //txtUsuario.Text = medico.Usuario.NombreUsuario;
+            //txtContrasenia.Text = medico.Usuario.Clave;
+        }
+        private void modificarRecepcionistaOpaciente(Persona persona)
+        {
+            //aca deberia poner los atributos que no queremos modificar en txtNombre.Enabled = true;
+            txtNombre.Text = persona.Nombre;
+            txtApellido.Text = persona.Apellido;
+            txtDocumento.Text = persona.Dni;
+            TextFechaNacimiento.Text = persona.FechaNacimiento.ToString("yyyy-MM-dd");
+            txtEmail.Text = persona.Email;
+            txtTelefono.Text = persona.Telefono;
+            //txtUsuario.Text = persona.Usuario.NombreUsuario;
+            //txtContrasenia.Text = persona.Usuario.Clave;
         }
 
         protected void BtnRegistrarse_Click(object sender, EventArgs e)
@@ -113,6 +156,46 @@ namespace Presentacion
                     ClientScript.RegisterStartupScript(this.GetType(), "redirigir",
                         "setTimeout(function(){ window.location='AdministradorMedicos.aspx'; }, 2500);", true); //redirijo al menu admin medicos
                     return;
+                }
+                if(Session["idRecepcionistaEditar"] != null)
+                {
+                    // Modo edición
+                    RecepcionistaNegocio negocio = new RecepcionistaNegocio();
+
+                    Recepcionista recepcionista = new Recepcionista();
+
+                    int id = int.Parse(Session["idRecepcionistaEditar"].ToString());
+                    recepcionista = negocio.buscarPorId(id);
+
+                    recepcionista.Nombre = txtNombre.Text.Trim();
+                    recepcionista.Apellido = txtApellido.Text.Trim();
+                    recepcionista.Dni = txtDocumento.Text.Trim();
+                    recepcionista.Email = txtEmail.Text.Trim();
+                    recepcionista.Telefono = txtTelefono.Text.Trim();
+                    
+                    // medico.UrlImagen = null
+                    recepcionista.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
+
+                    recepcionista.Usuario = new Usuario();
+                    if (!string.IsNullOrEmpty(txtContrasenia.Text))
+                    {
+                        recepcionista.Usuario.Clave = txtContrasenia.Text.Trim();
+                    }
+
+                    negocio.modificarRecepcionista(recepcionista);
+
+                    lblResultado.Text = "Datos del recepcionista actualizados correctamente.";
+                    pnlResultado.CssClass = "alert alert-success text-center mt-3";
+                    pnlResultado.Visible = true;
+
+
+                    Session.Remove("idRecepcionistaEditar");// Limpio la sesión
+
+
+                    ClientScript.RegisterStartupScript(this.GetType(), "redirigir",
+                        "setTimeout(function(){ window.location='AdministradorRecepcionistas.aspx'; }, 2500);", true); //redirijo al menu admin recepcionistas
+                    return;
+
                 }
                 divDatosAcceso.Visible = true;
                 string tipoUsuarioActivar = (string)Session["tipoUsuarioRegistrar"];// Recuperamos el tipo de usuario a registrar desde la session
@@ -281,16 +364,21 @@ namespace Presentacion
             {
                 if (Session["idMedicoEditar"] != null)
                 {
-                    // Modo edición boton inactivar
-                    /*int id = int.Parse(Session["idMedicoEditar"].ToString());
-                    MedicoNegocio negocio = new MedicoNegocio();
-                    Medico medico = new Medico();
-                    medico = negocio.buscarPorId(id);*/
+                   
                     Medico seleccionado = (Medico)Session["medicoSeleccionado"];
                     UsuarioNegocio negocioUsuario = new UsuarioNegocio();
                     negocioUsuario.bajaLogica(seleccionado.Usuario.Id,!seleccionado.ActivoUsuario);
                     Response.Redirect("AdministradorMedicos.aspx");
+                }else if (Session["idRecepcionistaEditar"] != null)
+                {
+                    Recepcionista seleccionado = (Recepcionista)Session["recepcionistaSeleccionado"];
+                    UsuarioNegocio negocioUsuario = new UsuarioNegocio();
+
+                    negocioUsuario.bajaLogica(seleccionado.Usuario.Id, !seleccionado.ActivoUsuario);
+                    Response.Redirect("AdministradorRecepcionistas.aspx");
+
                 }
+
 
             }catch(Exception ex) {
                 Session.Add("error", ex);

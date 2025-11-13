@@ -8,21 +8,19 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                <asp:GridView runat="server" ID="dgvRecepcionistas" AutoGenerateColumns="False" CssClass="table table-striped">
+                <asp:GridView runat="server" ID="dgvRecepcionistas" DataKeyNames="Id" AutoGenerateColumns="False" CssClass="table table-striped"  OnSelectedIndexChanged="dgvRecepcionistas_SelectedIndexChanged">
                      <Columns>
                         <asp:BoundField HeaderText="Dni" Datafield="Dni"/>
                         <asp:BoundField HeaderText="Nombre" Datafield="Nombre"/>
                         <asp:BoundField HeaderText="Apellido" Datafield="Apellido"/>
                         <asp:BoundField HeaderText="Email" Datafield="Email"/>
                         <asp:BoundField HeaderText="Telefono" Datafield="Telefono"/>
+                        <asp:CheckBoxField HeaderText="Activo" DataField="ActivoUsuario" />
      
                         <asp:TemplateField HeaderText="Acciones">
                             <ItemTemplate>
-                                <asp:LinkButton runat="server" ID="lnkBtnModificarDatos" Text="Editar" CssClass="btn btn-warning btn-sm" ToolTip="Modificar datos">
+                                <asp:LinkButton runat="server" ID="lnkBtnModificarDatos" Text="Editar" CssClass="btn btn-warning btn-sm" CommandName="Select" ToolTip="Modificar datos">
                                     <i class="bi bi-pencil-fill"></i>
-                                </asp:LinkButton>
-                                <asp:LinkButton runat="server" ID="lnkBtnVerTurnos"  Text="Turnos" CssClass="btn btn-sm btn-secondary btn-sm" ToolTip="Ver Turnos Asociados">
-                                    <i class="bi bi-eye-fill"></i>
                                 </asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>
