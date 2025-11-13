@@ -97,15 +97,14 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT  P.Id AS IdPaciente, P.Nombre, P.Apellido, P.FechaNacimiento, P.Email, P.Telefono, P.Dni, P.UrlImagen FROM Pacientes P");
+                datos.setearConsulta(@"SELECT P.Id, P.Nombre, P.Apellido, P.FechaNacimiento, P.Telefono, P.Dni, P.Email, P.UrlImagen, P.IdUsuario, U.Activo FROM Pacientes P INNER JOIN Usuarios U ON P.IdUsuario = U.Id;");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     Paciente aux = new Paciente();
 
-                    aux.Id = (int)datos.Lector["IdPaciente"];
-
+                    aux.Id = (int)datos.Lector["Id"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Apellido = (string)datos.Lector["Apellido"];
                     aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
@@ -113,17 +112,24 @@ namespace Negocio
                     aux.Email = (string)datos.Lector["Email"];
                     aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : null;
                     aux.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
-                    
+                    aux.Usuario = new Usuario();
+                    aux.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    aux.Usuario.Activo = (bool)datos.Lector["Activo"];
+
 
                     lista.Add(aux);
                 }
 
-                datos.cerrarConexion();
+               
                 return lista;
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
             }
         }
 
@@ -170,13 +176,13 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Pacientes SET Nombre = @nombre, Apellido = @apellido, FechaNacimiento = @fechaNacimiento, Dni = @dni, Email = @email, Telefono = @telefono, UrlImagen = @urlImagen WHERE Id = @id");
-                datos.setearParametro("@nombre", paciente.Nombre);
-                datos.setearParametro("@apellido", paciente.Apellido);
-                datos.setearParametro("@fechaNacimiento", paciente.FechaNacimiento);
-                //datos.setearParametro("@dni", paciente.Documento); // realmente queremos modificar este campo?
-                datos.setearParametro("@email", paciente.Email);
-                datos.setearParametro("@telefono", paciente.Telefono);
+                datos.setearConsulta(@"UPDATE Pacientes SET Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Dni = @Dni, Email = @Email, UrlImagen = @UrlImagen WHERE Id = @Id; ");
+                datos.setearParametro("@Nombre", paciente.Nombre);
+                datos.setearParametro("@Apellido", paciente.Apellido);
+                datos.setearParametro("@FechaNacimiento", paciente.FechaNacimiento);
+                datos.setearParametro("@Dni", paciente.Dni);
+                datos.setearParametro("@Email", paciente.Email);
+                datos.setearParametro("@Telefono", paciente.Telefono);
                 if (paciente.UrlImagen != null)
                 {
                     datos.setearParametro("@UrlImagen", paciente.UrlImagen);
@@ -185,7 +191,7 @@ namespace Negocio
                 {
                     datos.setearParametro("@UrlImagen", DBNull.Value);
                 }
-                datos.setearParametro("@id", paciente.Id);
+                datos.setearParametro("@Id", paciente.Id);
 
                 datos.ejecutarAccion();
 
@@ -244,7 +250,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta(@"SELECT P.Id, P.Nombre, P.Apellido, P.FechaNacimiento, P.Telefono, P.Dni, P.Email, P.UrlImagen, U.Id AS IdUsuario, U.Usuario, U.Clave, U.Activo FROM Pacientes P INNER JOIN Usuarios U ON U.Id = P.IdUsuario WHERE P.Id = @id");
+                datos.setearConsulta(@"SELECT  P.Id, P.Nombre, P.Apellido, P.FechaNacimiento, P.Telefono,  P.Dni, P.Email, P.UrlImagen, U.Id AS IdUsuario,  U.Usuario, U.Clave, U.Activo FROM Pacientes P INNER JOIN Usuarios U ON U.Id = P.IdUsuario WHERE P.Id = @id;");
                 datos.setearParametro("@id", id);
                 datos.ejecutarLectura();
 
