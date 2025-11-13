@@ -26,7 +26,7 @@ namespace Negocio
         {
             Usuario usuario = user != null ? (Usuario)user : null;
             
-            if(usuario.Permiso.Descripcion == "Paciente")
+            if(usuario != null && usuario.Permiso.Descripcion == "Paciente")
             {
                 return true;
             }
@@ -38,7 +38,7 @@ namespace Negocio
         {
             Usuario usuario = user != null ? (Usuario)user : null;
 
-            if (usuario.Permiso.Descripcion == "Medico")
+            if (usuario != null && usuario.Permiso.Descripcion == "Medico")
             {
                 return true;
             }
@@ -50,7 +50,7 @@ namespace Negocio
         {
             Usuario usuario = user != null ? (Usuario)user : null;
 
-            if (usuario.Permiso.Descripcion == "Recepcionista")
+            if (usuario != null && usuario.Permiso.Descripcion == "Recepcionista")
             {
                 return true;
             }
@@ -62,7 +62,7 @@ namespace Negocio
         {
             Usuario usuario = user != null ? (Usuario)user : null;
 
-            if (usuario.Permiso.Descripcion == "Administrador")
+            if (usuario != null && usuario.Permiso.Descripcion == "Administrador")
             {
                 return true;
             }

@@ -292,9 +292,9 @@ namespace Presentacion
                         pnlResultado.Visible = true;
 
                         // redirijo al login despues de 3 segundos para que se alcance a leer el pnl al login
-                        if (Seguridad.esPaciente(Session["usuario"]))
+                        if (Seguridad.esAdministrador(Session["usuario"]))
                         {
-                            ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='Login.aspx'; }, 3000);", true);
+                            // ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='AdministradorPacientes.aspx'; }, 3000);", true); # FALTA VENTANA DE "AdministradorPacientes"
                         }
                         else if (Seguridad.esRecepcionista(Session["usuario"]))
                         {
@@ -302,7 +302,7 @@ namespace Presentacion
                         }
                         else
                         {
-                            // ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='AdministradorPacientes.aspx'; }, 3000);", true); # FALTA VENTANA DE "AdministradorPacientes"
+                            ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='Login.aspx'; }, 3000);", true);
                         }
 
                         break;
