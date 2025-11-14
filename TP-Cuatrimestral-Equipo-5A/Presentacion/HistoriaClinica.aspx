@@ -44,6 +44,10 @@
                             data-bs-toggle="collapse"  <%--indica que es un acordeon--%>
                             data-bs-target="#collapse-<%# Eval("Id")%>">  <%--vincula el div con el id de la HC para redirigir--%>
                             <strong> <%# Eval("Fecha") %></strong>
+
+                             -
+
+                            <%# Eval("Asunto") %>
                         </button>
                     </h2>
                     <%--Contenido--%>

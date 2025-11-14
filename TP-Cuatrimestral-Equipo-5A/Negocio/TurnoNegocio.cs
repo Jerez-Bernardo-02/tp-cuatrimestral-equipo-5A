@@ -83,7 +83,7 @@ namespace Negocio
 
                     aux.Id = (int)datos.Lector["Id"];
                     aux.Fecha = (DateTime)datos.Lector["Fecha"];
-                    aux.Observaciones = (string)datos.Lector["Observaciones"];
+                    aux.Observaciones = datos.Lector["Observaciones"] != DBNull.Value ? (string)datos.Lector["Observaciones"] : null;
 
                     aux.Paciente = new Paciente();
                     aux.Paciente.Nombre = (string)datos.Lector["NombrePaciente"];
