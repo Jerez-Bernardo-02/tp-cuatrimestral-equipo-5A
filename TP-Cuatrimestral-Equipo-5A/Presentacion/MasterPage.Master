@@ -48,7 +48,14 @@
 
                     </div>
                     <!-- REDIRECCIONAR A PAGINA DE LOGIN -->
-                    <a class="btn btn-primary" href="Login.aspx" role="button">Ingresar</a>
+                    <%if (!Negocio.Seguridad.sesionActiva(Session["usuario"]))
+                      { %>
+                        <a class="btn btn-primary" href="Login.aspx" role="button">Ingresar</a>
+                    <%}
+                      else
+                      { %>
+                        <asp:Button runat="server" Text="Salir" ID="btnSalir" CssClass="btn btn-primary" OnClick="btnSalir_Click"/>
+                    <%} %>
                 </div>
             </div>
         </nav>
