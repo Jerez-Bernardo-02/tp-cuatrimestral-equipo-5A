@@ -39,7 +39,8 @@ namespace Presentacion
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-
+            Session.Add("usuarioRegistrar", "Paciente");
+            Response.Redirect("FormularioRegistro.aspx");
         }
 
         protected void btnVolver_Click(object sender, EventArgs e)

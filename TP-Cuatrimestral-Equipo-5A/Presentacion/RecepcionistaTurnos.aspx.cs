@@ -80,5 +80,11 @@ namespace Presentacion
         {
             Response.Redirect("MenuUsuarios.aspx");
         }
+    
+        protected void btnNuevoPaciente_Click(object sender, EventArgs e)
+        {
+            Session.Add("usuarioRegistrar", "Paciente");
+            Response.Redirect("FormularioRegistro.aspx");
+        }
     }
 }

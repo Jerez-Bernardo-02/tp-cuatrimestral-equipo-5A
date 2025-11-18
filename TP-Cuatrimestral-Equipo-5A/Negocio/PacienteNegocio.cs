@@ -11,13 +11,13 @@ namespace Negocio
 {
     public class PacienteNegocio
     {
-        public int agregarPaciente(Paciente nuevo)
+        public bool agregarPaciente(Paciente nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 // Parametros (@Clave, valor) clave seria el nombre de la columna y valor el lo que tiene el objeto recibido por parametro en cada atributo
-                datos.setearConsulta(@"INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Dni, Email, Telefono, IdUsuario) OUTPUT INSERTED.Id VALUES (@nombre, @apellido, @fechaNacimiento, @dni, @email, @telefono, @idUsuario)");
+                datos.setearConsulta(@"INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Dni, Email, Telefono, IdUsuario) VALUES (@nombre, @apellido, @fechaNacimiento, @dni, @email, @telefono, @idUsuario)");
                 //seteamos parametros  (@Clave, valor)
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@apellido", nuevo.Apellido);
@@ -27,11 +27,9 @@ namespace Negocio
                 datos.setearParametro("@telefono", nuevo.Telefono);
                 datos.setearParametro("@idUsuario", nuevo.Usuario.Id);
 
-                //para obtener el id autogenerado en la BD 
-                int id = datos.ejecutarEscalar();
-                nuevo.Id = id;
+                datos.ejecutarAccion();
 
-                return nuevo.Id;
+                return true;
             }
             catch (Exception )
             {

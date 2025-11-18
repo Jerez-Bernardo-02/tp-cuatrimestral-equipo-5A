@@ -27,6 +27,9 @@
             <div class="col-md-1">
                 <asp:Button runat="server" ID="btnFiltrar" Text="Filtrar" CssClass="btn btn-primary w-100" OnClick="btnFiltrar_Click"/>
             </div>
+            <div class="col-md-1">
+                <asp:Button runat="server" ID="btnNuevoPaciente" Text="Filtrar" CssClass="btn btn-primary w-100" OnClick="btnNuevoPaciente_Click" />
+            </div>
             <div class="col-md text-end">
                 <asp:Button runat="server" ID="btnNuevoTurno" Text="Nuevo Turno" CssClass="btn btn-success" OnClick="btnNuevoTurno_Click" />
             </div>
