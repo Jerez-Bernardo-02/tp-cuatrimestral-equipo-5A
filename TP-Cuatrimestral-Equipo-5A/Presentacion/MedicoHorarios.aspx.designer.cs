@@ -33,31 +33,40 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Label lblLunes;
 
         /// <summary>
-        /// Control btnBorrarBloque.
+        /// Control repHorarioLunes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnBorrarBloque;
+        protected global::System.Web.UI.WebControls.Repeater repHorarioLunes;
 
         /// <summary>
-        /// Control txtDesde.
+        /// Control btnBorrarBloqueLunes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDesde;
+        protected global::System.Web.UI.WebControls.LinkButton btnBorrarBloqueLunes;
 
         /// <summary>
-        /// Control txtHasta.
+        /// Control txtHoraDesdeLunes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtHasta;
+        protected global::System.Web.UI.WebControls.TextBox txtHoraDesdeLunes;
+
+        /// <summary>
+        /// Control txtHoraHastaLunes.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtHoraHastaLunes;
 
         /// <summary>
         /// Control ddlEspecialidadesLunes.

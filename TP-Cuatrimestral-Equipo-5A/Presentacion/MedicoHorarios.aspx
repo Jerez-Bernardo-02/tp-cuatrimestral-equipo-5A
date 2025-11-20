@@ -20,22 +20,28 @@
                 </div>
                 <%-- Tarjeta para CADA bloque --%>
                 <div class="card-body">
+                    <%--      REPEATER     --%>
+                    <asp:Repeater runat="server"
+                        ID="repHorarioLunes">
+                        <ItemTemplate>
+
+                        </ItemTemplate>
+                    </asp:Repeater>
                     <%-- Botón de borrar --%>
                     <div class="text-end mt-1 mb-1">
-                        <asp:LinkButton ID="btnBorrarBloque" runat="server" CommandName="Delete"
+                        <asp:LinkButton ID="btnBorrarBloqueLunes" runat="server" CommandName="Delete"
                             CssClass="btn btn-danger btn-sm">
-                    <i class="bi bi-trash"></i>
-                </asp:LinkButton>
-
+                            <i class="bi bi-trash"></i>
+                         </asp:LinkButton>
                     </div>
 
                     <%--Horario desde--%>
                     <label class="form-label">Desde</label>
-                    <asp:TextBox ID="txtDesde" runat="server" CssClass="form-control" TextMode="Time" Text="" />
+                    <asp:TextBox ID="txtHoraDesdeLunes" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Horario hasta--%>
                     <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="txtHasta" runat="server" CssClass="form-control" TextMode="Time" Text="" />
+                    <asp:TextBox ID="txtHoraHastaLunes" runat="server" CssClass="form-control" TextMode="Time" Text="" />
 
                     <%--Especialidades--%>
                     <asp:DropDownList ID="ddlEspecialidadesLunes" runat="server" CssClass="form-select mt-2">
