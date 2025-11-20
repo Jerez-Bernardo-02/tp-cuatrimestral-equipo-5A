@@ -10,13 +10,13 @@ namespace Negocio
 {
     public class RecepcionistaNegocio
     {
-        public bool agregarRecepcionista(Recepcionista nuevo)
+        public bool agregar(Recepcionista nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 // Parametros (@Clave, valor) clave seria el nombre de la columna y valor el lo que tiene el objeto recibido por parametro en cada atributo
-                datos.setearConsulta(@"INSERT INTO Recepcionistas (Nombre, Apellido, FechaNacimiento, Dni, Email,Telefono, IdUsuario) VALUES (@nombre, @apellido,@fechaNacimiento, @dni, @email, @telefono, @idUsuario)");
+                datos.setearConsulta(@"INSERT INTO Recepcionistas (Nombre, Apellido, FechaNacimiento, Dni, Email,Telefono, UrlImagen, IdUsuario) VALUES (@nombre, @apellido, @fechaNacimiento, @dni, @email, @telefono, @urlImagen, @idUsuario)");
 
                 //seteamos parametros  (@Clave, valor) - activo = true por constructor
                 datos.setearParametro("@nombre", nuevo.Nombre);
@@ -24,17 +24,17 @@ namespace Negocio
                 datos.setearParametro("@fechaNacimiento", nuevo.FechaNacimiento);
                 datos.setearParametro("@dni", nuevo.Dni);
                 datos.setearParametro("@email", nuevo.Email);
-                datos.setearParametro("@telefono", nuevo.Telefono);
+                datos.setearParametro("@telefono", (object)nuevo.Telefono ?? DBNull.Value);
+                datos.setearParametro("@urlImagen", (object)nuevo.UrlImagen ?? DBNull.Value);
                 datos.setearParametro("@idUsuario", nuevo.Usuario.Id);
 
                 datos.ejecutarAccion();
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
-
+                throw ex;
             }
             finally
             {
@@ -110,10 +110,9 @@ namespace Negocio
                 return aux;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
             finally
             {
@@ -162,15 +161,14 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void modificarRecepcionista(Recepcionista recepcionista)
+        public void modificar(Recepcionista recepcionista)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta(@"UPDATE Recepcionistas SET  Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Dni = @Dni, Email = @Email, UrlImagen = @UrlImagen WHERE Id = @Id;");
+                datos.setearConsulta(@"UPDATE Recepcionistas SET  Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Dni = @Dni, Email = @Email, UrlImagen = @UrlImagen WHERE IdUsuario = @IdUsuario;");
 
-             
                 datos.setearParametro("@Nombre", recepcionista.Nombre);
                 datos.setearParametro("@Apellido", recepcionista.Apellido);
                 datos.setearParametro("@FechaNacimiento", recepcionista.FechaNacimiento);
@@ -178,13 +176,13 @@ namespace Negocio
                 datos.setearParametro("@Email", recepcionista.Email);
                 datos.setearParametro("@Telefono", (object)recepcionista.Telefono ?? DBNull.Value);
                 datos.setearParametro("@UrlImagen", (object)recepcionista.UrlImagen ?? DBNull.Value);
-                datos.setearParametro("@Id", recepcionista.Id);
+                datos.setearParametro("@IdUsuario", recepcionista.Usuario.Id);
 
                 datos.ejecutarAccion();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             finally
             {

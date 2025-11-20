@@ -87,7 +87,7 @@ namespace Negocio
         }
 
 
-        public int agregarUsuario(Usuario nuevo)
+        public int agregar(Usuario nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -100,17 +100,15 @@ namespace Negocio
                 datos.setearParametro("@clave", nuevo.Clave);
                 datos.setearParametro("@activo", nuevo.Activo);
                 datos.setearParametro("@idPermiso", nuevo.Permiso.Id);
-           
+
                 //para obtener el id autogenerado en la BD 
                 int id = datos.ejecutarEscalar();
-                nuevo.Id = id;
 
-                return nuevo.Id;
+                return id;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
-
+                throw ex;
             }
             finally
             {
@@ -187,7 +185,68 @@ namespace Negocio
             }
         }
 
-        
+        public void modificar(Usuario usuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"UPDATE Usuarios SET Usuario = @usuario, Clave = @clave, Activo = @activo, IdPermiso = @idPermiso WHERE Id = @id; ");
+                datos.setearParametro("@usuario", usuario.NombreUsuario);
+                datos.setearParametro("@clave", usuario.Clave);
+                datos.setearParametro("@activo", usuario.Activo);
+                datos.setearParametro("@idPermiso", usuario.Permiso.Id);
+                datos.setearParametro("@id", usuario.Id);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public Usuario buscarPorId(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT U.Id, U.Usuario, U.Clave, U.Activo, U.IdPermiso, P.Descripcion FROM Usuarios U INNER JOIN Permisos P ON U.IdPermiso = P.Id WHERE U.Id = @id");
+                datos.setearParametro("@id", id);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+
+                    Usuario usuario = new Usuario();
+
+                    usuario.Id = id;
+                    usuario.NombreUsuario = (string)datos.Lector["Usuario"];
+                    usuario.Clave = (string)datos.Lector["Clave"];
+                    usuario.Activo = (bool)datos.Lector["Activo"];
+
+                    usuario.Permiso = new Permiso();
+                    usuario.Permiso.Id = (int)datos.Lector["IdPermiso"];
+                    usuario.Permiso.Descripcion = (string)datos.Lector["Descripcion"];
+
+                    return usuario;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 
 }

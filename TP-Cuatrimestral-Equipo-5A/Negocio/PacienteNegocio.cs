@@ -24,17 +24,17 @@ namespace Negocio
                 datos.setearParametro("@fechaNacimiento", nuevo.FechaNacimiento);
                 datos.setearParametro("@dni", nuevo.Dni);
                 datos.setearParametro("@email", nuevo.Email);
-                datos.setearParametro("@telefono", nuevo.Telefono);
+                datos.setearParametro("@telefono", (object)nuevo.Telefono ?? DBNull.Value);
+                datos.setearParametro("@urlImagen", (object)nuevo.UrlImagen ?? DBNull.Value);
                 datos.setearParametro("@idUsuario", nuevo.Usuario.Id);
 
                 datos.ejecutarAccion();
 
                 return true;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                throw;
-               
+                throw ex;
             }
             finally
             {
@@ -175,25 +175,18 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta(@"UPDATE Pacientes SET Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Dni = @Dni, Email = @Email, UrlImagen = @UrlImagen WHERE Id = @Id; ");
+                datos.setearConsulta(@"UPDATE Pacientes SET Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Dni = @Dni, Email = @Email, UrlImagen = @UrlImagen WHERE IdUsuario = @IdUsuario;");
+
                 datos.setearParametro("@Nombre", paciente.Nombre);
                 datos.setearParametro("@Apellido", paciente.Apellido);
                 datos.setearParametro("@FechaNacimiento", paciente.FechaNacimiento);
                 datos.setearParametro("@Dni", paciente.Dni);
                 datos.setearParametro("@Email", paciente.Email);
-                datos.setearParametro("@Telefono", paciente.Telefono);
-                if (paciente.UrlImagen != null)
-                {
-                    datos.setearParametro("@UrlImagen", paciente.UrlImagen);
-                }
-                else
-                {
-                    datos.setearParametro("@UrlImagen", DBNull.Value);
-                }
-                datos.setearParametro("@Id", paciente.Id);
+                datos.setearParametro("@Telefono", (object)paciente.Telefono ?? DBNull.Value);
+                datos.setearParametro("@UrlImagen", (object)paciente.UrlImagen ?? DBNull.Value);
+                datos.setearParametro("@IdUsuario", paciente.Usuario.Id);
 
                 datos.ejecutarAccion();
-
             }
             catch (Exception ex)
             {
@@ -215,7 +208,7 @@ namespace Negocio
                 datos.setearConsulta("SELECT Id, Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, UrlImagen FROM Pacientes Where IdUsuario = @idUsuario");
                 datos.setearParametro("@idUsuario", idUsuario);
                 datos.ejecutarLectura();
-                
+
                 if (datos.Lector.Read())
                 {
                     aux.Id = (int)datos.Lector["Id"];
@@ -231,10 +224,10 @@ namespace Negocio
                 return aux;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             finally
             {

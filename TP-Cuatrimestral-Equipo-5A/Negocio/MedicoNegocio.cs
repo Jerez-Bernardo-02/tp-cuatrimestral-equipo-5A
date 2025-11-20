@@ -47,47 +47,43 @@ namespace Negocio
             }
         }
 
-        public void modificarMedico(Medico medico)
+        public void modificar(Medico medico)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta(@"UPDATE Medicos SET  Nombre = @Nombre,Apellido = @Apellido, FechaNacimiento = @FechaNacimiento,Telefono = @Telefono, Dni = @Dni, Email = @Email,UrlImagen = @UrlImagen,Matricula = @Matricula WHERE Id = @Id; ");
-                //seteamos parametros  (@Clave, valor) - activo = true por constructor
+                datos.setearConsulta(@"UPDATE Medicos SET  Nombre = @Nombre,Apellido = @Apellido, FechaNacimiento = @FechaNacimiento,Telefono = @Telefono, Dni = @Dni, Email = @Email,UrlImagen = @UrlImagen,Matricula = @Matricula WHERE IdUsuario = @IdUsuario;");
+
                 datos.setearParametro("@Nombre", medico.Nombre);
                 datos.setearParametro("@Apellido", medico.Apellido);
                 datos.setearParametro("@FechaNacimiento", medico.FechaNacimiento);
                 datos.setearParametro("@Dni", medico.Dni);
                 datos.setearParametro("@Email", medico.Email);
-                //Operador Coalescing o unificacion, es un operador condicional para trabajar nulos, evalua el object de la izquierda, si no es null lo registra, y si es null registra el de la derecha 
                 datos.setearParametro("@Telefono", (object)medico.Telefono ?? DBNull.Value);
                 datos.setearParametro("@UrlImagen", (object)medico.UrlImagen ?? DBNull.Value);
                 datos.setearParametro("@Matricula", (object)medico.Matricula ?? DBNull.Value);
-                datos.setearParametro("@Id", medico.Id);
-            
+                datos.setearParametro("@IdUsuario", medico.Usuario.Id);
+
                 datos.ejecutarAccion();
-
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
-            finally 
+            finally
             {
                 datos.cerrarConexion();
-            } 
+            }
 
         }
 
-        public Medico buscarPorIdUsuario(int idUsuario)
+        public Medico buscarPorIdUsuario(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT Id, Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, UrlImagen, Matricula  FROM Medicos Where IdUsuario = @idUsuario");
-                datos.setearParametro("@idUsuario", idUsuario);
+                datos.setearConsulta("SELECT Id, Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, UrlImagen, Matricula  FROM Medicos Where IdUsuario = @id");
+                datos.setearParametro("@id", id);
                 datos.ejecutarLectura();
                 Medico medico = null;
                 if (datos.Lector.Read())
@@ -102,15 +98,13 @@ namespace Negocio
                     medico.Dni = (string)datos.Lector["Dni"];
                     medico.UrlImagen = datos.Lector["UrlImagen"] != DBNull.Value ? (string)datos.Lector["UrlImagen"] : null;
                     medico.Matricula = (string)datos.Lector["Matricula"];
-                    //falta id usuario (no necesario por ahora)
                 }
                 return medico;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
             finally
             {
@@ -118,7 +112,7 @@ namespace Negocio
             }
         }
 
-        
+
         public List<Medico> listar()
         {
             AccesoDatos datos = new AccesoDatos();
