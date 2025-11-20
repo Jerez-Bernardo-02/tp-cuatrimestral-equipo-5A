@@ -12,17 +12,46 @@ namespace Presentacion
 {
     public partial class FormularioRegistro : System.Web.UI.Page
     {
+        // En caso de querer agregar un Usuario (Sin importar su permiso), solo se debe redireccionar al formulario. El mismo detecta que accion se va a realizar, pero se debe tener en cuenta lo siguiente:
+
+        // Si solo se redirecciona al formulario, solo permite registrar un paciente
+        // Si se llama al formulario desde el perfil del Administrador, se detecta que el usuario es un Administrador, y utilizando el desplegable se selecciona el tipo de entidad a registrar (Paciente, Medico, Recepcionista, Administrador)
+
+        // En caso de querer modificar un usuario (Sin importar su tipo de permiso. Solo el paciente o el administrador deben poder realizar esto) se debe pasar por session el Objeto de "Usuario" correspondiente. Se pasa de la siguiente manera:
+        
+        //     Session.Add("usuarioModificar", usuario);
+        //     Response.Redirect("FormularioRegistro.aspx");
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            pnlDatos.Visible = true;
+            pnlUsuario.Visible = true;
+            divMatricula.Visible = false;
+            Session.Add("usuarioRegistrar", "Paciente");
+
+            try
             {
-                pnlDatos.Visible = true;
-                pnlUsuario.Visible = true;
-                divMatricula.Visible = false;
+                if (!IsPostBack)
+                {
+                    Usuario usuario = (Usuario)Session["usuarioModificar"] != null ? (Usuario)Session["usuarioModificar"] : null;
 
-                mostrarPermisos();
+                    if (usuario != null) // Si hay un usuario para modificar, se traen sus datos de la BD y se cargan en los txt
+                    {
+                        cargarFormulario(usuario);
+                        ddlTipoPermiso.Visible = false;
+                    }
+                    else
+                    {
+                        mostrarPermisos();
+                    }
+                }
+
             }
-
+            catch (Exception ex)
+            {
+                Session.Add("Error", ex.ToString());
+                Response.Redirect("Error.aspx");
+            }
 
             //if (!IsPostBack)
             //{
@@ -102,10 +131,10 @@ namespace Presentacion
             Usuario usuario = new Usuario();
             usuario = (Usuario)Session["usuario"];
 
-            if (Seguridad.esAdministrador(Session["usuario"]))
+            if (Seguridad.esAdministrador(Session["usuario"])) // El desplegable para cambiar los datos del formulario en funcion al tipo de Usuario a registrar solo puede ser accedido por el Administrador
             {
                 ddlTipoPermiso.Visible = true;
-                cargarPermisos();
+                cargarPermisos(); // Solo se cargan los permisos en el desplegable en caso de que sea administrador, evitando cargar de mas el programa
             }
             else
             {
@@ -115,23 +144,97 @@ namespace Presentacion
         protected void cargarPermisos()
         {
             PermisoNegocio negocio = new PermisoNegocio();
-            List<Permiso> lista = negocio.listar();
 
-            ddlTipoPermiso.DataSource = lista;
-            ddlTipoPermiso.DataValueField = "Id";
-            ddlTipoPermiso.DataTextField = "Descripcion";
-            ddlTipoPermiso.DataBind();
+            try
+            {
+                List<Permiso> lista = negocio.listar();
+
+                ddlTipoPermiso.DataSource = lista;
+                ddlTipoPermiso.DataValueField = "Id";
+                ddlTipoPermiso.DataTextField = "Descripcion";
+                ddlTipoPermiso.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = ex;
+                Response.Redirect("Error.aspx");
+            }
+        }
+
+        private void cargarFormulario(Usuario usuario) // Solo se carga el formulario en caso de querer modificar un usuario, para traer sus datos
+        {
+            if (Seguridad.esPaciente(usuario))
+            {
+                cargarCamposPaciente(usuario.Id);
+            }
+
+            if (Seguridad.esMedico(usuario))
+            {
+                cargarCamposMedico(usuario.Id);
+                divMatricula.Visible = true;
+            }
+
+            if (Seguridad.esRecepcionista(usuario))
+            {
+                cargarCamposRecepcionista(usuario.Id);
+            }
+
+            if (Seguridad.esAdministrador(usuario))
+            {
+                divMatricula.Visible = false;
+                divDatosAcceso.Visible = false;
+            }
+
+            cargarCamposUsuario(usuario);
+        }
+
+        private void cargarCamposPersona(Persona persona) // Se cargan los txt comunes entre los Pacientes, Medicos o Recepcionista
+        {
+            txtNombre.Text = persona.Nombre;
+            txtApellido.Text = persona.Apellido;
+            txtDocumento.Text = persona.Dni;
+            txtEmail.Text = persona.Email;
+            txtTelefono.Text = persona.Telefono;
+            txtFechaNacimiento.Text = persona.FechaNacimiento.ToString("yyyy-MM-dd");
+        }
+
+        private void cargarCamposUsuario(Usuario usuario) // Se cargan los campos de los Usuarios
+        {
+            txtUsuario.Text = usuario.NombreUsuario;
+            txtContrasenia.Text = usuario.Clave;
+        }
+
+        private void cargarCamposPaciente(int idUsuario)
+        {
+            PacienteNegocio negocio = new PacienteNegocio();
+            Paciente paciente = negocio.buscarPorIdUsuario(idUsuario);
+
+            cargarCamposPersona(paciente);
+        }
+
+        private void cargarCamposMedico(int idUsuario)
+        {
+            MedicoNegocio negocio = new MedicoNegocio();
+            Medico medico = negocio.buscarPorIdUsuario(idUsuario);
+
+            cargarCamposPersona(medico);
+            txtMatricula.Text = medico.Matricula; // Como el medico cuenta con la matricula como propiedad adicional, se debe cargar manualmente
+        }
+
+        private void cargarCamposRecepcionista(int idUsuario)
+        {
+            RecepcionistaNegocio negocio = new RecepcionistaNegocio();
+            Recepcionista recepcionista = negocio.buscarPorIdUsuario(idUsuario);
+
+            cargarCamposPersona(recepcionista);
         }
 
         protected void ddlTipoPermiso_SelectedIndexChanged(object sender, EventArgs e)
         {
-            pnlDatos.Visible = true;
-            pnlUsuario.Visible = true;
-            divMatricula.Visible = false;
 
             int id = int.Parse(ddlTipoPermiso.SelectedValue);
 
-            switch (id)
+            switch (id) // Se evalua que opcion se selecciono en el desplegable de los tipos de usuarios que se pueden registrar
             {
                 case 1:
                     Session.Add("usuarioRegistrar", "Paciente");
@@ -139,7 +242,7 @@ namespace Presentacion
 
                 case 2:
                     Session.Add("usuarioRegistrar", "Medico");
-                    divMatricula.Visible = true;
+                    divMatricula.Visible = true; // Si es medico, se hace visble el "div" que contiene al txtMatricula
                     break;
 
                 case 3:
@@ -148,10 +251,10 @@ namespace Presentacion
 
                 case 4:
                     Session.Add("usuarioRegistrar", "Administrador");
-                    pnlDatos.Visible = false;
+                    pnlDatos.Visible = false; // Como los Administradores solo cuenta con las propiedades respectivas a la clase Usuario, se le ocultan los datos de Persona
                     break;
 
-                default:
+                default: // En caso de error se notifica por pantalla
                     pnlDatos.Visible = false;
                     pnlUsuario.Visible = false;
                     divMatricula.Visible = false;
@@ -192,43 +295,65 @@ namespace Presentacion
 
         protected void BtnRegistrarse_Click(object sender, EventArgs e)
         {
-            string usuarioRegistrar = (string)Session["usuarioRegistrar"];
+            Usuario usuarioModificar = (Usuario)Session["usuarioModificar"];
 
             try
             {
-                switch (usuarioRegistrar)
+                if (usuarioModificar != null) // Si se envio un usuario para modificar, se lo envia por parametro a los metodos de guardar. En caso contrario, se utiliza el parametro por omision en "usuario = null"
+                {
+                    if (Seguridad.esPaciente(usuarioModificar))
+                    {
+                        guardarPaciente(usuarioModificar);
+                    }
+                    else if (Seguridad.esMedico(usuarioModificar))
+                    {
+                        guardarMedico(usuarioModificar);
+                    }
+                    else if (Seguridad.esRecepcionista(usuarioModificar))
+                    {
+                        guardarRecepcionista(usuarioModificar);
+                    }
+                    else if (Seguridad.esAdministrador(usuarioModificar))
+                    {
+                        guardarUsuario(4, usuarioModificar); // Como el Administrador solo tiene información de la clase Usuario, directamente se utiliza el metodo de "guardarUsuario"
+                    }
+                    else
+                    {
+                        mostrarResultado(false);
+                    }
+
+                    mostrarResultado(true);
+                    redireccionar();
+                    return;
+                }
+
+                string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"]; // Si es administrador, en funcion de que opcion del desplegable seleccione, este valor va a cambiar
+
+                switch (tipoUsuarioRegistrar) // Se evalua que usuario se va a registrar. Por defecto se selecciona Paciente (Para evitar que el Recepcionista o futuro Paciente carguen datos que no sean el de un Paciente)
                 {
                     case "Paciente":
-                        mostrarResultado(registrarPaciente());
+                        guardarPaciente();
                         break;
 
                     case "Medico":
-                        mostrarResultado(registrarMedico());
+                        guardarMedico();
                         break;
 
                     case "Recepcionista":
-                        mostrarResultado(registrarRecepcionista());
+                        guardarRecepcionista();
                         break;
 
                     case "Administrador":
-                        // # ACA SE COMPLICA
-
-                        int id = registrarUsuario(4);
-                        if(id > 0)
-                        {
-                            mostrarResultado(true);
-                        }
-                        else
-                        {
-                            mostrarResultado(false);
-                        }
+                        guardarUsuario(4);
                         break;
 
                     default:
-                        mostrarResultado(false);
-                        break;
+                        mostrarResultado(false); // En caso de seleccionar un valor erroneo, se muestra el resultado incorrecto y se corta la ejecución
+                        return;
                 }
 
+                // Si no hubo problemas, se muestra por pantalla el resultado exitoso y se redirrecciona a sus respectivas ventanas. Si se produce una expecion directamente salta al "catch" y se maneja el error
+                mostrarResultado(true);
                 redireccionar();
             }
             catch (Exception ex)
@@ -243,9 +368,9 @@ namespace Presentacion
             //    {
             //        // Modo edición
             //        MedicoNegocio negocio = new MedicoNegocio();
-                 
+
             //        Medico medico = new Medico();
-                   
+
             //        int id = int.Parse(Session["idMedicoEditar"].ToString());
             //        medico = negocio.buscarPorId(id);
 
@@ -263,17 +388,17 @@ namespace Presentacion
             //        {
             //            medico.Usuario.Clave = txtContrasenia.Text.Trim();
             //        }
-           
+
             //        negocio.modificarMedico(medico);
 
             //        lblResultado.Text = "Datos del médico actualizados correctamente.";
             //        pnlResultado.CssClass = "alert alert-success text-center mt-3";
             //        pnlResultado.Visible = true;
 
-                    
+
             //        Session.Remove("idMedicoEditar");// Limpio la sesión
 
-                    
+
             //        ClientScript.RegisterStartupScript(this.GetType(), "redirigir",
             //            "setTimeout(function(){ window.location='AdministradorMedicos.aspx'; }, 2500);", true); //redirijo al menu admin medicos
             //        return;
@@ -293,7 +418,7 @@ namespace Presentacion
             //        recepcionista.Dni = txtDocumento.Text.Trim();
             //        recepcionista.Email = txtEmail.Text.Trim();
             //        recepcionista.Telefono = txtTelefono.Text.Trim();
-                    
+
             //        // medico.UrlImagen = null
             //        recepcionista.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
 
@@ -334,7 +459,7 @@ namespace Presentacion
             //    UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
 
             //    int idUsuario;
-                
+
             //    switch (tipoUsuarioActivar)
             //    {
             //        case "Medico":
@@ -362,7 +487,7 @@ namespace Presentacion
             //            medico.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
 
             //            medicoNegocio.agregarMedico(medico);
-                       
+
             //            //mostramos mensaje de exito si todo esta ok
             //            lblResultado.Text = "La cuenta del médico fue creada exitosamente.";
             //            pnlResultado.CssClass = "alert alert-success text-center mt-3";
@@ -479,91 +604,144 @@ namespace Presentacion
             //}
         }
 
-        protected int registrarUsuario(int idPermiso)
+        protected int guardarUsuario(int idPermiso, Usuario usuario = null)
         {
-            Usuario usuario = new Usuario();
             UsuarioNegocio negocio = new UsuarioNegocio();
 
-            usuario.NombreUsuario = txtUsuario.Text;
-            usuario.Clave = txtContrasenia.Text;
-            usuario.Activo = true;
+            try
+            {
+                if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar
+                {
+                    usuario.NombreUsuario = txtUsuario.Text;
+                    usuario.Clave = txtContrasenia.Text;
+                    usuario.Permiso = new Permiso();
+                    usuario.Permiso.Id = idPermiso;
+                    usuario.Activo = true;
 
-            usuario.Permiso = new Permiso();
-            usuario.Permiso.Id = idPermiso;
+                    negocio.modificar(usuario);
+                    return usuario.Id;
+                }
+                else
+                {
+                    Usuario nuevo = new Usuario();
+                    nuevo.NombreUsuario = txtUsuario.Text;
+                    nuevo.Clave = txtContrasenia.Text;
+                    nuevo.Activo = true;
+                    nuevo.Permiso = new Permiso() { Id = idPermiso };
 
-            int id = negocio.agregarUsuario(usuario);
-
-            return id;
+                    int id = negocio.agregar(nuevo);
+                    return id;
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("Error", ex.ToString());
+                Response.Redirect("Error.aspx");
+                return -1;
+            }
         }
 
-        protected bool registrarPaciente()
+
+        protected void guardarPaciente(Usuario usuario = null)
         {
             Paciente paciente = new Paciente();
             PacienteNegocio negocio = new PacienteNegocio();
 
-            paciente.Nombre = txtNombre.Text;
-            paciente.Apellido = txtApellido.Text;
-            paciente.Dni = txtDocumento.Text;
-            paciente.Email = txtEmail.Text;
-            paciente.Telefono = txtTelefono.Text;
-            paciente.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
-
-            paciente.Usuario = new Usuario();
-            paciente.Usuario.Id = registrarUsuario(1);
-
-            if (negocio.agregarPaciente(paciente))
+            try
             {
-                return true;
-            }
+                paciente.Nombre = txtNombre.Text;
+                paciente.Apellido = txtApellido.Text;
+                paciente.Dni = txtDocumento.Text;
+                paciente.Email = txtEmail.Text;
+                paciente.Telefono = txtTelefono.Text;
+                paciente.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
 
-            return false;
+                int idUsuario = guardarUsuario(1, usuario);
+                paciente.Usuario = new Usuario();
+                paciente.Usuario.Id = idUsuario;
+
+                if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el paciente
+                {
+                    negocio.modificar(paciente);
+                }
+                else
+                {
+                    negocio.agregarPaciente(paciente);
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("Error", ex.ToString());
+                Response.Redirect("Error.aspx");
+            }
         }
 
-        protected bool registrarMedico()
+        protected void guardarMedico(Usuario usuario = null)
         {
             Medico medico = new Medico();
             MedicoNegocio negocio = new MedicoNegocio();
 
-            medico.Nombre = txtNombre.Text;
-            medico.Apellido = txtApellido.Text;
-            medico.Dni = txtDocumento.Text;
-            medico.Email = txtEmail.Text;
-            medico.Telefono = txtTelefono.Text;
-            medico.Matricula = txtMatricula.Text;
-            medico.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
-
-            medico.Usuario = new Usuario();
-            medico.Usuario.Id = registrarUsuario(2);
-
-            if (negocio.agregarMedico(medico))
+            try
             {
-                return true;
-            }
+                medico.Nombre = txtNombre.Text;
+                medico.Apellido = txtApellido.Text;
+                medico.Dni = txtDocumento.Text;
+                medico.Email = txtEmail.Text;
+                medico.Telefono = txtTelefono.Text;
+                medico.Matricula = txtMatricula.Text;
+                medico.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
 
-            return false;
+                int idUsuario = guardarUsuario(2, usuario);
+                medico.Usuario = new Usuario();
+                medico.Usuario.Id = idUsuario;
+
+                if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el medico
+                {
+                    negocio.modificar(medico);
+                }
+                else
+                {
+                    negocio.agregarMedico(medico);
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("Error", ex.ToString());
+                Response.Redirect("Error.aspx");
+            }
         }
 
-        protected bool registrarRecepcionista()
+        protected void guardarRecepcionista(Usuario usuario = null)
         {
             Recepcionista recepcionista = new Recepcionista();
             RecepcionistaNegocio negocio = new RecepcionistaNegocio();
 
-            recepcionista.Nombre = txtNombre.Text;
-            recepcionista.Apellido = txtApellido.Text;
-            recepcionista.Dni = txtDocumento.Text;
-            recepcionista.Email = txtEmail.Text;
-            recepcionista.Telefono = txtTelefono.Text;
-            recepcionista.FechaNacimiento = DateTime.Parse(TextFechaNacimiento.Text);
-
-            recepcionista.Usuario = new Usuario();
-            recepcionista.Usuario.Id = registrarUsuario(3);
-
-            if (negocio.agregarRecepcionista(recepcionista))
+            try
             {
-                return true;
-            }
+                recepcionista.Nombre = txtNombre.Text;
+                recepcionista.Apellido = txtApellido.Text;
+                recepcionista.Dni = txtDocumento.Text;
+                recepcionista.Email = txtEmail.Text;
+                recepcionista.Telefono = txtTelefono.Text;
+                recepcionista.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
 
-            return false;
+                int idUsuario = guardarUsuario(3, usuario);
+                recepcionista.Usuario = new Usuario() { Id = idUsuario };
+
+                if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el Recepcionista
+                {
+                    negocio.modificar(recepcionista); 
+                }
+                else
+                {
+                    negocio.agregar(recepcionista);
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("Error", ex.ToString());
+                Response.Redirect("Error.aspx");
+            }
         }
 
         protected void mostrarResultado(bool resultado)
@@ -572,13 +750,13 @@ namespace Presentacion
 
             if (resultado)
             {
-                lblResultado.Text = "El " + usuarioRegistrar + " se registró con exito!";
+                lblResultado.Text = "Los datos se guardaron con exito!";
                 pnlResultado.CssClass = "alert alert-success text-center mt-3";
                 pnlResultado.Visible = true;
             }
             else
             {
-                lblResultado.Text = "Se produjo un error al registrar el " + usuarioRegistrar + "!";
+                lblResultado.Text = "Se produjo un error al guardar los datos!";
                 pnlResultado.CssClass = "alert alert-danger text-center mt-3";
                 pnlResultado.Visible = true;
             }
@@ -586,14 +764,23 @@ namespace Presentacion
 
         protected void redireccionar()
         {
+            // Se redirecciona a la ventana respsectiva al usuario ingreso al formulario
+
             if (Seguridad.esRecepcionista(Session["usuario"]))
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='RecepcionistaTurnos.aspx'; }, 3000);", true);
             }
-
-            if (Seguridad.esAdministrador(Session["usuario"]))
+            else if (Seguridad.esAdministrador(Session["usuario"]))
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='AdministradorPacientes.aspx'; }, 3000);", true); // # HABILITAR CUANDO SE CREE LA VENTANA DE "AdmininistradorUsuarios"
+                //ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='AdministradorPacientes.aspx'; }, 3000);", true); // # HABILITAR CUANDO SE CREE LA VENTANA DE "AdmininistradorUsuarios"
+            }
+            else if (Seguridad.esPaciente(Session["usuario"]))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='PacienteTurnos.aspx';}, 3000);", true);
+            }
+            else
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='Login.aspx';}, 3000);", true);
             }
         }
 

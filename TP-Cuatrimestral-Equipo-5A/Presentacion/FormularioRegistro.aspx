@@ -39,11 +39,11 @@
             </div>
 
             <div class="mb-3">
-                <label for="TextFechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                <asp:TextBox ID="TextFechaNacimiento" runat="server" CssClass="form-control" TextMode="Date"></asp:TextBox>
+                <label for="txtFechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                <asp:TextBox ID="txtFechaNacimiento" runat="server" CssClass="form-control" TextMode="Date"></asp:TextBox>
                 <!--
-                <asp:RequiredFieldValidator runat="server" ControlToValidate="TextFechaNacimiento" ErrorMessage="La fecha de nacimiento es obligatoria." ForeColor="Red" />
-                <asp:CustomValidator ID="cvFechaNacimiento" runat="server" ControlToValidate="TextFechaNacimiento" ErrorMessage="La fecha de nacimiento no puede ser futura." ForeColor="Red" Display="Dynamic" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtFechaNacimiento" ErrorMessage="La fecha de nacimiento es obligatoria." ForeColor="Red" />
+                <asp:CustomValidator ID="cvFechaNacimiento" runat="server" ControlToValidate="txtFechaNacimiento" ErrorMessage="La fecha de nacimiento no puede ser futura." ForeColor="Red" Display="Dynamic" />
                 -->
             </div>
 
