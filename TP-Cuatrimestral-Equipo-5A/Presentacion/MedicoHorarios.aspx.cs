@@ -31,40 +31,72 @@ namespace Presentacion
         protected void btnAñadirHorarioLunes_Click(object sender, EventArgs e)
         {
 
-
-            agregarHorario(1, txtNuevaHoraDesdeLunes, txtNuevaHoraHastaLunes, ddlNuevaEspecialidadesLunes, int.Parse(ddlMedicos.SelectedValue));
+            // el numero 1 es el IdDiaSemana del Lunes.
+            agregarHorario(1, txtNuevaHoraEntradaLunes, txtNuevaHoraSalidaLunes, ddlNuevaEspecialidadesLunes);
 
         }
 
-        private void agregarHorario(int idDiaSemana, TextBox txtNuevaHoraDesdeLunes, TextBox txtNuevaHoraHastaLunes, DropDownList ddlNuevaEspecialidadesLunes, int v2)
+        private void agregarHorario(int idDiaSemana, TextBox txtNuevaHoraEntrada, TextBox txtNuevaHoraSalida, DropDownList ddlEspecialidad)
         {
-            if (string.IsNullOrEmpty(txtNuevaHoraDesdeLunes.Text))
-            {
-                //mensaje de error?
-                return;
-            }
-            if (string.IsNullOrEmpty(txtNuevaHoraHastaLunes.Text))
-            {
-                //mensaje de error?
-                return;
-            }
-            // FALTA: Algun metodo para validar que no haya ningun horario que interfiera en ese rango horario en ese dia.
 
-            if (string.IsNullOrEmpty(ddlNuevaEspecialidadesLunes.ToString()))
+            if (string.IsNullOrEmpty(txtNuevaHoraEntrada.Text))
             {
+                //mensaje de error.
+                return;
+            }
+            if (string.IsNullOrEmpty(txtNuevaHoraSalida.Text))
+            {
+                //mensaje de error.
                 return;
             }
 
-            string nuevaHoraDesde = txtNuevaHoraDesdeLunes.Text; //SQL lo guarda como times solo
-            string nuevaHoraHasta = txtNuevaHoraHastaLunes.Text; //SQL lo guarda como times solo
-            int idMedico = int.Parse(ddlMedicos.SelectedValue);
-            int idEspecialidad = int.Parse(ddlNuevaEspecialidadesLunes.SelectedValue);
+            if (ddlEspecialidad.SelectedValue == "0" || ddlEspecialidad.SelectedValue == "")
+            {
+                // Error: Debe seleccionar especialidad
+                return;
+            }
 
+            TimeSpan nuevaHoraEntrada = TimeSpan.Parse(txtNuevaHoraEntrada.Text);
+            TimeSpan nuevaHoraSalida = TimeSpan.Parse(txtNuevaHoraSalida.Text); ;
+            if (nuevaHoraSalida < nuevaHoraEntrada)
+            {
+                // error. la hora salida debe ser mayor a la hora de entrada.
+                return;
+            }
+
+            // Capturo los valores de los DDL 
+            int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue); //este ddl cambia por cada horario y dia, por eso se pasa por parametro
+            int idMedico = int.Parse(ddlMedicos.SelectedValue); //este ddl es global (no cambia en toda la pagina)
+
+
+
+            //Valido si en la lista hay algun horario que interfiere con el que se esta intentando ingresar
             HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
-            horarioMedicoNegocio.agregarNuevoHorario(idDiaSemana, nuevaHoraDesde, nuevaHoraHasta, idMedico, idEspecialidad);
+            List<HorarioMedico> listaHorariosPorMedico =  horarioMedicoNegocio.listarHorariosPorIdMedico(idMedico);
+            
+            bool existeHorarioSuperpuesto = listaHorariosPorMedico.Any(horario => horario.Dia.Id == idDiaSemana && (horario.HoraEntrada < nuevaHoraSalida && horario.HoraSalida > nuevaHoraEntrada) );
+
+            if (existeHorarioSuperpuesto)
+            {
+                // Mensaje error.
+                return;
+            }
+            else
+            {
+                horarioMedicoNegocio.agregarNuevoHorario(idDiaSemana, nuevaHoraEntrada, nuevaHoraSalida, idEspecialidad, idMedico);
+            }
+
+            //Limpieza de inputs y recarga de pantalla
+            txtNuevaHoraEntrada.Text = "";
+            txtNuevaHoraSalida.Text = "";
+            ddlEspecialidad.SelectedIndex = 0; //el primer indice
+
+            //llamo al evento del DDL principal para que al elegir un nuevo medico se recargue la pantalla.
+            ddlMedicos_SelectedIndexChanged(null, null);
+
         }
 
-        private void cargarDdl(DropDownList ddlEspecialidades, int idMedico)
+        private void cargarDdlEspecialidadesPorMedico(DropDownList ddlEspecialidades, int idMedico)
         {
             EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
 
@@ -72,6 +104,7 @@ namespace Presentacion
             ddlEspecialidades.DataTextField = "Descripcion";
             ddlEspecialidades.DataValueField = "Id";
             ddlEspecialidades.DataBind();
+            ddlEspecialidades.Items.Insert(0, new ListItem(" Seleccione una especialidad", "0"));
 
         }
 
@@ -91,11 +124,11 @@ namespace Presentacion
         {
             int idMedico = int.Parse(ddlMedicos.SelectedValue);
             HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
-            List<HorarioMedico> listaHorariosCompleta = horarioMedicoNegocio.listarHorariosPorIdMedico(idMedico);
-            cargarDdl(ddlNuevaEspecialidadesLunes, idMedico); // modificar para listar solo las especialidades de ese medico.
+            List<HorarioMedico> listaHorariosPorMedico = horarioMedicoNegocio.listarHorariosPorIdMedico(idMedico);
+            cargarDdlEspecialidadesPorMedico(ddlNuevaEspecialidadesLunes, idMedico); // modificar para listar solo las especialidades de ese medico.
 
 
-            repHorarioLunes.DataSource = listaHorariosCompleta.FindAll(horarioMedico => horarioMedico.Dia.Descripcion == "Lunes");
+            repHorarioLunes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Descripcion == "Lunes");
             repHorarioLunes.DataBind();
 
 
@@ -118,8 +151,8 @@ namespace Presentacion
 
                 // Busco todos los controles de ese horario seleccionado (e.item)
                 DropDownList ddlEsp = (DropDownList)e.Item.FindControl("ddlEspecialidadesLunes");
-                TextBox txtHoraDesde = (TextBox)e.Item.FindControl("txtHoraDesdeLunes");
-                TextBox txtHoraHasta = (TextBox)e.Item.FindControl("txtHoraHastaLunes");
+                TextBox txtHoraEntrada = (TextBox)e.Item.FindControl("txtHoraEntradaLunes");
+                TextBox txtHoraSalida = (TextBox)e.Item.FindControl("txtHoraSalidaLunes");
 
                 //Carga DDL Especialidades
                 EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
@@ -132,8 +165,8 @@ namespace Presentacion
                 ddlEsp.SelectedValue = horario.Especialidad.Id.ToString();
 
                 //bloqueo de controles
-                txtHoraDesde.Enabled = false;
-                txtHoraHasta.Enabled = false;
+                txtHoraEntrada.Enabled = false;
+                txtHoraSalida.Enabled = false;
                 ddlEsp.Enabled = false;
 
             }

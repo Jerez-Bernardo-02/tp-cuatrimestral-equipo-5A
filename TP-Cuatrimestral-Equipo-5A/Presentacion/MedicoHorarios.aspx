@@ -42,13 +42,13 @@
 
                             <%--Horario desde--%>
                             <label class="form-label">Desde</label>
-                            <asp:TextBox ID="txtHoraDesdeLunes" runat="server" 
+                            <asp:TextBox ID="txtHoraEntradaLunes" runat="server" 
                                         CssClass="form-control" TextMode="Time" 
                                         Text='<%# Eval("HoraEntrada") %>' />
 
                             <%--Horario hasta--%>
                             <label class="form-label mt-2">Hasta</label>
-                            <asp:TextBox ID="txtHoraHastaLunes" runat="server" 
+                            <asp:TextBox ID="txtHoraSalidaLunes" runat="server" 
                                          CssClass="form-control" TextMode="Time" 
                                          Text='<%# Eval("HoraSalida") %>' />
 
@@ -59,13 +59,13 @@
                     </asp:Repeater>
                             <%--Horario desde--%>
                             <label class="form-label">Desde</label>
-                            <asp:TextBox ID="txtNuevaHoraDesdeLunes" runat="server" 
+                            <asp:TextBox ID="txtNuevaHoraEntradaLunes" runat="server" 
                                         CssClass="form-control" TextMode="Time" 
                                         Text="" />
 
                             <%--Horario hasta--%>
                             <label class="form-label mt-2">Hasta</label>
-                            <asp:TextBox ID="txtNuevaHoraHastaLunes" runat="server" 
+                            <asp:TextBox ID="txtNuevaHoraSalidaLunes" runat="server" 
                                          CssClass="form-control" TextMode="Time" 
                                          Text="" />
 
