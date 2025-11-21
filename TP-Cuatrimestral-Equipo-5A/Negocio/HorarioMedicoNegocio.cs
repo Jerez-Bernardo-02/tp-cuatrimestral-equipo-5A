@@ -35,6 +35,26 @@ namespace Negocio
             }
         }
 
+        public void eliminarPorId(int idHorarioAEliminar)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("DELETE FROM HorariosPorMedicos Where Id = @id;");
+                datos.setearParametro("@id", idHorarioAEliminar);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public List<HorarioMedico> listarHorariosPorIdMedico(int idMedico)
         {
             List<HorarioMedico> lista = new List<HorarioMedico>();

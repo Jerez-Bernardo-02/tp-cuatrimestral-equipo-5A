@@ -13,26 +13,20 @@ namespace Presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            try
             {
-                cargarDdlMedicos(ddlMedicos);
-                /*cargarDdl(ddlEspecialidadesLunes);
-                cargarDdl(ddlEspecialidadesMartes);
-                cargarDdl(ddlEspecialidadesMiercoles);
-                cargarDdl(ddlEspecialidadesJueves);
-                cargarDdl(ddlEspecialidadesViernes);
-                cargarDdl(ddlEspecialidadesSabado);
-                cargarDdl(ddlEspecialidadesDomingo);*/
+                if (!IsPostBack)
+                {
+                    cargarDdlMedicos(ddlMedicos);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = ex;
+                Response.Redirect("Error.aspx");
             }
 
-
-        }
-
-        protected void btnAñadirHorarioLunes_Click(object sender, EventArgs e)
-        {
-
-            // el numero 1 es el IdDiaSemana del Lunes.
-            agregarHorario(1, txtNuevaHoraEntradaLunes, txtNuevaHoraSalidaLunes, ddlNuevaEspecialidadesLunes);
 
         }
 
@@ -96,6 +90,77 @@ namespace Presentacion
 
         }
 
+        private void cargarDdlMedicos(DropDownList ddlMedicos)
+        {
+            MedicoNegocio medicoNegocio = new MedicoNegocio();
+            ddlMedicos.DataSource = medicoNegocio.listar();
+            ddlMedicos.DataTextField = "Apellido";
+            ddlMedicos.DataValueField = "Id";
+            ddlMedicos.DataBind();
+            ddlMedicos.Items.Insert(0, new ListItem(" Seleccione un medico", "0"));
+
+
+        }
+        protected void ddlMedicos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int idMedico = int.Parse(ddlMedicos.SelectedValue);
+                HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
+                List<HorarioMedico> listaHorariosPorMedico = horarioMedicoNegocio.listarHorariosPorIdMedico(idMedico);
+
+
+                //Lunes
+                repHorarioLunes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 1);
+                repHorarioLunes.DataBind();
+
+                //Martes
+                repHorarioMartes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 2);
+                repHorarioMartes.DataBind();
+
+                //Miercoles
+                repHorarioMiercoles.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 3);
+                repHorarioMiercoles.DataBind();
+
+                //Jueves
+                repHorarioJueves.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 4);
+                repHorarioJueves.DataBind();
+
+                //Viernes
+                repHorarioViernes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 5);
+                repHorarioViernes.DataBind();
+
+                //Sabado
+                repHorarioSabado.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 6);
+                repHorarioSabado.DataBind();
+
+                //Domingo
+                repHorarioDomingo.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 7);
+                repHorarioDomingo.DataBind();
+
+
+
+
+                //Cargo los DDL de todos los dias para agregar un nuevo horario
+                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioLunes, idMedico);
+                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioMartes, idMedico);
+                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioMiercoles, idMedico);
+                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioJueves, idMedico);
+                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioViernes, idMedico);
+                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioSabado, idMedico);
+                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioDomingo, idMedico);
+
+            }
+            catch (Exception ex)
+            {
+                // Error: pasar ex al lblError cuando se cree o redirigir a erroraspx.
+                throw;
+            }
+
+
+
+        }
+
         private void cargarDdlEspecialidadesPorMedico(DropDownList ddlEspecialidades, int idMedico)
         {
             EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
@@ -108,38 +173,7 @@ namespace Presentacion
 
         }
 
-        private void cargarDdlMedicos(DropDownList ddlMedicos)
-        {
-            MedicoNegocio medicoNegocio = new MedicoNegocio();
-            ddlMedicos.DataSource = medicoNegocio.listar();
-            ddlMedicos.DataTextField = "Apellido";
-            ddlMedicos.DataValueField = "Id";
-            ddlMedicos.DataBind();
-            ddlMedicos.Items.Insert(0, new ListItem(" Seleccione un medico", "0"));
 
-
-        }
-
-        protected void ddlMedicos_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int idMedico = int.Parse(ddlMedicos.SelectedValue);
-            HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
-            List<HorarioMedico> listaHorariosPorMedico = horarioMedicoNegocio.listarHorariosPorIdMedico(idMedico);
-            cargarDdlEspecialidadesPorMedico(ddlNuevaEspecialidadesLunes, idMedico); // modificar para listar solo las especialidades de ese medico.
-
-
-            repHorarioLunes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Descripcion == "Lunes");
-            repHorarioLunes.DataBind();
-
-
-
-        }
-
-        protected void btnBorrarBloque_Command(object sender, CommandEventArgs e)
-        {
-            // evaluar  si es el boton lunes, martes, miercoles, jueves, viernes, sabado, domingo
-            // evaluar el command argument para ver que id de horariomedico hay que eliminar.
-        }
 
         protected void repHorarioLunes_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
@@ -150,26 +184,273 @@ namespace Presentacion
                 HorarioMedico horario = (HorarioMedico)e.Item.DataItem;
 
                 // Busco todos los controles de ese horario seleccionado (e.item)
-                DropDownList ddlEsp = (DropDownList)e.Item.FindControl("ddlEspecialidadesLunes");
+                DropDownList ddlEspecialidad = (DropDownList)e.Item.FindControl("ddlEspecialidadesLunes");
                 TextBox txtHoraEntrada = (TextBox)e.Item.FindControl("txtHoraEntradaLunes");
                 TextBox txtHoraSalida = (TextBox)e.Item.FindControl("txtHoraSalidaLunes");
 
-                //Carga DDL Especialidades
-                EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
-                ddlEsp.DataSource = especialidadNegocio.listar();
-                ddlEsp.DataTextField = "Descripcion";
-                ddlEsp.DataValueField = "Id";
-                ddlEsp.DataBind();
+                int idMedico = int.Parse(ddlMedicos.SelectedValue);
+
+                //Carga DDL Especialidades por medico
+                cargarDdlEspecialidadesPorMedico(ddlEspecialidad, idMedico);
 
                 // Le asigno al DDL el valor que coincida con el ID de especialidad del horario"
-                ddlEsp.SelectedValue = horario.Especialidad.Id.ToString();
+                ddlEspecialidad.SelectedValue = horario.Especialidad.Id.ToString();
 
                 //bloqueo de controles
                 txtHoraEntrada.Enabled = false;
                 txtHoraSalida.Enabled = false;
-                ddlEsp.Enabled = false;
+                ddlEspecialidad.Enabled = false;
 
             }
         }
+
+        protected void repHorarioMartes_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            //Obtiene el objeto horario por cada vuelta de repeater
+            HorarioMedico horario = (HorarioMedico)e.Item.DataItem;
+
+            // Busco todos los controles de ese horario seleccionado (e.item)
+            DropDownList ddlEspecialidad = (DropDownList)e.Item.FindControl("ddlEspecialidadesMartes");
+            TextBox txtHoraEntrada = (TextBox)e.Item.FindControl("txtHoraEntradaMartes");
+            TextBox txtHoraSalida = (TextBox)e.Item.FindControl("txtHoraSalidaMartes");
+
+            int idMedico = int.Parse(ddlMedicos.SelectedValue);
+
+            //Carga DDL Especialidades por medico
+            cargarDdlEspecialidadesPorMedico(ddlEspecialidad, idMedico);
+
+            // Le asigno al DDL el valor que coincida con el ID de especialidad del horario"
+            ddlEspecialidad.SelectedValue = horario.Especialidad.Id.ToString();
+
+            //bloqueo de controles
+            txtHoraEntrada.Enabled = false;
+            txtHoraSalida.Enabled = false;
+            ddlEspecialidad.Enabled = false;
+
+        }
+
+        protected void repHorarioMiercoles_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            //Obtiene el objeto horario por cada vuelta de repeater
+            HorarioMedico horario = (HorarioMedico)e.Item.DataItem;
+
+            // Busco todos los controles de ese horario seleccionado (e.item)
+            DropDownList ddlEspecialidad = (DropDownList)e.Item.FindControl("ddlEspecialidadesMiercoles");
+            TextBox txtHoraEntrada = (TextBox)e.Item.FindControl("txtHoraEntradaMiercoles");
+            TextBox txtHoraSalida = (TextBox)e.Item.FindControl("txtHoraSalidaMiercoles");
+
+            int idMedico = int.Parse(ddlMedicos.SelectedValue);
+
+            //Carga DDL Especialidades por medico
+            cargarDdlEspecialidadesPorMedico(ddlEspecialidad, idMedico);
+
+            // Le asigno al DDL el valor que coincida con el ID de especialidad del horario"
+            ddlEspecialidad.SelectedValue = horario.Especialidad.Id.ToString();
+
+            //bloqueo de controles
+            txtHoraEntrada.Enabled = false;
+            txtHoraSalida.Enabled = false;
+            ddlEspecialidad.Enabled = false;
+
+        }
+
+        protected void repHorarioJueves_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            //Obtiene el objeto horario por cada vuelta de repeater
+            HorarioMedico horario = (HorarioMedico)e.Item.DataItem;
+
+            // Busco todos los controles de ese horario seleccionado (e.item)
+            DropDownList ddlEspecialidad = (DropDownList)e.Item.FindControl("ddlEspecialidadesJueves");
+            TextBox txtHoraEntrada = (TextBox)e.Item.FindControl("txtHoraEntradaJueves");
+            TextBox txtHoraSalida = (TextBox)e.Item.FindControl("txtHoraSalidaJueves");
+
+            int idMedico = int.Parse(ddlMedicos.SelectedValue);
+
+            //Carga DDL Especialidades por medico
+            cargarDdlEspecialidadesPorMedico(ddlEspecialidad, idMedico);
+
+            // Le asigno al DDL el valor que coincida con el ID de especialidad del horario"
+            ddlEspecialidad.SelectedValue = horario.Especialidad.Id.ToString();
+
+            //bloqueo de controles
+            txtHoraEntrada.Enabled = false;
+            txtHoraSalida.Enabled = false;
+            ddlEspecialidad.Enabled = false;
+
+        }
+
+        protected void repHorarioViernes_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            //Obtiene el objeto horario por cada vuelta de repeater
+            HorarioMedico horario = (HorarioMedico)e.Item.DataItem;
+
+            // Busco todos los controles de ese horario seleccionado (e.item)
+            DropDownList ddlEspecialidad = (DropDownList)e.Item.FindControl("ddlEspecialidadesViernes");
+            TextBox txtHoraEntrada = (TextBox)e.Item.FindControl("txtHoraEntradaViernes");
+            TextBox txtHoraSalida = (TextBox)e.Item.FindControl("txtHoraSalidaViernes");
+
+            int idMedico = int.Parse(ddlMedicos.SelectedValue);
+
+            //Carga DDL Especialidades por medico
+            cargarDdlEspecialidadesPorMedico(ddlEspecialidad, idMedico);
+
+            // Le asigno al DDL el valor que coincida con el ID de especialidad del horario"
+            ddlEspecialidad.SelectedValue = horario.Especialidad.Id.ToString();
+
+            //bloqueo de controles
+            txtHoraEntrada.Enabled = false;
+            txtHoraSalida.Enabled = false;
+            ddlEspecialidad.Enabled = false;
+
+        }
+
+        protected void repHorarioSabado_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            //Obtiene el objeto horario por cada vuelta de repeater
+            HorarioMedico horario = (HorarioMedico)e.Item.DataItem;
+
+            // Busco todos los controles de ese horario seleccionado (e.item)
+            DropDownList ddlEspecialidad = (DropDownList)e.Item.FindControl("ddlEspecialidadesSabado");
+            TextBox txtHoraEntrada = (TextBox)e.Item.FindControl("txtHoraEntradaSabado");
+            TextBox txtHoraSalida = (TextBox)e.Item.FindControl("txtHoraSalidaSabado");
+
+            int idMedico = int.Parse(ddlMedicos.SelectedValue);
+
+            //Carga DDL Especialidades por medico
+            cargarDdlEspecialidadesPorMedico(ddlEspecialidad, idMedico);
+
+            // Le asigno al DDL el valor que coincida con el ID de especialidad del horario"
+            ddlEspecialidad.SelectedValue = horario.Especialidad.Id.ToString();
+
+            //bloqueo de controles
+            txtHoraEntrada.Enabled = false;
+            txtHoraSalida.Enabled = false;
+            ddlEspecialidad.Enabled = false;
+
+        }
+
+        protected void repHorarioDomingo_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            //Obtiene el objeto horario por cada vuelta de repeater
+            HorarioMedico horario = (HorarioMedico)e.Item.DataItem;
+
+            // Busco todos los controles de ese horario seleccionado (e.item)
+            DropDownList ddlEspecialidad = (DropDownList)e.Item.FindControl("ddlEspecialidadesDomingo");
+            TextBox txtHoraEntrada = (TextBox)e.Item.FindControl("txtHoraEntradaDomingo");
+            TextBox txtHoraSalida = (TextBox)e.Item.FindControl("txtHoraSalidaDomingo");
+
+            int idMedico = int.Parse(ddlMedicos.SelectedValue);
+
+            //Carga DDL Especialidades por medico
+            cargarDdlEspecialidadesPorMedico(ddlEspecialidad, idMedico);
+
+            // Le asigno al DDL el valor que coincida con el ID de especialidad del horario"
+            ddlEspecialidad.SelectedValue = horario.Especialidad.Id.ToString();
+
+            //bloqueo de controles
+            txtHoraEntrada.Enabled = false;
+            txtHoraSalida.Enabled = false;
+            ddlEspecialidad.Enabled = false;
+
+        }
+
+
+
+
+
+
+        protected void btnAñadirHorario_Command(object sender, CommandEventArgs e)
+        {
+            try
+            {
+                //Obtengo el valor del boton que llamo al evento del boton añadir horario (lunes, martes, miercoles ...)
+                int idDiaSemana = int.Parse(e.CommandArgument.ToString());
+
+                TextBox txtHoraEntrada;
+                TextBox txtHoraSalida;
+                DropDownList ddlEspecialidad;
+
+                switch (idDiaSemana)
+                {
+                    case 1: //Lunes
+                        txtHoraEntrada = txtNuevaHoraEntradaLunes;
+                        txtHoraSalida = txtNuevaHoraSalidaLunes;
+                        ddlEspecialidad = ddlEspNuevoHorarioLunes;
+                        break;
+
+                    case 2: //Martes
+                        txtHoraEntrada = txtNuevaHoraEntradaMartes;
+                        txtHoraSalida = txtNuevaHoraSalidaMartes;
+                        ddlEspecialidad = ddlEspNuevoHorarioMartes;
+                        break;
+
+                    case 3: //Miercoles
+                        txtHoraEntrada = txtNuevaHoraEntradaMiercoles;
+                        txtHoraSalida = txtNuevaHoraSalidaMiercoles;
+                        ddlEspecialidad = ddlEspNuevoHorarioMiercoles;
+                        break;
+                    case 4: //Jueves
+                        txtHoraEntrada = txtNuevaHoraEntradaJueves;
+                        txtHoraSalida = txtNuevaHoraSalidaJueves;
+                        ddlEspecialidad = ddlEspNuevoHorarioJueves;
+                        break;
+
+                    case 5: //Viernes
+                        txtHoraEntrada = txtNuevaHoraEntradaViernes;
+                        txtHoraSalida = txtNuevaHoraSalidaViernes;
+                        ddlEspecialidad = ddlEspNuevoHorarioViernes;
+                        break;
+
+                    case 6: //Sabado
+                        txtHoraEntrada = txtNuevaHoraEntradaSabado;
+                        txtHoraSalida = txtNuevaHoraSalidaSabado;
+                        ddlEspecialidad = ddlEspNuevoHorarioSabado;
+                        break;
+
+                    case 7: //Domingo
+                        txtHoraEntrada = txtNuevaHoraEntradaDomingo;
+                        txtHoraSalida = txtNuevaHoraSalidaDomingo;
+                        ddlEspecialidad = ddlEspNuevoHorarioDomingo;
+                        break;
+
+                    default:
+                        //Error.
+                        return;
+                }
+
+                agregarHorario(idDiaSemana, txtHoraEntrada, txtHoraSalida, ddlEspecialidad);
+            }
+            catch (Exception ex)
+            {
+                // Error: pasar ex al lblError cuando se cree o redirigir a erroraspx.
+                throw;
+            }
+
+        }
+
+
+        protected void btnBorrarBloque_Command(object sender, CommandEventArgs e)
+        {
+            try
+            {
+                HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
+                int idHorarioAEliminar = int.Parse(e.CommandArgument.ToString());
+
+                horarioMedicoNegocio.eliminarPorId(idHorarioAEliminar);
+
+                //Recarga de pantalla
+
+                // validar si el medico tiene turnos disponibles en el horario a borrar.
+                ddlMedicos_SelectedIndexChanged(null, null);
+
+            }
+            catch (Exception)
+            {
+                // Error: pasar ex al lblError cuando se cree 
+                throw;
+            }
+
+        }
+
     }
 }

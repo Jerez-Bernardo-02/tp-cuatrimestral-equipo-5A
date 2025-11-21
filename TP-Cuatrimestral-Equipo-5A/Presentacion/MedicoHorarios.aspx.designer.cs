@@ -69,13 +69,13 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraSalidaLunes;
 
         /// <summary>
-        /// Control ddlNuevaEspecialidadesLunes.
+        /// Control ddlEspNuevoHorarioLunes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlNuevaEspecialidadesLunes;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEspNuevoHorarioLunes;
 
         /// <summary>
         /// Control btnAñadirHorarioLunes.
@@ -87,381 +87,381 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Button btnAñadirHorarioLunes;
 
         /// <summary>
-        /// Control CheckBox1.
+        /// Control chkNoDisponibleMartes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CheckBox1;
+        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleMartes;
 
         /// <summary>
-        /// Control Label1.
+        /// Control lblMartes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Label lblMartes;
 
         /// <summary>
-        /// Control LinkButton1.
+        /// Control repHorarioMartes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        protected global::System.Web.UI.WebControls.Repeater repHorarioMartes;
 
         /// <summary>
-        /// Control TextBox1.
+        /// Control txtNuevaHoraEntradaMartes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraEntradaMartes;
 
         /// <summary>
-        /// Control TextBox2.
+        /// Control txtNuevaHoraSalidaMartes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox2;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraSalidaMartes;
 
         /// <summary>
-        /// Control ddlEspecialidadesMartes.
+        /// Control ddlEspNuevoHorarioMartes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidadesMartes;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEspNuevoHorarioMartes;
 
         /// <summary>
-        /// Control Button1.
+        /// Control btnAñadirHorarioMartes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.WebControls.Button btnAñadirHorarioMartes;
 
         /// <summary>
-        /// Control CheckBox2.
+        /// Control chkNoDisponibleMiercoles.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CheckBox2;
+        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleMiercoles;
 
         /// <summary>
-        /// Control Label2.
+        /// Control lblMiercoles.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label2;
+        protected global::System.Web.UI.WebControls.Label lblMiercoles;
 
         /// <summary>
-        /// Control LinkButton2.
+        /// Control repHorarioMiercoles.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton2;
+        protected global::System.Web.UI.WebControls.Repeater repHorarioMiercoles;
 
         /// <summary>
-        /// Control TextBox3.
+        /// Control txtNuevaHoraEntradaMiercoles.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox3;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraEntradaMiercoles;
 
         /// <summary>
-        /// Control TextBox4.
+        /// Control txtNuevaHoraSalidaMiercoles.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox4;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraSalidaMiercoles;
 
         /// <summary>
-        /// Control ddlEspecialidadesMiercoles.
+        /// Control ddlEspNuevoHorarioMiercoles.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidadesMiercoles;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEspNuevoHorarioMiercoles;
 
         /// <summary>
-        /// Control Button2.
+        /// Control btnAñadirHorarioMiercoles.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
+        protected global::System.Web.UI.WebControls.Button btnAñadirHorarioMiercoles;
 
         /// <summary>
-        /// Control CheckBox3.
+        /// Control chkNoDisponibleJueves.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CheckBox3;
+        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleJueves;
 
         /// <summary>
-        /// Control Label3.
+        /// Control lblJueves.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label3;
+        protected global::System.Web.UI.WebControls.Label lblJueves;
 
         /// <summary>
-        /// Control LinkButton3.
+        /// Control repHorarioJueves.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton3;
+        protected global::System.Web.UI.WebControls.Repeater repHorarioJueves;
 
         /// <summary>
-        /// Control TextBox5.
+        /// Control txtNuevaHoraEntradaJueves.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox5;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraEntradaJueves;
 
         /// <summary>
-        /// Control TextBox6.
+        /// Control txtNuevaHoraSalidaJueves.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox6;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraSalidaJueves;
 
         /// <summary>
-        /// Control ddlEspecialidadesJueves.
+        /// Control ddlEspNuevoHorarioJueves.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidadesJueves;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEspNuevoHorarioJueves;
 
         /// <summary>
-        /// Control Button3.
+        /// Control btnAñadirHorarioJueves.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button3;
+        protected global::System.Web.UI.WebControls.Button btnAñadirHorarioJueves;
 
         /// <summary>
-        /// Control CheckBox4.
+        /// Control chkNoDisponibleViernes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CheckBox4;
+        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleViernes;
 
         /// <summary>
-        /// Control Label4.
+        /// Control lblViernes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label4;
+        protected global::System.Web.UI.WebControls.Label lblViernes;
 
         /// <summary>
-        /// Control LinkButton4.
+        /// Control repHorarioViernes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton4;
+        protected global::System.Web.UI.WebControls.Repeater repHorarioViernes;
 
         /// <summary>
-        /// Control TextBox7.
+        /// Control txtNuevaHoraEntradaViernes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox7;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraEntradaViernes;
 
         /// <summary>
-        /// Control TextBox8.
+        /// Control txtNuevaHoraSalidaViernes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox8;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraSalidaViernes;
 
         /// <summary>
-        /// Control ddlEspecialidadesViernes.
+        /// Control ddlEspNuevoHorarioViernes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidadesViernes;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEspNuevoHorarioViernes;
 
         /// <summary>
-        /// Control Button4.
+        /// Control btnAñadirHorarioViernes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button4;
+        protected global::System.Web.UI.WebControls.Button btnAñadirHorarioViernes;
 
         /// <summary>
-        /// Control CheckBox5.
+        /// Control chkNoDisponibleSabado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CheckBox5;
+        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleSabado;
 
         /// <summary>
-        /// Control Label5.
+        /// Control lblSabado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label5;
+        protected global::System.Web.UI.WebControls.Label lblSabado;
 
         /// <summary>
-        /// Control LinkButton5.
+        /// Control repHorarioSabado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton5;
+        protected global::System.Web.UI.WebControls.Repeater repHorarioSabado;
 
         /// <summary>
-        /// Control TextBox9.
+        /// Control txtNuevaHoraEntradaSabado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox9;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraEntradaSabado;
 
         /// <summary>
-        /// Control TextBox10.
+        /// Control txtNuevaHoraSalidaSabado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox10;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraSalidaSabado;
 
         /// <summary>
-        /// Control ddlEspecialidadesSabado.
+        /// Control ddlEspNuevoHorarioSabado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidadesSabado;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEspNuevoHorarioSabado;
 
         /// <summary>
-        /// Control Button5.
+        /// Control btnAñadirHorarioSabado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button5;
+        protected global::System.Web.UI.WebControls.Button btnAñadirHorarioSabado;
 
         /// <summary>
-        /// Control CheckBox6.
+        /// Control chkNoDisponibleDomingo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CheckBox6;
+        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleDomingo;
 
         /// <summary>
-        /// Control Label6.
+        /// Control lblDomingo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label6;
+        protected global::System.Web.UI.WebControls.Label lblDomingo;
 
         /// <summary>
-        /// Control LinkButton6.
+        /// Control repHorarioDomingo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton6;
+        protected global::System.Web.UI.WebControls.Repeater repHorarioDomingo;
 
         /// <summary>
-        /// Control TextBox11.
+        /// Control txtNuevaHoraEntradaDomingo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox11;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraEntradaDomingo;
 
         /// <summary>
-        /// Control TextBox12.
+        /// Control txtNuevaHoraSalidaDomingo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox12;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraSalidaDomingo;
 
         /// <summary>
-        /// Control ddlEspecialidadesDomingo.
+        /// Control ddlEspNuevoHorarioDomingo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidadesDomingo;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEspNuevoHorarioDomingo;
 
         /// <summary>
-        /// Control Button6.
+        /// Control btnAñadirHorarioDomingo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button6;
+        protected global::System.Web.UI.WebControls.Button btnAñadirHorarioDomingo;
     }
 }
