@@ -35,18 +35,18 @@ namespace Presentacion
 
             if (string.IsNullOrEmpty(txtNuevaHoraEntrada.Text))
             {
-                //mensaje de error.
+                MostrarError("Por favor complete el horario de salida.");
                 return;
             }
             if (string.IsNullOrEmpty(txtNuevaHoraSalida.Text))
             {
-                //mensaje de error.
+                MostrarError("Por favor complete el horario de entrada.");
                 return;
             }
 
             if (ddlEspecialidad.SelectedValue == "0" || ddlEspecialidad.SelectedValue == "")
             {
-                // Error: Debe seleccionar especialidad
+                MostrarError("Debe seleccionar una especialidad.");
                 return;
             }
 
@@ -54,7 +54,7 @@ namespace Presentacion
             TimeSpan nuevaHoraSalida = TimeSpan.Parse(txtNuevaHoraSalida.Text); ;
             if (nuevaHoraSalida < nuevaHoraEntrada)
             {
-                // error. la hora salida debe ser mayor a la hora de entrada.
+                MostrarError("La hora de salida debe ser mayor a la de entrada.");
                 return;
             }
 
@@ -72,7 +72,7 @@ namespace Presentacion
 
             if (existeHorarioSuperpuesto)
             {
-                // Mensaje error.
+                MostrarError("El horario ingresado se superpone con otro existente.");
                 return;
             }
             else
@@ -85,8 +85,11 @@ namespace Presentacion
             txtNuevaHoraSalida.Text = "";
             ddlEspecialidad.SelectedIndex = 0; //el primer indice
 
-            //llamo al evento del DDL principal para que al elegir un nuevo medico se recargue la pantalla.
+
+            //llamo al evento del DDL principal para que al elegir un nuevo medico se recargue la pantalla y se limpien los lbl exito y error.
             ddlMedicos_SelectedIndexChanged(null, null);
+
+            MostrarExito("Horario agregado con éxito!");
 
         }
 
@@ -103,6 +106,7 @@ namespace Presentacion
         }
         protected void ddlMedicos_SelectedIndexChanged(object sender, EventArgs e)
         {
+            LimpiarMensajes();
             try
             {
                 int idMedico = int.Parse(ddlMedicos.SelectedValue);
@@ -153,8 +157,7 @@ namespace Presentacion
             }
             catch (Exception ex)
             {
-                // Error: pasar ex al lblError cuando se cree o redirigir a erroraspx.
-                throw;
+                MostrarError("Error al cargar datos. " + ex.ToString());
             }
 
 
@@ -439,17 +442,40 @@ namespace Presentacion
                 horarioMedicoNegocio.eliminarPorId(idHorarioAEliminar);
 
                 //Recarga de pantalla
-
                 // validar si el medico tiene turnos disponibles en el horario a borrar.
                 ddlMedicos_SelectedIndexChanged(null, null);
 
+                MostrarExito("Horario eliminado correctamente.");
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Error: pasar ex al lblError cuando se cree 
-                throw;
+                MostrarError("No se puede eliminar el horario. " + ex.ToString());
             }
 
+        }
+
+
+        private void MostrarExito(string mensaje)
+        {
+            LimpiarMensajes(); //se limpian y ocultan ambos mensajes.
+            lblMensajeExito.Text = mensaje; // se muestra y se llena solo el mensaje de exito
+            lblMensajeExito.Visible = true;
+        }
+
+        private void MostrarError(string mensaje)
+        {
+            LimpiarMensajes(); //se limpian y ocultan ambos mensajes.
+            lblMensajeError.Text = mensaje; // se muestra y se llena solo el mensaje de Error.
+            lblMensajeError.Visible = true;
+        }
+
+        private void LimpiarMensajes()
+        {
+            lblMensajeError.Visible = false;
+            lblMensajeExito.Visible = false;
+            lblMensajeError.Text = "";
+            lblMensajeExito.Text = "";
         }
 
     }

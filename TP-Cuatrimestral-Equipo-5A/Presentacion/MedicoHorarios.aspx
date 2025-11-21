@@ -4,13 +4,30 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+    <%--Seleccion de medico:--%>
     <div class="col-md-8 mt-2 mb-2">
         <asp:DropDownList OnSelectedIndexChanged="ddlMedicos_SelectedIndexChanged" ID="ddlMedicos"
             runat="server" CssClass="form-select mt-2" AutoPostBack="true">
         </asp:DropDownList>
     </div>
-    <div class="row">
 
+    <%--Mensaje Exitoso o Error--%>
+    <div class="row">
+        <div class="col-12">
+            <%-- Label de ERROR (Rojo) --%>
+            <asp:Label ID="lblMensajeError" runat="server"
+                CssClass="alert alert-danger d-block text-center" Visible="false">
+            </asp:Label>
+
+            <%-- Label de ÉXITO (Verde) --%>
+            <asp:Label ID="lblMensajeExito" runat="server"
+                CssClass="alert alert-success d-block text-center" Visible="false">
+            </asp:Label>
+        </div>
+    </div>
+
+
+    <div class="row">
 
         <%--Lunes--%>
         <div class="col-md-3 mt-2">
@@ -77,7 +94,7 @@
                     <div class="text-center mt-2">
                         <asp:Button ID="btnAñadirHorarioLunes" runat="server" Text="Añadir Horario"
                             CssClass="btn btn-primary"
-                            CommandArgument="1" 
+                            CommandArgument="1"
                             OnCommand="btnAñadirHorario_Command" /><%--1 = Lunes--%>
                     </div>
                 </div>
@@ -132,7 +149,7 @@
                         </ItemTemplate>
                     </asp:Repeater>
                     <%--PARA AGREGAR UN NUEVO HORARIO:--%>
-                            <%--Horario desde--%>
+                    <%--Horario desde--%>
                     <label class="form-label">Desde</label>
                     <asp:TextBox ID="txtNuevaHoraEntradaMartes" runat="server"
                         CssClass="form-control" TextMode="Time"
@@ -151,7 +168,7 @@
                     <div class="text-center mt-2">
                         <asp:Button ID="btnAñadirHorarioMartes" runat="server" Text="Añadir Horario"
                             CssClass="btn btn-primary"
-                            CommandArgument="2" 
+                            CommandArgument="2"
                             OnCommand="btnAñadirHorario_Command" /><%--2 = Martes--%>
                     </div>
                 </div>
@@ -207,7 +224,7 @@
                     </asp:Repeater>
 
                     <%--PARA AGREGAR UN NUEVO HORARIO:--%>
-                            <%--Horario desde--%>
+                    <%--Horario desde--%>
                     <label class="form-label">Desde</label>
                     <asp:TextBox ID="txtNuevaHoraEntradaMiercoles" runat="server"
                         CssClass="form-control" TextMode="Time"
@@ -226,7 +243,7 @@
                     <div class="text-center mt-2">
                         <asp:Button ID="btnAñadirHorarioMiercoles" runat="server" Text="Añadir Horario"
                             CssClass="btn btn-primary"
-                            CommandArgument="3" 
+                            CommandArgument="3"
                             OnCommand="btnAñadirHorario_Command" /><%--3 = Miercoles--%>
                     </div>
                 </div>
@@ -282,7 +299,7 @@
                         </ItemTemplate>
                     </asp:Repeater>
                     <%--PARA AGREGAR UN NUEVO HORARIO:--%>
-                            <%--Horario desde--%>
+                    <%--Horario desde--%>
                     <label class="form-label">Desde</label>
                     <asp:TextBox ID="txtNuevaHoraEntradaJueves" runat="server"
                         CssClass="form-control" TextMode="Time"
@@ -301,7 +318,7 @@
                     <div class="text-center mt-2">
                         <asp:Button ID="btnAñadirHorarioJueves" runat="server" Text="Añadir Horario"
                             CssClass="btn btn-primary"
-                            CommandArgument="4" 
+                            CommandArgument="4"
                             OnCommand="btnAñadirHorario_Command" /><%--4 = Jueves--%>
                     </div>
 
@@ -359,7 +376,7 @@
                     </asp:Repeater>
                     <%--PARA AGREGAR UN NUEVO HORARIO:--%>
 
-                            <%--Horario desde--%>
+                    <%--Horario desde--%>
                     <label class="form-label">Desde</label>
                     <asp:TextBox ID="txtNuevaHoraEntradaViernes" runat="server"
                         CssClass="form-control" TextMode="Time"
@@ -378,7 +395,7 @@
                     <div class="text-center mt-2">
                         <asp:Button ID="btnAñadirHorarioViernes" runat="server" Text="Añadir Horario"
                             CssClass="btn btn-primary"
-                            CommandArgument="5" 
+                            CommandArgument="5"
                             OnCommand="btnAñadirHorario_Command" /><%--5 = Viernes--%>
                     </div>
                 </div>
@@ -434,7 +451,7 @@
                     </asp:Repeater>
                     <%--PARA AGREGAR UN NUEVO HORARIO:--%>
 
-                            <%--Horario desde--%>
+                    <%--Horario desde--%>
                     <label class="form-label">Desde</label>
                     <asp:TextBox ID="txtNuevaHoraEntradaSabado" runat="server"
                         CssClass="form-control" TextMode="Time"
@@ -453,7 +470,7 @@
                     <div class="text-center mt-2">
                         <asp:Button ID="btnAñadirHorarioSabado" runat="server" Text="Añadir Horario"
                             CssClass="btn btn-primary"
-                            CommandArgument="6" 
+                            CommandArgument="6"
                             OnCommand="btnAñadirHorario_Command" /><%--6 = Sabado--%>
                     </div>
                 </div>
@@ -510,7 +527,7 @@
                     </asp:Repeater>
                     <%--PARA AGREGAR UN NUEVO HORARIO:--%>
 
-                            <%--Horario desde--%>
+                    <%--Horario desde--%>
                     <label class="form-label">Desde</label>
                     <asp:TextBox ID="txtNuevaHoraEntradaDomingo" runat="server"
                         CssClass="form-control" TextMode="Time"
@@ -529,7 +546,7 @@
                     <div class="text-center mt-2">
                         <asp:Button ID="btnAñadirHorarioDomingo" runat="server" Text="Añadir Horario"
                             CssClass="btn btn-primary"
-                            CommandArgument="7" 
+                            CommandArgument="7"
                             OnCommand="btnAñadirHorario_Command" /><%--7 = Domingo--%>
                     </div>
                 </div>
