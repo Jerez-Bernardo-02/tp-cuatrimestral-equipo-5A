@@ -11,6 +11,30 @@ namespace Negocio
 {
     public class HorarioMedicoNegocio
     {
+        public void agregarNuevoHorario(int idDiaSemana, string nuevaHoraDesde, string nuevaHoraHasta, int idMedico, int idEspecialidad)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO HorariosPorMedicos (IdDiaSemana, HoraEntrada, HoraSalida, IdMedico, IdEspecialidad) VALUES (@idDiaSemana, @horaEntrada, @horaSalida, @idMedico, @idEspecialidad);");
+                datos.setearParametro("@idDiaSemana", idDiaSemana);
+                datos.setearParametro("@horaEntrada", nuevaHoraDesde);
+                datos.setearParametro("@horaSalida", nuevaHoraHasta);
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public List<HorarioMedico> listarHorariosPorIdMedico(int idMedico)
         {
             List<HorarioMedico> lista = new List<HorarioMedico>();

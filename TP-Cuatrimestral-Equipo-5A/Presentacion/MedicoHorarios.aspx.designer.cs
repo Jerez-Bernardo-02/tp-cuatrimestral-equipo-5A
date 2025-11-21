@@ -51,6 +51,33 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Repeater repHorarioLunes;
 
         /// <summary>
+        /// Control txtNuevaHoraDesdeLunes.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraDesdeLunes;
+
+        /// <summary>
+        /// Control txtNuevaHoraHastaLunes.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHoraHastaLunes;
+
+        /// <summary>
+        /// Control ddlNuevaEspecialidadesLunes.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlNuevaEspecialidadesLunes;
+
+        /// <summary>
         /// Control btnAñadirHorarioLunes.
         /// </summary>
         /// <remarks>

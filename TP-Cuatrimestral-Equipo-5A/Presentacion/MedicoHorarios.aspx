@@ -54,14 +54,26 @@
 
                             <%--Especialidades--%>
                             <asp:DropDownList ID="ddlEspecialidadesLunes" runat="server" CssClass="form-select mt-2">
-                                <asp:ListItem Text="Especialidades" Value="" />
                             </asp:DropDownList>
                         </ItemTemplate>
                     </asp:Repeater>
+                            <%--Horario desde--%>
+                            <label class="form-label">Desde</label>
+                            <asp:TextBox ID="txtNuevaHoraDesdeLunes" runat="server" 
+                                        CssClass="form-control" TextMode="Time" 
+                                        Text="" />
 
-                    <div class="text-center mt-2">
+                            <%--Horario hasta--%>
+                            <label class="form-label mt-2">Hasta</label>
+                            <asp:TextBox ID="txtNuevaHoraHastaLunes" runat="server" 
+                                         CssClass="form-control" TextMode="Time" 
+                                         Text="" />
 
+                            <%--Especialidades--%>
+                            <asp:DropDownList ID="ddlNuevaEspecialidadesLunes" runat="server" CssClass="form-select mt-2">
+                            </asp:DropDownList>
                         <%--Boton confirmar horario--%>
+                    <div class="text-center mt-2">
                         <asp:Button ID="btnAñadirHorarioLunes" runat="server" Text="Añadir Horario"
                             CssClass="btn btn-primary"
                             OnClick="btnAñadirHorarioLunes_Click" />
