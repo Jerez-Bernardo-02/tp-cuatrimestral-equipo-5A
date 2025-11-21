@@ -68,7 +68,7 @@ namespace Presentacion
                     break;
 
                 case "Administrador":
-                    Response.Redirect("AdministradorPacientes.aspx", false); //# HABILITAR OPCION CUANDO SE CREE EL ARCHIVO "AdministradorUsuarios"
+                    Response.Redirect("AdministradorEspecialidades.aspx", false); //# HABILITAR OPCION CUANDO SE CREE EL ARCHIVO "AdministradorUsuarios"
                     break;
 
                 default:

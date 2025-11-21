@@ -14,16 +14,26 @@ namespace Presentacion
         {
             if (!IsPostBack)
             {
+                cargarGrilla();
+            }
+        }
+        private void cargarGrilla()
+        {
+            try
+            {
                 EspecialidadNegocio negocio = new EspecialidadNegocio();
                 dgvEspecialidades.DataSource = negocio.listar();
                 dgvEspecialidades.DataBind();
+            }
+            catch(Exception ex)
+            {
+                Session.Add("error",ex);
             }
         }
 
         protected void dgvEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var id = dgvEspecialidades.SelectedDataKey.Value.ToString();// Recupero el ID de la fila seleccionada
-
+            int id = int.Parse(dgvEspecialidades.SelectedDataKey.Value.ToString());// Recupero el ID de la fila seleccionada
             Session["idEspecalidadEditar"] = id;// Guardamos el id en Session
             Response.Redirect("FormularioEspecialidades.aspx", false); // Redirigimos al formulario de edición
         }
@@ -31,6 +41,7 @@ namespace Presentacion
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
             Response.Redirect("FormularioEspecialidades.aspx", false);//Redirigimos al formulario de alta de especialidad
+
         }
 
         protected void btnVolver_Click(object sender, EventArgs e)

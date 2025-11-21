@@ -16,21 +16,46 @@
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <asp:Button Text="Registrar" ID="btnRegistrar" runat="server" CssClass="btn btn-primary" OnClick="btnRegistrar_Click" />
-                <asp:Button Text="Volver" ID="btnVolver" runat="server" CssClass="btn btn-outline-secondary ms-2" OnClick="btnVolver_Click" />
-        
-            </div>
-        </div>
+<!-- Bloque botones -->
+<div class="row mb-3 d-flex justify-content-between align-items-start">
 
+    
+    <div class="col-md-6 d-flex align-items-center gap-2">
+
+        <!-- Agregar / Guardar -->
+        <asp:Button Text="Registrar" ID="btnRegistrar" runat="server" CssClass="btn btn-primary" OnClick="btnRegistrar_Click" />
+
+        <!-- Botón Eliminar -->
+        <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" OnClick="btnEliminar_Click" CssClass="btn btn-danger" Visible="false" />
+
+    </div>
+    <!-- Volver -->
+    <div class="col-md-3 text-end">
+        <asp:Button Text="Volver" ID="btnVolver" runat="server" CssClass="btn btn-outline-secondary" OnClick="btnVolver_Click" />
+    </div>
+</div>
+<!-- confirmacion eliminacion -->
+<div class="row mb-3">
+    <div class="col-md-6 d-flex flex-column gap-2">
+
+        <% if (ConfirmaEliminacion) { %>
+            <asp:CheckBox Text="Confirmar Eliminación" ID="chkConfirmaEliminacion" runat="server" />
+            <asp:Button ID="btnConfirmaEliminar" runat="server" Text="Eliminar" OnClick="btnConfirmaEliminar_Click" CssClass="btn btn-outline-danger" Visible="true" />
+        <% } %>
+    </div>
+</div>
         <div class="row mb-3">
             <div class="col-md-12">
                 <asp:Panel ID="pnlResultado" runat="server" Visible="false" CssClass="alert alert-success text-center mt-3">
                     <asp:Label ID="lblResultado" runat="server" Text=""></asp:Label>
                 </asp:Panel>
-            </div>
-        </div>
+                  <div class="col-md-12">
+                     <asp:Panel ID="PanelEliminacion" runat="server" Visible="false" CssClass="alert alert-success text-center mt-3">
+                     <asp:Label ID="lblEliminacion" runat="server" Text=""></asp:Label>
+                     </asp:Panel>
+                 </div>
+           </div>
+       </div>
 
-    </div>
+</div>
 </asp:Content>
