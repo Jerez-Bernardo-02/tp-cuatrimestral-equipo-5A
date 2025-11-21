@@ -4,7 +4,14 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+    <div class="col-md-8 mt-2 mb-2">
+        <asp:DropDownList OnSelectedIndexChanged="ddlMedicos_SelectedIndexChanged" ID="ddlMedicos" 
+            runat="server" CssClass="form-select mt-2" AutoPostBack="true">
+        </asp:DropDownList>
+    </div>
     <div class="row">
+
+
         <%--Lunes--%>
         <div class="col-md-3 mt-2">
             <div class="card shadow-sm mb-3">
@@ -22,31 +29,35 @@
                 <div class="card-body">
                     <%--      REPEATER     --%>
                     <asp:Repeater runat="server"
-                        ID="repHorarioLunes">
+                        ID="repHorarioLunes" OnItemDataBound="repHorarioLunes_ItemDataBound">
                         <ItemTemplate>
+                            <%-- Botón de borrar --%>
+                            <div class="text-end mt-1 mb-1">
+                                <asp:LinkButton ID="btnBorrarBloqueLunes" CommandArgument='<%# Eval("Id")%>' OnCommand="btnBorrarBloque_Command"
+                                    runat="server"
+                                    CssClass="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </asp:LinkButton>
+                            </div>
 
+                            <%--Horario desde--%>
+                            <label class="form-label">Desde</label>
+                            <asp:TextBox ID="txtHoraDesdeLunes" runat="server" 
+                                        CssClass="form-control" TextMode="Time" 
+                                        Text='<%# Eval("HoraEntrada") %>' />
+
+                            <%--Horario hasta--%>
+                            <label class="form-label mt-2">Hasta</label>
+                            <asp:TextBox ID="txtHoraHastaLunes" runat="server" 
+                                         CssClass="form-control" TextMode="Time" 
+                                         Text='<%# Eval("HoraSalida") %>' />
+
+                            <%--Especialidades--%>
+                            <asp:DropDownList ID="ddlEspecialidadesLunes" runat="server" CssClass="form-select mt-2">
+                                <asp:ListItem Text="Especialidades" Value="" />
+                            </asp:DropDownList>
                         </ItemTemplate>
                     </asp:Repeater>
-                    <%-- Botón de borrar --%>
-                    <div class="text-end mt-1 mb-1">
-                        <asp:LinkButton ID="btnBorrarBloqueLunes" runat="server" CommandName="Delete"
-                            CssClass="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                         </asp:LinkButton>
-                    </div>
-
-                    <%--Horario desde--%>
-                    <label class="form-label">Desde</label>
-                    <asp:TextBox ID="txtHoraDesdeLunes" runat="server" CssClass="form-control" TextMode="Time" Text="" />
-
-                    <%--Horario hasta--%>
-                    <label class="form-label mt-2">Hasta</label>
-                    <asp:TextBox ID="txtHoraHastaLunes" runat="server" CssClass="form-control" TextMode="Time" Text="" />
-
-                    <%--Especialidades--%>
-                    <asp:DropDownList ID="ddlEspecialidadesLunes" runat="server" CssClass="form-select mt-2">
-                        <asp:ListItem Text="Especialidades" Value="" />
-                    </asp:DropDownList>
 
                     <div class="text-center mt-2">
 
@@ -79,7 +90,7 @@
                         <asp:LinkButton ID="LinkButton1" runat="server" CommandName="Delete"
                             CssClass="btn btn-danger btn-sm">
                     <i class="bi bi-trash"></i>
-                </asp:LinkButton>
+                        </asp:LinkButton>
 
                     </div>
 
@@ -126,7 +137,7 @@
                         <asp:LinkButton ID="LinkButton2" runat="server" CommandName="Delete"
                             CssClass="btn btn-danger btn-sm">
                     <i class="bi bi-trash"></i>
-                </asp:LinkButton>
+                        </asp:LinkButton>
 
                     </div>
 
@@ -173,7 +184,7 @@
                         <asp:LinkButton ID="LinkButton3" runat="server" CommandName="Delete"
                             CssClass="btn btn-danger btn-sm">
                     <i class="bi bi-trash"></i>
-                </asp:LinkButton>
+                        </asp:LinkButton>
 
                     </div>
 
@@ -220,7 +231,7 @@
                         <asp:LinkButton ID="LinkButton4" runat="server" CommandName="Delete"
                             CssClass="btn btn-danger btn-sm">
                     <i class="bi bi-trash"></i>
-                </asp:LinkButton>
+                        </asp:LinkButton>
 
                     </div>
 
@@ -267,7 +278,7 @@
                         <asp:LinkButton ID="LinkButton5" runat="server" CommandName="Delete"
                             CssClass="btn btn-danger btn-sm">
                     <i class="bi bi-trash"></i>
-                </asp:LinkButton>
+                        </asp:LinkButton>
 
                     </div>
 
@@ -314,7 +325,7 @@
                         <asp:LinkButton ID="LinkButton6" runat="server" CommandName="Delete"
                             CssClass="btn btn-danger btn-sm">
                     <i class="bi bi-trash"></i>
-                </asp:LinkButton>
+                        </asp:LinkButton>
 
                     </div>
 
