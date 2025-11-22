@@ -117,7 +117,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT Id, Descripcion, Activo FROM Especialidades WHERE Id = @id");
+                datos.setearConsulta("SELECT Id, Descripcion FROM Especialidades WHERE Id = @id");
                 datos.setearParametro("@id", id);
 
                 datos.ejecutarLectura();
@@ -139,6 +139,26 @@ namespace Negocio
             }
 
             return aux;
+        }
+
+        public void Eliminar(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("DELETE FROM Especialidades WHERE Id = @id");
+                datos.setearParametro("@id", id);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
     }
 }
