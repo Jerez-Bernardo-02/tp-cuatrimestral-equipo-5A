@@ -338,6 +338,33 @@ namespace Negocio
             }
         }
 
+        public List<TimeSpan> listarTurnosOcupadosPorMedico(int idMedico, DateTime fecha)
+        {
+            List<TimeSpan> lista = new List<TimeSpan>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT CAST(Fecha AS time) as Hora FROM Turnos WHERE IDMedico = @idMedico AND CAST(Fecha AS date) = @fecha AND IdEstado = 1;");
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@fecha", fecha);
+                datos.ejecutarLectura();
 
+                while (datos.Lector.Read())
+                {
+                    TimeSpan horarioOcupado = (TimeSpan)datos.Lector["Hora"];
+                    lista.Add(horarioOcupado);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

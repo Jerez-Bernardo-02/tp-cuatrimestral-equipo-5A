@@ -43,7 +43,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label d-block">Seleccione una fecha</label>
                                 <asp:TextBox ID="txtFecha" runat="server" TextMode="Date"
-                                    CssClass="form-control" AutoPostBack="true">
+                                    CssClass="form-control" AutoPostBack="true" OnTextChanged="txtFecha_TextChanged" >
                                 </asp:TextBox>
                             </div>
 
@@ -55,11 +55,11 @@
 
                                     <asp:Repeater runat="server" ID="repHorarios" OnItemDataBound="repHorarios_ItemDataBound">
                                         <ItemTemplate>
-<%--                                            <asp:Button Text="btnHorario" runat="server"
-                                                Text="asdsadasd"
-                                                CommandArgument="asd"
+                                            <asp:Button ID="btnHorario" runat="server"
+                                                Text="<%# Container.DataItem %>"
+                                                CommandArgument="<%# Container.DataItem %>"
                                                 CommandName="Seleccionar"
-                                                OnCommand=""/>--%>
+                                                 CssClass="btn btn-outline-info btn-sm m-1"/>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                 </div>
@@ -76,10 +76,10 @@
                         <h5 class="card-title">Resumen del Turno</h5>
                         <hr />
 
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 </asp:Content>

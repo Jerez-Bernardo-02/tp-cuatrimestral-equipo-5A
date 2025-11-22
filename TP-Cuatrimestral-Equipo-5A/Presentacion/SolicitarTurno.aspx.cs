@@ -1,4 +1,5 @@
-﻿using Negocio;
+﻿using Dominio;
+using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,17 +57,21 @@ namespace Presentacion
         protected void repHorarios_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
 
+            Button btnHora = (Button)e.Item.FindControl("btnHorario");
+            TimeSpan horaSlot = (TimeSpan)e.Item.DataItem;
+
+
         }
 
-        private void generarSlotsTurnos()
+        protected void txtFecha_TextChanged(object sender, EventArgs e)
         {
             HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
-            if(ddlEspecialidad.SelectedValue == "0" || ddlEspecialidad.SelectedValue == "")
+            if (ddlEspecialidad.SelectedValue == "0" || ddlEspecialidad.SelectedValue == "")
             {
                 //error.
                 return;
             }
-            if(ddlMedicos.SelectedValue == "0" || ddlMedicos.SelectedValue == "")
+            if (ddlMedicos.SelectedValue == "0" || ddlMedicos.SelectedValue == "")
             {
                 //error.
                 return;
@@ -80,10 +85,52 @@ namespace Presentacion
             int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
             int idMedico = int.Parse(ddlMedicos.SelectedValue);
             DateTime diaSemana = DateTime.Parse(txtFecha.Text);
-
+            int duracionTurno = 30;
+            List<TimeSpan> turnosDiarios = new List<TimeSpan>();
             int idDiaSemana = (int)diaSemana.DayOfWeek;
 
-            horarioMedicoNegocio.listarHorariosPorFecha(idMedico, idEspecialidad, idDiaSemana);
+            if (idDiaSemana == 0)
+            {
+                idDiaSemana = 7; //Porque Domingo en DayOfWeek es 0
+            }
+
+            List<HorarioMedico> RangoDeHorarios = horarioMedicoNegocio.listarHorariosPorFecha(idMedico, idEspecialidad, idDiaSemana);
+
+            if (RangoDeHorarios.Count == 0)
+            {
+                //No hay turnos disponibles
+                return;
+            }
+
+            foreach (HorarioMedico horarioMedico in RangoDeHorarios) //Itera por la cantidad de horarios distintos en un mismo dia de la semana
+            {
+                TimeSpan horaComienzo = horarioMedico.HoraEntrada;
+                TimeSpan horaSalida = horarioMedico.HoraSalida;
+                
+                //Antes de la iteracion, la hora actual será la misma que la del comienzo del horario
+                TimeSpan horaActual = horaComienzo;
+                while (horaActual < horaSalida)
+                {
+                    //Se verifica que entre un nuevo turno de 30 minutos en el rango horario.
+                    if (horaActual.Add(TimeSpan.FromMinutes(duracionTurno)) <= horaSalida)
+                    {
+                        //Se agrega la hora actual como un horario de turno a la lista de timespans.
+                        turnosDiarios.Add(horaActual);
+                    }
+                    //Se le agrega 30 minutos a la hora actual.
+                    horaActual = horaActual.Add(TimeSpan.FromMinutes(duracionTurno));
+                }
+            }
+
+            TurnoNegocio turnoNegocio = new TurnoNegocio();
+            turnoNegocio.listarTurnosOcupadosPorMedico(idMedico, DateTime.Parse(txtFecha.Text));
+
+            repHorarios.DataSource = turnosDiarios;
+            repHorarios.DataBind();
+        }
+        private void generarSlotsTurnos()
+        {
+
         }
 
     }

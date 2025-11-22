@@ -100,7 +100,7 @@ namespace Negocio
             List<HorarioMedico> lista = new List<HorarioMedico>();
             try
             {
-                datos.setearConsulta("SELECT HoraEntrada, HoraSalida FROM HorariosPorMedicos WHERE IdMedico = @idMedico AND IdEspecialidad = @idEspecialidad AND IdDiaSemana = @idDiaSemana;");
+                datos.setearConsulta("SELECT HoraEntrada, HoraSalida FROM HorariosPorMedicos WHERE IdMedico = @idMedico AND IdEspecialidad = @idEspecialidad AND IdDiaSemana = @idDiaSemana ORDER BY HoraEntrada ASC;");
                 datos.setearParametro("@idMedico", idMedico);
                 datos.setearParametro("@idEspecialidad", idEspecialidad);
                 datos.setearParametro("@idDiaSemana", idDiaSemana);
