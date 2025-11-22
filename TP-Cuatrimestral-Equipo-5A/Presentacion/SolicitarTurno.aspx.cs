@@ -17,6 +17,7 @@ namespace Presentacion
                 CargarEspecialidades();
                 CargarMedicos();
             }
+            generarSlotsTurnos();
         }
 
         protected void ddlEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
@@ -56,5 +57,34 @@ namespace Presentacion
         {
 
         }
+
+        private void generarSlotsTurnos()
+        {
+            HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
+            if(ddlEspecialidad.SelectedValue == "0" || ddlEspecialidad.SelectedValue == "")
+            {
+                //error.
+                return;
+            }
+            if(ddlMedicos.SelectedValue == "0" || ddlMedicos.SelectedValue == "")
+            {
+                //error.
+                return;
+            }
+
+            if (string.IsNullOrEmpty(txtFecha.Text))
+            {
+                //error.
+                return;
+            }
+            int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
+            int idMedico = int.Parse(ddlMedicos.SelectedValue);
+            DateTime diaSemana = DateTime.Parse(txtFecha.Text);
+
+            int idDiaSemana = (int)diaSemana.DayOfWeek;
+
+            horarioMedicoNegocio.listarHorariosPorFecha(idMedico, idEspecialidad, idDiaSemana);
+        }
+
     }
 }

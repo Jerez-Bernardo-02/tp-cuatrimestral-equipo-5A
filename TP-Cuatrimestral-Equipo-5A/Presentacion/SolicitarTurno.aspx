@@ -36,7 +36,7 @@
                         </div>
                         <hr />
 
-                        <%-- PASO 2: Fecha y Hora --%>
+                        <%-- PASO 2: Fecha y repeater con horarios disponibles --%>
                         <h5 class="card-title">Paso 2: Elija una Fecha y Hora</h5>
                         <div class="row">
                             <%-- Calendario --%>
@@ -55,10 +55,11 @@
 
                                     <asp:Repeater runat="server" ID="repHorarios" OnItemDataBound="repHorarios_ItemDataBound">
                                         <ItemTemplate>
-                                            <asp:Button Text="btnHorario" runat="server"
-                                                Text=""
-                                                CommandArgument=""
-                                                CommandName="Seleccionar"/>
+<%--                                            <asp:Button Text="btnHorario" runat="server"
+                                                Text="asdsadasd"
+                                                CommandArgument="asd"
+                                                CommandName="Seleccionar"
+                                                OnCommand=""/>--%>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                 </div>

@@ -1,19 +1,19 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="FormularioRegistro.aspx.cs" Inherits="Presentacion.FormularioRegistro" UnobtrusiveValidationMode="None"  %> 
-	
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="FormularioRegistro.aspx.cs" Inherits="Presentacion.FormularioRegistro" UnobtrusiveValidationMode="None" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
-	
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container mt-4">
         <h3 class="ms-3 mb-3">Formulario de registro</h3>
         <h4 class="text-primary ms-3 mb-4">Datos personales</h4>
 
         <div class="d-flex align-items-center mb-4">
-            <div class="position-relative" style="width:80px; height:80px;">
+            <div class="position-relative" style="width: 80px; height: 80px;">
                 <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="rounded-circle w-100 h-100" alt="imagenPerfil" />
             </div>
 
-            <asp:DropDownList ID="ddlTipoPermiso" runat="server" AutoPostback="true" OnSelectedIndexChanged="ddlTipoPermiso_SelectedIndexChanged"></asp:DropDownList>
+            <asp:DropDownList ID="ddlTipoPermiso" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlTipoPermiso_SelectedIndexChanged"></asp:DropDownList>
         </div>
 
         <asp:Panel ID="pnlDatos" runat="server">
@@ -85,31 +85,39 @@
                 </div>
             </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6" id="divMatricula" runat="server" visible="false">
-                <label for="txtMatricula" class="form-label">Matricula</label>
-              
-                <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="Matricula"></asp:TextBox>
-                  <!--<asp:RequiredFieldValidator ID="rfvMatricula" runat="server" ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria para médicos." ForeColor="Red" Enabled="false" />
+            <div class="row mb-3" id="divMatricula" runat="server" visible="false">
+                <div class="col-md-6">
+                    <label for="txtMatricula" class="form-label">Matricula</label>
+
+                    <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="Matricula"></asp:TextBox>
+                    <!--<asp:RequiredFieldValidator ID="rfvMatricula" runat="server" ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria para médicos." ForeColor="Red" Enabled="false" />
                 -->
-            </div>  
-        </div>
-    </asp:Panel>
+                </div>
+                <div class="col-md-6" id="divEspecialidad" runat="server">
+                    <label for="txtEspecialidad" class="form-label">Especialidad</label>
+
+                    <asp:DropDownList runat="server" ID="ddlEspecialidad" CssClass="form-control">
+                        <asp:ListItem Text="Cargue una especialidad" />
+                    </asp:DropDownList>
+                </div>
+
+            </div>
+        </asp:Panel>
 
         <asp:Panel ID="pnlUsuario" runat="server">
             <div id="divDatosAcceso" runat="server">
-            <h4 class="text-primary ms-3 mb-4">Datos de acceso</h4>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="txtUsuario" class="form-label">Usuario</label>
-                    <asp:TextBox runat="server" ID="txtUsuario" CssClass="form-control" placeholder="Nombre de usuario"></asp:TextBox>
-                </div>
+                <h4 class="text-primary ms-3 mb-4">Datos de acceso</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="txtUsuario" class="form-label">Usuario</label>
+                        <asp:TextBox runat="server" ID="txtUsuario" CssClass="form-control" placeholder="Nombre de usuario"></asp:TextBox>
+                    </div>
 
-                <div class="col-md-6">
-                    <label for="txtContrasenia" class="form-label">Contraseña</label>
-                    <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" placeholder="Contraseña"></asp:TextBox>
+                    <div class="col-md-6">
+                        <label for="txtContrasenia" class="form-label">Contraseña</label>
+                        <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" placeholder="Contraseña"></asp:TextBox>
+                    </div>
                 </div>
-            </div>
             </div>
 
         </asp:Panel>
@@ -118,15 +126,15 @@
             <div class="col-md-4">
                 <asp:Button Text="Registrarse" ID="BtnRegistrarse" OnClick="BtnRegistrarse_Click" runat="server" class="btn btn-primary" />
                 <%--<asp:Button Text="Inactivar" ID="btnInactivar" OnClick="btnInactivar_Click" runat="server" CssClass="btn btn-warning" />--%>
-            </div>  
-          
-          <div class="row mb-3">
-            <div class="col-md-12">
-                <asp:Panel ID="pnlResultado" runat="server" Visible="false" CssClass="alert alert-success text-center mt-3">
-                    <asp:Label ID="lblResultado" runat="server" Text=""></asp:Label>
-                </asp:Panel>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <asp:Panel ID="pnlResultado" runat="server" Visible="false" CssClass="alert alert-success text-center mt-3">
+                        <asp:Label ID="lblResultado" runat="server" Text=""></asp:Label>
+                    </asp:Panel>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </asp:Content>
