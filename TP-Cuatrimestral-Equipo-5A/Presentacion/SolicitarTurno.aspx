@@ -7,16 +7,16 @@
     <div class="container-fluid">
         <div class="mb-4 ms-3">
             <h1 class="display-5">Solicitar un Nuevo Turno</h1>
-            <p>Siga los pasos para agendar su cita.</p>
+            <p>Siga los pasos para agendar un nuevo turno.</p>
         </div>
 
         <div class="row">
-            <%-- COLUMNA IZQUIERDA (Filtros y Calendario) --%>
+            <%-- COLUMNA IZQUIERDA (Filtros, calendario, hora y horarios disponibles) --%>
             <div class="col-md-7">
                 <div class="card shadow-sm border-0 mb-3">
                     <div class="card-body">
 
-                        <%-- PASO 1: Profesional --%>
+                        <%-- PASO 1: Elegirr medico y especialidad --%>
                         <h5 class="card-title">Paso 1: Profesional y Especialidad</h5>
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -52,6 +52,15 @@
                                 <label class="form-label d-block">Horarios disponibles</label>
                                 <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
                                     <asp:Label ID="lblNoHorarios" runat="server" Text="Seleccione un médico y una fecha." Visible="false" />
+
+                                    <asp:Repeater runat="server" ID="repHorarios" OnItemDataBound="repHorarios_ItemDataBound">
+                                        <ItemTemplate>
+                                            <asp:Button Text="btnHorario" runat="server"
+                                                Text=""
+                                                CommandArgument=""
+                                                CommandName="Seleccionar"/>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
                                 </div>
                             </div>
                         </div>

@@ -46,7 +46,7 @@
                 <div class="card-body">
                     <%--      REPEATER     --%>
                     <asp:Repeater runat="server"
-                        ID="repHorarioLunes" OnItemDataBound="repHorarioLunes_ItemDataBound">
+                        ID="repHorarioLunes" OnItemDataBound="repHorarioLunes_ItemDataBound"> <%--OnItemDataBound para personalizar la pagina de acuerdo al codigo (cargar ddls)--%>
                         <ItemTemplate>
                             <%-- Botón de borrar --%>
                             <div class="text-end mt-1 mb-1">

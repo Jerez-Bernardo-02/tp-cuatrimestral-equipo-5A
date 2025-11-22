@@ -97,7 +97,7 @@ namespace Presentacion
         {
             MedicoNegocio medicoNegocio = new MedicoNegocio();
             ddlMedicos.DataSource = medicoNegocio.listar();
-            ddlMedicos.DataTextField = "Apellido";
+            ddlMedicos.DataTextField = "NombreCompleto";
             ddlMedicos.DataValueField = "Id";
             ddlMedicos.DataBind();
             ddlMedicos.Items.Insert(0, new ListItem(" Seleccione un medico", "0"));

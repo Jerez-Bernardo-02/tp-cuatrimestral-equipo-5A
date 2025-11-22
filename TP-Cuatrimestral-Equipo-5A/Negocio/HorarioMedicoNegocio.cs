@@ -93,5 +93,38 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public List<HorarioMedico> listarHorariosPorFecha(int idMedico, int idEspecialidad, int idDiaSemana)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<HorarioMedico> lista = new List<HorarioMedico>();
+            try
+            {
+                datos.setearConsulta("SELECT HoraEntrada, HoraSalida FROM HorariosPorMedicos WHERE IdMedico = @idMedico AND IdEspecialidad = @idEspecialidad AND IdDiaSemana = @idDiaSemana;");
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.setearParametro("@idDiaSemana", idDiaSemana);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    HorarioMedico nuevo = new HorarioMedico();
+                    nuevo.HoraEntrada = (TimeSpan)datos.Lector["HoraEntrada"];
+                    nuevo.HoraSalida = (TimeSpan)datos.Lector["HoraSalida"];
+                    lista.Add(nuevo);
+                }
+
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

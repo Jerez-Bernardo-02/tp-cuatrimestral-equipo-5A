@@ -51,5 +51,10 @@ namespace Presentacion
             ddlMedicos.DataBind();
 
         }
+
+        protected void repHorarios_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+
+        }
     }
 }
