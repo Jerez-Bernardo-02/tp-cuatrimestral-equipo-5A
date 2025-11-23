@@ -55,6 +55,7 @@ namespace Negocio
                 if (datos.Lector.Read())
                 {
                     Paciente paciente = new Paciente();
+                    paciente.Id = (int)datos.Lector["Id"];
                     paciente.Dni = (string)datos.Lector["Dni"];
                     paciente.Nombre = (string)datos.Lector["Nombre"];
                     paciente.Apellido = (string)datos.Lector["Apellido"];

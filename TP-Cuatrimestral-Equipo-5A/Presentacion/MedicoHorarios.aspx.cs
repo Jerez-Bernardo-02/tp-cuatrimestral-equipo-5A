@@ -50,25 +50,32 @@ namespace Presentacion
                 return;
             }
 
-            TimeSpan nuevaHoraEntrada = TimeSpan.Parse(txtNuevaHoraEntrada.Text);
-            TimeSpan nuevaHoraSalida = TimeSpan.Parse(txtNuevaHoraSalida.Text); ;
-            if (nuevaHoraSalida < nuevaHoraEntrada)
+            //inicializacion del objeto HorarioMedico
+            HorarioMedico nuevoHorario = new HorarioMedico();
+            nuevoHorario.Dia = new DiaDeSemana();
+            nuevoHorario.Especialidad = new Especialidad();
+            nuevoHorario.Medico = new Medico();
+
+            //Asignacion
+            nuevoHorario.HoraEntrada = TimeSpan.Parse(txtNuevaHoraEntrada.Text);
+            nuevoHorario.HoraSalida = TimeSpan.Parse(txtNuevaHoraSalida.Text); ;
+            if (nuevoHorario.HoraSalida < nuevoHorario.HoraEntrada)
             {
                 MostrarError("La hora de salida debe ser mayor a la de entrada.");
                 return;
             }
 
             // Capturo los valores de los DDL 
-            int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue); //este ddl cambia por cada horario y dia, por eso se pasa por parametro
-            int idMedico = int.Parse(ddlMedicos.SelectedValue); //este ddl es global (no cambia en toda la pagina)
+            nuevoHorario.Especialidad.Id = int.Parse(ddlEspecialidad.SelectedValue); //este ddl cambia por cada horario y dia, por eso se pasa por parametro
+            nuevoHorario.Medico.Id = int.Parse(ddlMedicos.SelectedValue); //este ddl es global (no cambia en toda la pagina)
 
 
 
             //Valido si en la lista hay algun horario que interfiere con el que se esta intentando ingresar
             HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
-            List<HorarioMedico> listaHorariosPorMedico =  horarioMedicoNegocio.listarHorariosPorIdMedico(idMedico);
+            List<HorarioMedico> listaHorariosPorMedico =  horarioMedicoNegocio.listarHorariosPorIdMedico(nuevoHorario.Medico.Id);
             
-            bool existeHorarioSuperpuesto = listaHorariosPorMedico.Any(horario => horario.Dia.Id == idDiaSemana && (horario.HoraEntrada < nuevaHoraSalida && horario.HoraSalida > nuevaHoraEntrada) );
+            bool existeHorarioSuperpuesto = listaHorariosPorMedico.Any(horario => horario.Dia.Id == idDiaSemana && (horario.HoraEntrada < nuevoHorario.HoraSalida && horario.HoraSalida > nuevoHorario.HoraEntrada) );
 
             if (existeHorarioSuperpuesto)
             {
@@ -77,7 +84,7 @@ namespace Presentacion
             }
             else
             {
-                horarioMedicoNegocio.agregarNuevoHorario(idDiaSemana, nuevaHoraEntrada, nuevaHoraSalida, idEspecialidad, idMedico);
+                horarioMedicoNegocio.agregarNuevoHorario(idDiaSemana, nuevoHorario);
             }
 
             //Limpieza de inputs y recarga de pantalla
@@ -356,11 +363,6 @@ namespace Presentacion
             ddlEspecialidad.Enabled = false;
 
         }
-
-
-
-
-
 
         protected void btnAñadirHorario_Command(object sender, CommandEventArgs e)
         {

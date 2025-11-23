@@ -15,13 +15,49 @@ namespace Presentacion
     {
 
         /// <summary>
-        /// Control ddlPacientes.
+        /// Control txtDniPaciente.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPacientes;
+        protected global::System.Web.UI.WebControls.TextBox txtDniPaciente;
+
+        /// <summary>
+        /// Control btnBuscarPaciente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnBuscarPaciente;
+
+        /// <summary>
+        /// Control txtNombrePaciente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNombrePaciente;
+
+        /// <summary>
+        /// Control hfIdPaciente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfIdPaciente;
+
+        /// <summary>
+        /// Control lblErrorPaciente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblErrorPaciente;
 
         /// <summary>
         /// Control ddlEspecialidad.
@@ -51,6 +87,15 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.TextBox txtFecha;
 
         /// <summary>
+        /// Control lblInfoHorarios.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblInfoHorarios;
+
+        /// <summary>
         /// Control repHorarios.
         /// </summary>
         /// <remarks>
@@ -60,13 +105,22 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Repeater repHorarios;
 
         /// <summary>
-        /// Control lblInfoHorarios.
+        /// Control txtObservaciones.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblInfoHorarios;
+        protected global::System.Web.UI.WebControls.TextBox txtObservaciones;
+
+        /// <summary>
+        /// Control lblResumenPaciente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblResumenPaciente;
 
         /// <summary>
         /// Control lblResumenEspecialidad.
@@ -103,6 +157,15 @@ namespace Presentacion
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblResumenHora;
+
+        /// <summary>
+        /// Control lblResumenObservaciones.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblResumenObservaciones;
 
         /// <summary>
         /// Control btnConfirmar.

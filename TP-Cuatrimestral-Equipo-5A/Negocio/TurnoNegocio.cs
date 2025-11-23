@@ -125,13 +125,13 @@ namespace Negocio
             {
                 string consulta = "SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.FechaNacimiento AS FnacPaciente, P.Email AS EmailPaciente, P.Telefono AS TelefonoPaciente, P.Dni AS DniPaciente, P.UrlImagen AS UrlImagenPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id = T.IdEspecialidad INNER JOIN Estados E ON E.Id = T.IdEstado INNER JOIN Pacientes P ON P.Id = T.IdPaciente  WHERE T.IdMedico = @idMedico";
 
-                if (!string.IsNullOrEmpty(filtroNombre) )
+                if (!string.IsNullOrEmpty(filtroNombre))
                 {
                     consulta += " AND (P.Nombre LIKE '%' + @filtroNombre + '%')";
                     datos.setearParametro("@filtroNombre", filtroNombre);
                 }
-                
-                if (!string.IsNullOrEmpty (filtroApellido))
+
+                if (!string.IsNullOrEmpty(filtroApellido))
                 {
                     consulta += " AND (P.Apellido LIKE '%' + @filtroApellido + '%')";
                     datos.setearParametro("@filtroApellido", filtroApellido);
@@ -199,7 +199,7 @@ namespace Negocio
             }
         }
 
-        public List<Turno> listaFiltrada(string dni = "", DateTime ? fecha = null, int idEstado = 0, int idEspecialidad = 0)
+        public List<Turno> listaFiltrada(string dni = "", DateTime? fecha = null, int idEstado = 0, int idEspecialidad = 0)
         {
             List<Turno> lista = new List<Turno>();
             AccesoDatos datos = new AccesoDatos();
@@ -338,7 +338,49 @@ namespace Negocio
             }
         }
 
-        public List<TimeSpan> listarTurnosOcupadosPorMedico(int idMedico, DateTime fecha)
+        public List<TimeSpan> ListarTurnosDiarios(int idMedico, int idEspecialidad, DateTime fecha)
+        {
+            List<TimeSpan> turnosDiarios = new List<TimeSpan>();
+            int duracionTurno = 30; // turnos de 30 minutos.
+
+            int idDiaSemana = (int)fecha.DayOfWeek;
+            if (idDiaSemana == 0)
+            {
+                idDiaSemana = 7; //Ajuste: Domingo en DayOfWeek es 0, lo forzamos a 7 para que coincida con la base de datos.
+            }
+
+            //Obtener rangos horarios del medico
+            HorarioMedicoNegocio horarioNegocio = new HorarioMedicoNegocio();
+            List<HorarioMedico> RangoDeHorarios = horarioNegocio.listarHorariosPorFecha(idMedico, idEspecialidad, idDiaSemana);
+
+            // Si no trabaja, devolvemos lista vacía
+            if (RangoDeHorarios.Count == 0)
+            {
+                return turnosDiarios;
+            }
+
+            foreach (HorarioMedico horarioMedico in RangoDeHorarios) //Itera por la cantidad de horarios distintos en un mismo dia de la semana
+            {
+                TimeSpan horaComienzo = horarioMedico.HoraEntrada;
+                TimeSpan horaSalida = horarioMedico.HoraSalida;
+
+                //Antes de la iteracion, la hora actual será la misma que la del comienzo del horario
+                TimeSpan horaActual = horaComienzo;
+                while (horaActual < horaSalida)
+                {
+                    //Se verifica que entre un nuevo turno de 30 minutos en el rango horario.
+                    if (horaActual.Add(TimeSpan.FromMinutes(duracionTurno)) <= horaSalida)
+                    {
+                        //Se agrega la hora actual como un horario de turno a la lista de timespans.
+                        turnosDiarios.Add(horaActual);
+                    }
+                    //Se le agrega 30 minutos a la hora actual.
+                    horaActual = horaActual.Add(TimeSpan.FromMinutes(duracionTurno));
+                }
+            }
+            return turnosDiarios;
+        }
+        public List<TimeSpan> ListarTurnosOcupadosPorMedico(int idMedico, DateTime fecha)
         {
             List<TimeSpan> lista = new List<TimeSpan>();
             AccesoDatos datos = new AccesoDatos();
@@ -359,6 +401,31 @@ namespace Negocio
             catch (Exception)
             {
 
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void AgregarTurno(Turno nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("INSERT INTO Turnos (Fecha, Observaciones, IdPaciente, IdEstado, IdMedico, IdEspecialidad) Values (@fecha, @observaciones, @idPaciente, @idEstado, @idMedico, @idEspecialidad)");
+                datos.setearParametro("@fecha", nuevo.Fecha);
+                datos.setearParametro("@observaciones", (object)nuevo.Observaciones ?? DBNull.Value);
+                datos.setearParametro("@idPaciente", nuevo.Paciente.Id);
+                datos.setearParametro("@idEstado",nuevo.Estado.Id);
+                datos.setearParametro("@idMedico", nuevo.Medico.Id);
+                datos.setearParametro("@idEspecialidad", nuevo.Especialidad.Id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
                 throw;
             }
             finally

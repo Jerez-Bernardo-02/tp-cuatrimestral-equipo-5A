@@ -11,17 +11,17 @@ namespace Negocio
 {
     public class HorarioMedicoNegocio
     {
-        public void agregarNuevoHorario(int idDiaSemana, TimeSpan nuevaHoraEntrada, TimeSpan nuevaHoraSalida, int idEspecialidad, int idMedico)
+        public void agregarNuevoHorario(int idDiaSemana, HorarioMedico nuevoHorario)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 datos.setearConsulta("INSERT INTO HorariosPorMedicos (IdDiaSemana, HoraEntrada, HoraSalida, IdMedico, IdEspecialidad) VALUES (@idDiaSemana, @horaEntrada, @horaSalida, @idMedico, @idEspecialidad);");
                 datos.setearParametro("@idDiaSemana", idDiaSemana);
-                datos.setearParametro("@horaEntrada", nuevaHoraEntrada);
-                datos.setearParametro("@horaSalida", nuevaHoraSalida);
-                datos.setearParametro("@idEspecialidad", idEspecialidad);
-                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@horaEntrada", nuevoHorario.HoraEntrada);
+                datos.setearParametro("@horaSalida", nuevoHorario.HoraSalida);
+                datos.setearParametro("@idEspecialidad", nuevoHorario.Especialidad.Id);
+                datos.setearParametro("@idMedico", nuevoHorario.Medico.Id);
                 datos.ejecutarAccion();
             }
             catch (Exception)
