@@ -37,7 +37,7 @@ namespace Presentacion
                     divMatricula.Visible = false;
                     Session.Add("usuarioRegistrar", "Paciente");
                     Usuario usuario = (Usuario)Session["usuarioModificar"] != null ? (Usuario)Session["usuarioModificar"] : null;
-
+                  
                     if (usuario != null) // Si hay un usuario para modificar, se traen sus datos de la BD y se cargan en los txt
                     {
                         cargarFormulario(usuario);
@@ -47,13 +47,8 @@ namespace Presentacion
                     {
                         mostrarPermisos();
                     }
-                    btnVolverFormulariosAdmiin(usuario);
-                    Usuario usuarioLogueado = (Usuario)Session["usuario"];
 
-                    if (usuario != null && Seguridad.esAdministrador(usuarioLogueado))
-                    {
-                        btnVolver.Visible = true;
-                    }
+                    btnVolverFormulariosAdmiin(usuario);
                 }
 
             }
@@ -391,6 +386,7 @@ protected void mostrarPermisos()
 
                 // Si no hubo problemas, se muestra por pantalla el resultado exitoso y se redirrecciona a sus respectivas ventanas. Si se produce una expecion directamente salta al "catch" y se maneja el error
                 mostrarResultado(true);
+                Session.Remove("usuarioRegistrar");
                 redireccionar();
             }
             catch (Exception ex)
@@ -668,8 +664,10 @@ protected void mostrarPermisos()
                     nuevo.Clave = txtContrasenia.Text;
                     nuevo.Activo = true;
                     nuevo.Permiso = new Permiso() { Id = idPermiso };
+                   
 
                     int id = negocio.agregar(nuevo);
+                    Session.Add("UsuarioRegistrado", nuevo);
                     return id;
                 }
             }
@@ -699,6 +697,7 @@ protected void mostrarPermisos()
                 int idUsuario = guardarUsuario(1, usuario);
                 paciente.Usuario = new Usuario();
                 paciente.Usuario.Id = idUsuario;
+                
 
                 if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el paciente
                 {
@@ -706,7 +705,12 @@ protected void mostrarPermisos()
                 }
                 else
                 {
+                    Usuario usuarioRegistrado = new Usuario();
+                    usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
+                    string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregarPaciente(paciente);
+                    envioEmailNuevoRegistro(paciente.Nombre, paciente.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, paciente.Email);
+                    Session.Remove("UsuarioRegistrado");
                 }
             }
             catch (Exception ex)
@@ -741,7 +745,12 @@ protected void mostrarPermisos()
                 }
                 else
                 {
+                    Usuario usuarioRegistrado = new Usuario();
+                    usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
+                    string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregarMedico(medico);
+                    envioEmailNuevoRegistro(medico.Nombre, medico.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, medico.Email);
+                    Session.Remove("UsuarioRegistrado");
                 }
             }
             catch (Exception ex)
@@ -774,7 +783,12 @@ protected void mostrarPermisos()
                 }
                 else
                 {
+                    Usuario usuarioRegistrado = new Usuario();
+                    usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
+                    string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregar(recepcionista);
+                    envioEmailNuevoRegistro(recepcionista.Nombre, recepcionista.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, recepcionista.Email);
+                    Session.Remove("UsuarioRegistrado");
                 }
             }
             catch (Exception ex)
@@ -783,7 +797,41 @@ protected void mostrarPermisos()
                 Response.Redirect("Error.aspx",false);
             }
         }
-
+        protected void envioEmailNuevoRegistro(string nombreUsuario, string apellidoUsuario, string tipoUsuario, string NombreUsuario, string emailUsuario)
+        {
+            try
+            {
+                EmailService email = new EmailService();
+                string cuerpo = $@"
+                    <html>
+                      <body style='font-family: Arial, sans-serif; background-color:#f5f5f5; padding:20px; color:#000;'>
+                        <div style='max-width:600px; margin:auto; background:#fff; border:1px solid #ddd; border-radius:8px; padding:20px;'>
+                          <h2 style='text-align:center;'>Gracias por registrarte en Nuestra Clínica, {nombreUsuario} {apellidoUsuario}</h2>
+                          <p>Tipo de usuario registrado: <b>{tipoUsuario}</b></p>
+                          <p>Tu usuario para ingresar es: 
+                            <b>{NombreUsuario}</b>
+                          </p>
+                          <p>Tu contraseña es:</p>
+                          <p style='font-size:20px; font-weight:bold; text-align:center; margin:15px 0;'>1234</p>
+                          <p style='text-align:center;'>Ingresa y actualízala por una nueva contraseña.</p>
+                          <hr style='border:none; border-top:1px solid #eee; margin:20px 0;' />
+                          <p style='font-size:12px; text-align:center;'>
+                            Este mensaje fue generado automáticamente por <b>NuestraClinica</b>.<br/>
+                            Por favor, no respondas a este correo.
+                          </p>
+                        </div>
+                      </body>
+                    </html>";
+                email.armarCorreo(emailUsuario, "Nuevo Registro - Nuestra Clínica", cuerpo); // Se arma al estructura del correo
+                email.enviarEmail(); // Se envia el correo al email del cliente agregado o modificado
+            }
+            catch(Exception ex) 
+            {
+                    Session.Add("error", "Error al enviar el email" + ex.ToString());
+                    Response.Redirect("Error.aspx", false);
+                    return;
+            }
+        }
         protected void mostrarResultado(bool resultado)
         {
             string usuarioRegistrar = (string)Session["usuarioRegistrar"];
