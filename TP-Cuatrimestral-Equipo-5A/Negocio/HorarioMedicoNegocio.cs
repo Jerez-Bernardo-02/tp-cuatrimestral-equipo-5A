@@ -126,5 +126,33 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public List<int> listarDiasLaborales(int idMedico, int idEspecialidad)
+        {
+            List<int> dias = new List<int>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // El DISTINCT para que no repita si trabaja mañana y tarde el mismo día
+                datos.setearConsulta("SELECT DISTINCT IdDiaSemana FROM HorariosPorMedicos WHERE IdMedico = @idMed AND IdEspecialidad = @idEsp");
+                datos.setearParametro("@idMed", idMedico);
+                datos.setearParametro("@idEsp", idEspecialidad);
+
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    dias.Add((int)datos.Lector["IdDiaSemana"]);
+                }
+                return dias;
+            }
+            catch (Exception)
+            { 
+                throw; 
+            }
+            finally 
+            { 
+                datos.cerrarConexion(); 
+            }
+        }
     }
 }

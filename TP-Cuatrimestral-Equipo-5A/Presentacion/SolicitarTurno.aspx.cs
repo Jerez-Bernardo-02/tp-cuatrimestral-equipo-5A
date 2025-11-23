@@ -65,6 +65,7 @@ namespace Presentacion
             lblInfoHorarios.Visible = true;
             lblInfoHorarios.CssClass = "text-muted";
             btnConfirmar.Enabled = false;
+            btnProximaFechaTurno.Enabled = false;
 
         }
 
@@ -78,6 +79,7 @@ namespace Presentacion
             lblInfoHorarios.Visible = true;
             lblInfoHorarios.CssClass = "text-muted";
             btnConfirmar.Enabled = false;
+            btnProximaFechaTurno.Enabled = true;
         }
 
         protected void txtFecha_TextChanged(object sender, EventArgs e)
@@ -317,7 +319,7 @@ namespace Presentacion
 
 
         }
-        private bool ValidarSeleccionPrevia()
+        private bool ValidarSeleccionPrevia(bool validarFecha = true)
         {
             // Validacion especialidad
             if (ddlEspecialidad.SelectedValue == "0" || string.IsNullOrEmpty(ddlEspecialidad.SelectedValue))
@@ -331,12 +333,15 @@ namespace Presentacion
                 MostrarError("Seleccione un médico.");
                 return false;
             }
-            // Validacion Fecha
-            if (string.IsNullOrEmpty(txtFecha.Text))
+            // Validacion Fecha (Solo omite validar la fecha si al metodo le mandamos false (para buscar el proximo turno por ejemplo).
+            if (validarFecha)
             {
-                lblInfoHorarios.Text = "Seleccione una fecha.";
-                lblInfoHorarios.Visible = true;
-                return false;
+                    if (string.IsNullOrEmpty(txtFecha.Text))
+                {
+                    lblInfoHorarios.Text = "Seleccione una fecha.";
+                    lblInfoHorarios.Visible = true;
+                    return false;
+                }
             }
 
             return true;
@@ -353,6 +358,56 @@ namespace Presentacion
         {
             lblMensaje.Visible = false;
             lblInfoHorarios.Visible = false;
+        }
+
+        protected void btnProximaFechaTurno_Click(object sender, EventArgs e)
+        {
+            DateTime fechaBase;
+            if (string.IsNullOrEmpty(txtFecha.Text))
+            {
+                fechaBase = DateTime.Today;
+            }
+            else
+            {
+                fechaBase = DateTime.Parse(txtFecha.Text);
+
+            }
+            BuscarYAsignarFecha(fechaBase);
+        }
+
+        private void BuscarYAsignarFecha(DateTime baseInicio)
+        {
+            try
+            {
+                if (!ValidarSeleccionPrevia(false))
+                {
+                    return;
+                }
+
+                int idMedico = int.Parse(ddlMedicos.SelectedValue);
+                int idEsp = int.Parse(ddlEspecialidad.SelectedValue);
+
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+
+                //Devuelve una fecha que corresponde a un dia de semana que el medico tenga asignado como horario laboral.
+                DateTime proximaFecha = turnoNegocio.buscarProximaFechaDisponible(idMedico, idEsp, baseInicio);
+
+                //Validacion si se encontró una fecha:
+                if (proximaFecha == DateTime.MinValue)
+                {
+                    lblInfoHorarios.Text = "No se encontraron turnos disponibles.";
+                    lblInfoHorarios.Visible = true;
+                    return;
+                }
+                //Si se encontró una fecha, se asigna al textbox del calendario y se carga la grilla
+                txtFecha.Text = proximaFecha.ToString("yyyy-MM-dd");
+                txtFecha_TextChanged(null, null);
+            }
+            catch (Exception ex)
+            {
+                lblInfoHorarios.Text = ex.Message; // "No hay turnos cercanos..."
+                lblInfoHorarios.Visible = true;
+            }
         }
     }
 }

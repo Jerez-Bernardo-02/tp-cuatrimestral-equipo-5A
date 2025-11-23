@@ -67,11 +67,17 @@
                             <%-- Calendario --%>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label d-block">Seleccione una fecha</label>
-                                <asp:TextBox ID="txtFecha" runat="server" TextMode="Date"
-                                    CssClass="form-control" AutoPostBack="true" OnTextChanged="txtFecha_TextChanged">
-                                </asp:TextBox>
-                            </div>
+                                <div class="input-group">
+                                    <asp:TextBox ID="txtFecha" runat="server" TextMode="Date"
+                                        CssClass="form-control" AutoPostBack="true" OnTextChanged="txtFecha_TextChanged">
+                                    </asp:TextBox>
 
+                                    <%-- Boton para buscar fecha con proximos turnos. --%>
+                                    <asp:Button ID="btnProximaFechaTurno" runat="server" Text="Próxima fecha"
+                                        CssClass="btn btn-outline-secondary btn-sm"
+                                        OnClick="btnProximaFechaTurno_Click" Enabled="false" />
+                                </div>
+                            </div>
                             <%-- Horarios (con Repeater o foreach) --%>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label d-block">Horarios disponibles</label>

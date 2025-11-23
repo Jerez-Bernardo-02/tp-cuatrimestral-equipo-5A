@@ -433,5 +433,49 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public DateTime buscarProximaFechaDisponible(int idMedico, int idEsp, DateTime fechaBase)
+        {
+            HorarioMedicoNegocio horarioNegocio = new HorarioMedicoNegocio();
+
+            //Obtengo los dias laborales del medico seleccionado
+            List<int> diasLaborales = horarioNegocio.listarDiasLaborales(idMedico, idEsp);
+
+            //Validacion si tiene horarios asignados
+            if (diasLaborales.Count == 0)
+            {
+                return DateTime.MinValue;
+            }
+            //Validacion fecha base seleccionada: Si es menor a un dia actual, la ignoramos y forzamos la fecha actual.
+            if (fechaBase < DateTime.Today)
+            {
+                fechaBase = DateTime.Today;
+            }
+
+            DateTime fechaCursor = fechaBase;
+
+            // Buscamos turnos en los proximos 365 días para poner un límite.
+            for (int i = 0; i < 365; i++)
+            {
+                fechaCursor = fechaCursor.AddDays(1); //Se agrega un dia al cursor.
+
+                // Convertimos la fecha del cursor a dia de semana, si es domingo lo forzamos para que sea 7.
+                int diaSemanaCursor = (int)fechaCursor.DayOfWeek;
+                if(diaSemanaCursor == 0)
+                {
+                    diaSemanaCursor = 7; //Ajuste: Domingo en DayOfWeek es 0, lo forzamos a 7 para que coincida con la base de datos.
+                }
+
+                //Si el medico trabaja en el dia buscado, retornamos esa fecha.
+                if (diasLaborales.Contains(diaSemanaCursor))
+                {
+                    // No se valida si ese dia todos los slots estan ocupados.
+                    return fechaCursor;
+                }
+            }
+
+            // Si llegamos aca, no encontramos nada en 2 meses.
+            return DateTime.MinValue;
+        }
     }
 }
