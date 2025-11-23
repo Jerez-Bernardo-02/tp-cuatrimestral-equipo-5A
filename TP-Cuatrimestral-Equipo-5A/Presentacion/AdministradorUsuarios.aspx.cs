@@ -21,19 +21,37 @@ namespace Presentacion
         }
         private void cargarGrilla()
         {
-            PersonaNegocio negocio = new PersonaNegocio();
-            dgvUsuarios.DataSource = negocio.listarPersonaRol();
-            dgvUsuarios.DataBind();
+            try
+            {
+                PersonaNegocio negocio = new PersonaNegocio();
+                dgvUsuarios.DataSource = negocio.listarPersonaRol();
+                dgvUsuarios.DataBind();
+
+            }catch(Exception ex)
+            {
+                Session["error"] = ex.Message;
+                Response.Redirect("Error.aspx");
+            }
+            
         }
 
         protected void dgvUsuarios_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int idUsuario = (int)dgvUsuarios.SelectedDataKey.Values["IdUsuario"];//guardo el idUsuario guardado en session desde el gridViewUsuarios
-            UsuarioNegocio negocio = new UsuarioNegocio();
-            Usuario usuario = negocio.buscarPorId(idUsuario);
-            Session.Add("usuarioModificar", usuario); //guardo el usuario completo en session
-            //Session.Remove("IdUsuario"); //luego de pasar usuario completo, limpio
-            Response.Redirect("FormularioRegistro.aspx", false);
+            try
+            {
+                int idUsuario = (int)dgvUsuarios.SelectedDataKey.Values["IdUsuario"];//guardo el idUsuario guardado en session desde el gridViewUsuarios
+                UsuarioNegocio negocio = new UsuarioNegocio();
+                Usuario usuario = negocio.buscarPorId(idUsuario);
+                Session.Add("usuarioModificar", usuario); //guardo el usuario completo en session
+                                                          //Session.Remove("IdUsuario"); //luego de pasar usuario completo, limpio
+                Response.Redirect("FormularioRegistro.aspx", false);
+
+            }catch(Exception ex)
+            {
+                Session["error"] = ex.Message;
+                Response.Redirect("Error.aspx");
+            }
+            
 
         }
 
@@ -50,23 +68,41 @@ namespace Presentacion
 
         protected void dgvUsuarios_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if(e.Row.RowType == DataControlRowType.DataRow)
+            try
             {
-                bool activo = Convert.ToBoolean(DataBinder.Eval(e.Row.DataItem, "ActivoUsuario"));
-                LinkButton btnActivar = (LinkButton)e.Row.FindControl("btnActivar");
-                LinkButton btnInactivar = (LinkButton)e.Row.FindControl("btnInactivar");
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    Usuario usuarioLogeado = (Usuario)Session["usuario"];
+                    int idUsuarioFila = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "IdUsuario"));
+                    bool activo = Convert.ToBoolean(DataBinder.Eval(e.Row.DataItem, "ActivoUsuario"));
+                    LinkButton btnActivar = (LinkButton)e.Row.FindControl("btnActivar");
+                    LinkButton btnInactivar = (LinkButton)e.Row.FindControl("btnInactivar");
 
-                if (activo)
-                {
-                    btnActivar.Visible = false;
-                    btnInactivar.Visible = true;
-                }
-                else
-                {
-                    btnActivar.Visible = true;
-                    btnInactivar.Visible = false;
+                    if (idUsuarioFila == usuarioLogeado.Id)
+                    {
+                        btnActivar.Visible = false;
+                        btnInactivar.Visible = false;
+                        return; // oculto el boton cuando el usuario logeado es el mismo que el de la fila y corto 
+                    }
+
+                    if (activo) // muestro o no normalmente 
+                    {
+                        btnActivar.Visible = false;
+                        btnInactivar.Visible = true;
+                    }
+                    else
+                    {
+                        btnActivar.Visible = true;
+                        btnInactivar.Visible = false;
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                Session["error"] = ex.Message;
+                Response.Redirect("Error.aspx");
+            }
+           
         }
         protected void inactivarUsuario(int idUsuario)
         {
@@ -80,9 +116,10 @@ namespace Presentacion
                 }
                 negocio.bajaLogica(idUsuario);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Session["error"] = ex.Message;
+                Response.Redirect("Error.aspx");
             }
         }
         protected void activarUsuario(int idUsuario)
@@ -92,26 +129,37 @@ namespace Presentacion
                 UsuarioNegocio negocio = new UsuarioNegocio();
                 negocio.altaLogica(idUsuario);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Session["error"] = ex.Message;
+                Response.Redirect("Error.aspx");
             }
         }
 
         protected void dgvUsuarios_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            
-            int idUsuario = Convert.ToInt32(e.CommandArgument);
-            if(e.CommandName == "Activar")
+            try
             {
-                activarUsuario(idUsuario);
-            }
-            else if(e.CommandName == "Inactivar")
-            {
-                inactivarUsuario(idUsuario);
-            }
-            cargarGrilla();
+                if (e.CommandName == "Select") //si viene desde el btnModificar
+                    return;
 
+                int idUsuario = Convert.ToInt32(e.CommandArgument);
+
+                if (e.CommandName == "Activar")
+                    activarUsuario(idUsuario);
+
+                if (e.CommandName == "Inactivar")
+                    inactivarUsuario(idUsuario);
+
+                cargarGrilla();
+
+            }catch(Exception ex)
+            {
+                Session["error"] = ex.Message;
+                Response.Redirect("Error.aspx");
+            }
+            
+           
         }
     }
 }

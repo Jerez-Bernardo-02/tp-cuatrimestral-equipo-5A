@@ -41,7 +41,6 @@
 
     <div class="mt-4 d-flex justify-content-between">
         <asp:Button ID="btnAgregar" runat="server" Text="Agregar" OnClick="btnAgregar_Click" CssClass="btn btn-primary"/>
-        <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-outline-secondary" />
     </div>
 
 </div>

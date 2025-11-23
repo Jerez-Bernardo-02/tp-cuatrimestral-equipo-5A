@@ -24,14 +24,17 @@ namespace Presentacion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            pnlDatos.Visible = true;
-            pnlUsuario.Visible = true;
-            divMatricula.Visible = false;
+            //pnlDatos.Visible = true; 
+            //pnlUsuario.Visible = true;
+           // divMatricula.Visible = false;
 
             try
             {
                 if (!IsPostBack)
                 {
+                    pnlDatos.Visible = true;
+                    pnlUsuario.Visible = true;
+                    divMatricula.Visible = false;
                     Session.Add("usuarioRegistrar", "Paciente");
                     Usuario usuario = (Usuario)Session["usuarioModificar"] != null ? (Usuario)Session["usuarioModificar"] : null;
 
@@ -44,13 +47,20 @@ namespace Presentacion
                     {
                         mostrarPermisos();
                     }
+                    btnVolverFormulariosAdmiin(usuario);
+                    Usuario usuarioLogueado = (Usuario)Session["usuario"];
+
+                    if (usuario != null && Seguridad.esAdministrador(usuarioLogueado))
+                    {
+                        btnVolver.Visible = true;
+                    }
                 }
 
             }
             catch (Exception ex)
             {
                 Session.Add("Error", ex.ToString());
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Error.aspx",false);
             }
 
             //if (!IsPostBack)
@@ -126,7 +136,27 @@ namespace Presentacion
             //}
 
         }
-        protected void mostrarPermisos()
+        protected void btnVolverFormulariosAdmiin(Usuario usuario)
+        {
+            try
+            {
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+
+                if (usuario != null && Seguridad.esAdministrador(usuarioLogueado))
+                {
+                    btnVolver.Visible = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx",false);
+            }
+            
+        }
+       
+
+protected void mostrarPermisos()
         {
             Usuario usuario = new Usuario();
             usuario = (Usuario)Session["usuario"];
@@ -157,7 +187,7 @@ namespace Presentacion
             catch (Exception ex)
             {
                 Session["error"] = ex;
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Error.aspx",false);
             }
         }
 
@@ -181,8 +211,14 @@ namespace Presentacion
 
             if (Seguridad.esAdministrador(usuario))
             {
+                // El administrador no tiene datos personales
+                pnlDatos.Visible = false;
+
+                // No tiene matrícula
                 divMatricula.Visible = false;
-                divDatosAcceso.Visible = false;
+
+                // Debe ver usuario y contraseña (MUY IMPORTANTE)
+                divDatosAcceso.Visible = true;
             }
 
             cargarCamposUsuario(usuario);
@@ -640,7 +676,7 @@ namespace Presentacion
             catch (Exception ex)
             {
                 Session.Add("Error", ex.ToString());
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Error.aspx",false);
                 return -1;
             }
         }
@@ -676,7 +712,7 @@ namespace Presentacion
             catch (Exception ex)
             {
                 Session.Add("Error", ex.ToString());
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Error.aspx",false);
             }
         }
 
@@ -711,7 +747,7 @@ namespace Presentacion
             catch (Exception ex)
             {
                 Session.Add("Error", ex.ToString());
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Error.aspx",false);
             }
         }
 
@@ -744,7 +780,7 @@ namespace Presentacion
             catch (Exception ex)
             {
                 Session.Add("Error", ex.ToString());
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Error.aspx",false);
             }
         }
 
@@ -786,6 +822,17 @@ namespace Presentacion
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='Login.aspx';}, 3000);", true);
             }
+        }
+
+        protected void btnVolver_Click(object sender, EventArgs e)
+        {
+            Usuario usuario = (Usuario)Session["usuario"];
+            if (usuario.Permiso.Id == 4)
+            {
+                Response.Redirect("AdministradorUsuarios.aspx", false);
+                Session.Remove("usuarioModificar");
+            }
+
         }
 
 

@@ -11,7 +11,6 @@
 
             <div class="table-responsive">
                 <asp:GridView runat="server" ID="dgvUsuarios" AutoGenerateColumns="False" AllowPaging="true" PageSize="10" CssClass="table table-striped align-middle" DataKeyNames="IdUsuario"  OnPageIndexChanging="dgvUsuarios_PageIndexChanging" OnSelectedIndexChanged="dgvUsuarios_SelectedIndexChanged" OnRowDataBound="dgvUsuarios_RowDataBound" OnRowCommand="dgvUsuarios_RowCommand">
-
     <Columns>
 
         <asp:BoundField HeaderText="DNI" DataField="Dni" />
@@ -54,7 +53,6 @@
 
     <div class="mt-4 d-flex justify-content-between">
         <asp:Button ID="btnAgregar" runat="server" Text="Agregar" OnClick="btnAgregar_Click" CssClass="btn btn-primary"/>
-        
     </div>
 
 </div>

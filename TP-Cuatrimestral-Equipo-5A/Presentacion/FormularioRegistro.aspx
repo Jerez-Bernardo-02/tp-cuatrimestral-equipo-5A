@@ -126,6 +126,7 @@
             <div class="col-md-4">
                 <asp:Button Text="Registrarse" ID="BtnRegistrarse" OnClick="BtnRegistrarse_Click" runat="server" class="btn btn-primary" />
                 <%--<asp:Button Text="Inactivar" ID="btnInactivar" OnClick="btnInactivar_Click" runat="server" CssClass="btn btn-warning" />--%>
+                <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary"/>
             </div>
 
             <div class="row mb-3">

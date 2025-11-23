@@ -423,7 +423,7 @@ namespace Presentacion
 
                 agregarHorario(idDiaSemana, txtHoraEntrada, txtHoraSalida, ddlEspecialidad);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Error: pasar ex al lblError cuando se cree o redirigir a erroraspx.
                 throw;

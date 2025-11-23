@@ -21,72 +21,75 @@ namespace Negocio
             List<Persona> lista = new List<Persona>();
             try
             {
+              
                 datos.setearConsulta(@"
-            -- Medicos
-            SELECT
-                M.Id AS IdPersona,
-                M.Nombre AS Nombre,
-                M.Apellido AS Apellido,
-                M.Dni AS Dni,
-                M.Email AS Email,
-                M.Telefono AS Telefono,
-                M.UrlImagen AS UrlImagen,
-                U.Id AS IdUsuario,                 
-                U.Usuario AS UsuarioNombre,
-                U.Activo AS Activo,
-                'Médico' AS Rol
-            FROM Usuarios U
-            INNER JOIN Medicos M ON U.Id = M.IdUsuario
-
-            UNION ALL
-
-            -- Pacientes
-            SELECT
-                P.Id AS IdPersona,
-                P.Nombre AS Nombre,
-                P.Apellido AS Apellido,
-                P.Dni AS Dni,
-                P.Email AS Email,
-                P.Telefono AS Telefono,
-                P.UrlImagen AS UrlImagen,
-                U.Id AS IdUsuario,                 
-                U.Usuario AS UsuarioNombre,
-                U.Activo AS Activo,
+           
+            SELECT --pacientes
+                U.Id AS IdUsuario,
+                Pa.Dni,
+                Pa.Nombre,
+                Pa.Apellido,
+                U.Usuario AS NombreUsuario,
+                U.Activo AS ActivoUsuario,
                 'Paciente' AS Rol
             FROM Usuarios U
-            INNER JOIN Pacientes P ON U.Id = P.IdUsuario
+            INNER JOIN Pacientes Pa ON Pa.IdUsuario = U.Id
 
             UNION ALL
 
-            -- Recepcionistas
-            SELECT
-                R.Id AS IdPersona,
-                R.Nombre AS Nombre,
-                R.Apellido AS Apellido,
-                R.Dni AS Dni,
-                R.Email AS Email,
-                R.Telefono AS Telefono,
-                R.UrlImagen AS UrlImagen,
-                U.Id AS IdUsuario,                 
-                U.Usuario AS UsuarioNombre,
-                U.Activo AS Activo,
+            SELECT --recepcionistas
+                U.Id AS IdUsuario,
+                R.Dni,
+                R.Nombre,
+                R.Apellido,
+                U.Usuario AS NombreUsuario,
+                U.Activo AS ActivoUsuario,
                 'Recepcionista' AS Rol
             FROM Usuarios U
-            INNER JOIN Recepcionistas R ON U.Id = R.IdUsuario;
-        ");
+            INNER JOIN Recepcionistas R ON R.IdUsuario = U.Id
+
+            UNION ALL
+
+            SELECT --medicos
+                U.Id AS IdUsuario,
+                M.Dni,
+                M.Nombre,
+                M.Apellido,
+                U.Usuario AS NombreUsuario,
+                U.Activo AS ActivoUsuario,
+                'Medico' AS Rol
+            FROM Usuarios U
+            INNER JOIN Medicos M ON M.IdUsuario = U.Id
+
+            UNION ALL
+
+            SELECT --administradores
+                U.Id AS IdUsuario,
+                NULL AS Dni,
+                NULL AS Nombre,
+                NULL AS Apellido,
+                U.Usuario AS NombreUsuario,
+                U.Activo AS ActivoUsuario,
+                'Administrador' AS Rol
+            FROM Usuarios U
+            WHERE U.IdPermiso = 4;
+                    ");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
+                   
                     Persona aux = new Persona();
-                    aux.Id = (int)datos.Lector["IdPersona"];
-                    aux.Dni = (string)datos.Lector["Dni"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Apellido = (string)datos.Lector["Apellido"];
                     aux.Usuario = new Usuario();
                     aux.Usuario.Id = (int)datos.Lector["IdUsuario"];
-                    aux.Usuario.NombreUsuario = (string)datos.Lector["UsuarioNombre"];
-                    aux.Usuario.Activo = (bool)datos.Lector["Activo"];
-                    aux.Rol = datos.Lector["Rol"].ToString();
+
+                    aux.Dni = datos.Lector["Dni"] != DBNull.Value ? (string)datos.Lector["Dni"] : "";
+                    aux.Nombre = datos.Lector["Nombre"] != DBNull.Value ? (string)datos.Lector["Nombre"] : "";
+                    aux.Apellido = datos.Lector["Apellido"] != DBNull.Value ? (string)datos.Lector["Apellido"] : "";
+
+                    aux.Usuario.NombreUsuario = (string)datos.Lector["NombreUsuario"];
+                    aux.Usuario.Activo = (bool)datos.Lector["ActivoUsuario"];
+                    aux.Rol = (string)datos.Lector["Rol"];
+
                     lista.Add(aux);
                 }
                 return lista;
