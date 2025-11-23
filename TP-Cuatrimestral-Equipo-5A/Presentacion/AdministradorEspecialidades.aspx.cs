@@ -21,6 +21,7 @@ namespace Presentacion
         {
             try
             {
+                
                 EspecialidadNegocio negocio = new EspecialidadNegocio();
                 dgvEspecialidades.DataSource = negocio.listar();
                 dgvEspecialidades.DataBind();
@@ -47,6 +48,12 @@ namespace Presentacion
         protected void btnVolver_Click(object sender, EventArgs e)
         {
             Response.Redirect("MenuUsuarios.aspx");//Redirigimos al menuUsuario ppal con tarjeta
+        }
+
+        protected void dgvEspecialidades_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvEspecialidades.PageIndex = e.NewPageIndex;
+            cargarGrilla();
         }
     }
 }

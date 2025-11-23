@@ -85,6 +85,7 @@
     <Content Include="RecepcionistaTurnos.aspx" />
     <Content Include="SolicitarTurno.aspx" />
     <Content Include="Web.config" />
+    <Content Include="AdministradorUsuarios.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdministradorEspecialidades.aspx.cs">
@@ -209,6 +210,13 @@
     </Compile>
     <Compile Include="SolicitarTurno.aspx.designer.cs">
       <DependentUpon>SolicitarTurno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdministradorUsuarios.aspx.cs">
+      <DependentUpon>AdministradorUsuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdministradorUsuarios.aspx.designer.cs">
+      <DependentUpon>AdministradorUsuarios.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

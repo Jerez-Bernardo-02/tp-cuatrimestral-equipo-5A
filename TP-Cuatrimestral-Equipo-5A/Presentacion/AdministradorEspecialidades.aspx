@@ -10,7 +10,7 @@
         <div class="card-body">
 
             <div class="table-responsive">
-                <asp:GridView runat="server" ID="dgvEspecialidades" DataKeyNames="Id" AutoGenerateColumns="False" CssClass="table table-striped align-middle" OnSelectedIndexChanged="dgvEspecialidades_SelectedIndexChanged">
+                <asp:GridView runat="server" ID="dgvEspecialidades" DataKeyNames="Id" AutoGenerateColumns="False" CssClass="table table-striped align-middle"  AllowPaging="true" PageSize="10" OnSelectedIndexChanged="dgvEspecialidades_SelectedIndexChanged" OnPageIndexChanging="dgvEspecialidades_PageIndexChanging">
 
                     <Columns>
 

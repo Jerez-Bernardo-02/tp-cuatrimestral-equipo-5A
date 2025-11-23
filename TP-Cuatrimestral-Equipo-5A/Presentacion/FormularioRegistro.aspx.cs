@@ -27,12 +27,12 @@ namespace Presentacion
             pnlDatos.Visible = true;
             pnlUsuario.Visible = true;
             divMatricula.Visible = false;
-            Session.Add("usuarioRegistrar", "Paciente");
 
             try
             {
                 if (!IsPostBack)
                 {
+                    Session.Add("usuarioRegistrar", "Paciente");
                     Usuario usuario = (Usuario)Session["usuarioModificar"] != null ? (Usuario)Session["usuarioModificar"] : null;
 
                     if (usuario != null) // Si hay un usuario para modificar, se traen sus datos de la BD y se cargan en los txt
@@ -295,7 +295,7 @@ namespace Presentacion
 
         protected void BtnRegistrarse_Click(object sender, EventArgs e)
         {
-            Usuario usuarioModificar = (Usuario)Session["usuarioModificar"];
+            Usuario usuarioModificar = (Usuario)Session["usuarioModificar"]; 
 
             try
             {
@@ -323,6 +323,7 @@ namespace Presentacion
                     }
 
                     mostrarResultado(true);
+                    Session.Remove("usuarioModificar");
                     redireccionar();
                     return;
                 }
@@ -613,7 +614,10 @@ namespace Presentacion
                 if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar
                 {
                     usuario.NombreUsuario = txtUsuario.Text;
-                    usuario.Clave = txtContrasenia.Text;
+                    if (txtContrasenia.Text != "")
+                    {
+                        usuario.Clave = txtContrasenia.Text; //si se decide dejar sin cambios es decir txt vacio, no impacta el cambio. caso contrario si
+                    }
                     usuario.Permiso = new Permiso();
                     usuario.Permiso.Id = idPermiso;
                     usuario.Activo = true;
@@ -772,7 +776,7 @@ namespace Presentacion
             }
             else if (Seguridad.esAdministrador(Session["usuario"]))
             {
-                //ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='AdministradorPacientes.aspx'; }, 3000);", true); // # HABILITAR CUANDO SE CREE LA VENTANA DE "AdmininistradorUsuarios"
+                ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='AdministradorUsuarios.aspx'; }, 3000);", true); 
             }
             else if (Seguridad.esPaciente(Session["usuario"]))
             {

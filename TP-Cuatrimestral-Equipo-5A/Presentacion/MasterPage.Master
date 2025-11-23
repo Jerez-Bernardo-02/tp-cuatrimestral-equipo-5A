@@ -33,9 +33,9 @@
                         <a class="nav-link" href="#">Nosotros</a>
                         <!-- REDIRECCIONAR A PAGINA CON INFORMACION DE CONTACTO -->
                         <a class="nav-link" href="#">Contacto</a>
-                        <a class="nav-link" href="MenuAdministrador.aspx">Gestion Medicos</a>
-                        <a class="nav-link" href="AdministradorGestionPersonal.aspx">Gestion Personal</a>
-                        <a class="nav-link" href="AdministradorGestionPacientes.aspx">Gestion Pacientes</a>
+                        <a class="nav-link" href="AdministradorEspecialidades.aspx">Gestión Especialidades</a>
+                        <a class="nav-link" href="AdministradorUsuarios.aspx">Gestión Usuarios</a>
+                        <a class="nav-link" href="MedicoHoarios.aspx">Gestión Horarios Médicos</a>
                         <a class="nav-link" href="#">Configuraciones</a>
                         <a class="nav-link" href="MedicoResumen.aspx">Medicos Resumen</a>
                         <a class="nav-link" href="MedicoHorarios.aspx">Medico Horarios</a>

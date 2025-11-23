@@ -115,7 +115,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
+   
         public List<Usuario> listar()
         { // Listar todos
             AccesoDatos datos = new AccesoDatos();
