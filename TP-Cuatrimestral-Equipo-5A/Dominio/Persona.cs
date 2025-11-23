@@ -19,12 +19,20 @@ namespace Dominio
         public string UrlImagen { get; set; }
 
         public Usuario Usuario { get; set; }
+        public string Rol { get; set; } // agrego esta propiedad para poder guardar los roles para el gridview
 
         public bool ActivoUsuario //propiedad para poder ser accesible en el gridView (checkBoxField Activo)
         {
             get { return Usuario != null && Usuario.Activo; }
         }
-
+        public string NombreUsuario //propiedad para poder ser accesible en el gridView. Porque no bindea propiedades anidadas
+        {
+            get { return Usuario != null ? Usuario.NombreUsuario : ""; }
+        }
+        public int IdUsuario
+        {
+            get { return Usuario != null ? Usuario.Id : 0; }//propiedad para poder ser accesible en el gridView. Porque no bindea propiedades anidadas
+        }
         public string NombreCompleto
         {
             get
@@ -34,5 +42,6 @@ namespace Dominio
 
 
         }
+
     }
 }
