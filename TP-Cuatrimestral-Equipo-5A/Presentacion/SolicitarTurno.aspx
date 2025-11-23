@@ -43,7 +43,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label d-block">Seleccione una fecha</label>
                                 <asp:TextBox ID="txtFecha" runat="server" TextMode="Date"
-                                    CssClass="form-control" AutoPostBack="true" OnTextChanged="txtFecha_TextChanged" >
+                                    CssClass="form-control" AutoPostBack="true" OnTextChanged="txtFecha_TextChanged">
                                 </asp:TextBox>
                             </div>
 
@@ -53,15 +53,19 @@
                                 <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
                                     <asp:Label ID="lblNoHorarios" runat="server" Text="Seleccione un médico y una fecha." Visible="false" />
 
-                                    <asp:Repeater runat="server" ID="repHorarios" OnItemDataBound="repHorarios_ItemDataBound">
-                                        <ItemTemplate>
-                                            <asp:Button ID="btnHorario" runat="server"
-                                                Text="<%# Container.DataItem %>"
-                                                CommandArgument="<%# Container.DataItem %>"
-                                                CommandName="Seleccionar"
-                                                 CssClass="btn btn-outline-info btn-sm m-1"/>
-                                        </ItemTemplate>
-                                    </asp:Repeater>
+                                    <div class="row g-2">
+                                        <asp:Repeater runat="server" ID="repHorarios" OnItemDataBound="repHorarios_ItemDataBound" OnItemCommand="repHorarios_ItemCommand">
+                                            <ItemTemplate>
+                                                <div class="col-md-4">
+                                                    <asp:Button ID="btnHorario" runat="server"
+                                                        Text="<%# Container.DataItem %>"
+                                                        CommandArgument="<%# Container.DataItem %>"
+                                                        CommandName="Seleccionar"
+                                                        CssClass="btn btn-outline-info w-100 btn-sm" />
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -76,10 +80,38 @@
                         <h5 class="card-title">Resumen del Turno</h5>
                         <hr />
 
+                        <div class="mb-2">
+                            <strong>Especialidad:</strong>
+                            <asp:Label ID="lblResumenEspecialidad" runat="server" Text="-" CssClass="d-block text-muted"></asp:Label>
+                        </div>
+
+                        <div class="mb-2">
+                            <strong>Médico:</strong>
+                            <asp:Label ID="lblResumenMedico" runat="server" Text="-" CssClass="d-block text-muted"></asp:Label>
+                        </div>
+
+                        <div class="mb-2">
+                            <strong>Fecha:</strong>
+                            <asp:Label ID="lblResumenFecha" runat="server" Text="-" CssClass="d-block text-muted"></asp:Label>
+                        </div>
+
+                        <div class="mb-3">
+                            <strong>Hora:</strong>
+                            <asp:Label ID="lblResumenHora" runat="server" Text="-" CssClass="d-block text-muted"></asp:Label>
+                        </div>
+
+                        <div class="md-12">
+                            <%-- Botón Confirmar --%>
+                            <asp:Button ID="btnConfirmar" runat="server" Text="Confirmar Turno"
+                                CssClass="btn btn-success btn-lg w-100" Enabled="false"
+                                OnClick="btnConfirmar_Click" />
+                        </div>
+
+                        <%-- Mensajes de éxito y error --%>
+                        <asp:Label ID="lblMensaje" runat="server" CssClass="alert alert-success mt-3 d-block text-center" Visible="false"></asp:Label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </asp:Content>

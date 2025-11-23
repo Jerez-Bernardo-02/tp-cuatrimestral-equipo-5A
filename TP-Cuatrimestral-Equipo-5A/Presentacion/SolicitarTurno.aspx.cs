@@ -11,6 +11,7 @@ namespace Presentacion
 {
     public partial class Turnos1 : System.Web.UI.Page
     {
+        private List<TimeSpan> listaTurnosOcupados = new List<TimeSpan>();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -60,6 +61,20 @@ namespace Presentacion
             Button btnHora = (Button)e.Item.FindControl("btnHorario");
             TimeSpan horaSlot = (TimeSpan)e.Item.DataItem;
 
+            //formato horas y minutos (se quitan los segundos)
+            btnHora.Text = horaSlot.ToString(@"hh\:mm");
+
+
+            //Validacion oturno ocupado.
+            foreach (TimeSpan horario in listaTurnosOcupados)
+            {
+                if (horario == horaSlot) 
+                {
+                    btnHora.Enabled = false;
+                    btnHora.CssClass = "btn btn-secondary w-100 btn-sm";
+                    btnHora.Style.Add("text-decoration", "line-through");
+                }
+            }
 
         }
 
@@ -123,7 +138,7 @@ namespace Presentacion
             }
 
             TurnoNegocio turnoNegocio = new TurnoNegocio();
-            turnoNegocio.listarTurnosOcupadosPorMedico(idMedico, DateTime.Parse(txtFecha.Text));
+            listaTurnosOcupados = turnoNegocio.listarTurnosOcupadosPorMedico(idMedico, DateTime.Parse(txtFecha.Text));
 
             repHorarios.DataSource = turnosDiarios;
             repHorarios.DataBind();
@@ -131,6 +146,48 @@ namespace Presentacion
         private void generarSlotsTurnos()
         {
 
+        }
+
+
+        protected void repHorarios_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "Seleccionar")
+            {
+                string horaSeleccionada = e.CommandArgument.ToString();
+                Session.Add("HoraTurno", horaSeleccionada);
+            }
+
+            lblResumenEspecialidad.Text = ddlEspecialidad.SelectedItem.Text;
+            lblResumenMedico.Text = ddlMedicos.SelectedItem.Text;
+            lblResumenFecha.Text = DateTime.Parse(txtFecha.Text).ToString("dd/MM/yyyy"); //se convierte a datetime, y luego a string con el formato dd/mm/yyyy
+            TimeSpan horaTurno = TimeSpan.Parse(Session["HoraTurno"].ToString()); //Se convierte el object de session a string y luego a timespan
+            lblResumenHora.Text = horaTurno.ToString(@"hh\:mm"); //se convierte el TimeSpan a string con el formato hh/mm (se quitan los segundos).
+        }
+        protected void btnConfirmar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Turno turno = new Turno();
+                turno.Medico = new Medico();
+
+                turno.Medico.Id = int.Parse(ddlMedicos.SelectedValue);
+                turno.Especialidad = new Especialidad();
+                turno.Especialidad.Id = int.Parse(ddlEspecialidad.SelectedValue);
+                TimeSpan horaTurno = TimeSpan.Parse(Session["HoraTurno"].ToString());
+                turno.Fecha = DateTime.Parse(txtFecha.Text).Add(horaTurno); //Se pasa la fecha por un lado y se le agrega la hora.
+                turno.Paciente = new Paciente();
+                turno.Paciente.Id = 1; //CORREGIR POR EL PACIENTE REAL
+                turno.Estado = new Estado();
+                turno.Estado.Id = 1; // Nuevo (corregir el nombre nuevo a pendiente en la base de datos).
+
+                
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
     }
