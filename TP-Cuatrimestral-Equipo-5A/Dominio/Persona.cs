@@ -31,8 +31,14 @@ namespace Dominio
             {
                 return Apellido + ", " + Nombre;
             }
-
-
         }
+        public string NombreYDni
+        {
+            get
+            {
+                return Apellido + ", " + Nombre + " - " + Dni;
+            }
+        }
+
     }
 }

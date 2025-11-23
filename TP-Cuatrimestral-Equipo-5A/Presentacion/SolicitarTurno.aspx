@@ -10,7 +10,15 @@
             <p>Siga los pasos para agendar un nuevo turno.</p>
         </div>
 
-        <div class="row">
+        <%--Seleccion de medico:--%>
+        <div class="col-md-7 mt-2 mb-2">
+            <label class="form-label d-block">Paciente</label>
+            <asp:DropDownList ID="ddlPacientes" runat="server" CssClass="form-select mt-2">
+            </asp:DropDownList>
+        </div>
+
+
+        <div class="row mt-5">
             <%-- COLUMNA IZQUIERDA (Filtros, calendario, hora y horarios disponibles) --%>
             <div class="col-md-7">
                 <div class="card shadow-sm border-0 mb-3">
@@ -51,7 +59,6 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label d-block">Horarios disponibles</label>
                                 <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
-                                    <asp:Label ID="lblNoHorarios" runat="server" Text="Seleccione un médico y una fecha." Visible="false" />
 
                                     <div class="row g-2">
                                         <asp:Repeater runat="server" ID="repHorarios" OnItemDataBound="repHorarios_ItemDataBound" OnItemCommand="repHorarios_ItemCommand">
@@ -68,6 +75,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <asp:Label ID="lblInfoHorarios" runat="server" Text="Seleccione una fecha para ver los horarios disponibles."
+                                CssClass="text-muted"
+                                Visible="true">
+                            </asp:Label>
                         </div>
                     </div>
                 </div>

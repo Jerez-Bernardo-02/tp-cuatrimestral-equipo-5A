@@ -18,18 +18,30 @@ namespace Presentacion
             {
                 CargarEspecialidades();
                 CargarMedicos();
+                CargarPacientes();
             }
             generarSlotsTurnos();
         }
 
+
         protected void ddlEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
         {
             CargarMedicos();
+            lblInfoHorarios.Text = "Seleccione una fecha para ver los horarios disponibles.";
+            lblInfoHorarios.Visible = true;
+            lblInfoHorarios.CssClass = "text-muted";
+
         }
 
         protected void ddlMedicos_SelectedIndexChanged(object sender, EventArgs e)
         {
+            txtFecha.Text = "";
+            repHorarios.DataSource = null;
+            repHorarios.DataBind();
 
+            lblInfoHorarios.Text = "Seleccione una fecha para ver los horarios disponibles.";
+            lblInfoHorarios.Visible = true;
+            lblInfoHorarios.CssClass = "text-muted";
         }
 
         private void CargarEspecialidades()
@@ -40,6 +52,17 @@ namespace Presentacion
             ddlEspecialidad.DataTextField = "Descripcion";
             ddlEspecialidad.DataValueField = "Id";
             ddlEspecialidad.DataBind();
+            ddlEspecialidad.Items.Insert(0, new ListItem(" Seleccione una especialidad", "0"));
+
+        }
+        private void CargarPacientes()
+        {
+            PacienteNegocio pacienteNegocio = new PacienteNegocio();
+            ddlPacientes.DataSource = pacienteNegocio.listar();
+            ddlPacientes.DataTextField = "NombreYDni";
+            ddlPacientes.DataValueField= "Id";
+            ddlPacientes.DataBind();
+            ddlPacientes.Items.Insert(0, new ListItem(" Seleccione un paciente", "0"));
 
         }
 
@@ -52,6 +75,8 @@ namespace Presentacion
             ddlMedicos.DataTextField = "Apellido";
             ddlMedicos.DataValueField = "Id";
             ddlMedicos.DataBind();
+            ddlMedicos.Items.Insert(0, new ListItem(" Seleccione un medico", "0"));
+
 
         }
 
@@ -80,6 +105,7 @@ namespace Presentacion
 
         protected void txtFecha_TextChanged(object sender, EventArgs e)
         {
+            lblInfoHorarios.Visible = false;
             HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
             if (ddlEspecialidad.SelectedValue == "0" || ddlEspecialidad.SelectedValue == "")
             {
@@ -94,7 +120,8 @@ namespace Presentacion
 
             if (string.IsNullOrEmpty(txtFecha.Text))
             {
-                //error.
+                repHorarios.DataSource = null;
+                repHorarios.DataBind();
                 return;
             }
             int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
@@ -104,16 +131,34 @@ namespace Presentacion
             List<TimeSpan> turnosDiarios = new List<TimeSpan>();
             int idDiaSemana = (int)diaSemana.DayOfWeek;
 
+            //Validacion eleccion fecha pasada.
+            if (diaSemana < DateTime.Today)
+            {
+                repHorarios.DataSource = null;
+                repHorarios.DataBind();
+                lblInfoHorarios.Text = "No se pueden reservar turnos en fechas pasadas.";
+                lblInfoHorarios.CssClass = "text-danger";
+                lblInfoHorarios.Visible = true;
+                return;
+            }
+
             if (idDiaSemana == 0)
             {
                 idDiaSemana = 7; //Porque Domingo en DayOfWeek es 0
             }
 
+
+
             List<HorarioMedico> RangoDeHorarios = horarioMedicoNegocio.listarHorariosPorFecha(idMedico, idEspecialidad, idDiaSemana);
 
+            //Validacion si el medico con esa especialidad no tiene horarios asignados en el dia seleccionado:
             if (RangoDeHorarios.Count == 0)
             {
-                //No hay turnos disponibles
+                repHorarios.DataSource = null;
+                repHorarios.DataBind();
+                lblInfoHorarios.Text = "El médico no atiende en la fecha seleccionada.";
+                lblInfoHorarios.CssClass = "text-danger";
+                lblInfoHorarios.Visible = true;
                 return;
             }
 
@@ -180,7 +225,7 @@ namespace Presentacion
                 turno.Estado = new Estado();
                 turno.Estado.Id = 1; // Nuevo (corregir el nombre nuevo a pendiente en la base de datos).
 
-                
+                //agregar turno.
 
             }
             catch (Exception)
