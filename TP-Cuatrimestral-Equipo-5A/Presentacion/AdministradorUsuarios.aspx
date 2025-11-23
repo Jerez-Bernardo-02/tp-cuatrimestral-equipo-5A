@@ -10,7 +10,7 @@
         <div class="card-body">
 
             <div class="table-responsive">
-                <asp:GridView runat="server" ID="dgvUsuarios" AutoGenerateColumns="False" AllowPaging="true" PageSize="10" CssClass="table table-striped align-middle" DataKeyNames="IdUsuario"  OnPageIndexChanging="dgvUsuarios_PageIndexChanging" OnSelectedIndexChanged="dgvUsuarios_SelectedIndexChanged">
+                <asp:GridView runat="server" ID="dgvUsuarios" AutoGenerateColumns="False" AllowPaging="true" PageSize="10" CssClass="table table-striped align-middle" DataKeyNames="IdUsuario"  OnPageIndexChanging="dgvUsuarios_PageIndexChanging" OnSelectedIndexChanged="dgvUsuarios_SelectedIndexChanged" OnRowDataBound="dgvUsuarios_RowDataBound" OnRowCommand="dgvUsuarios_RowCommand">
 
     <Columns>
 
@@ -26,6 +26,20 @@
                 <asp:LinkButton runat="server" ID="lnkBtnModificarDatos" CssClass="btn btn-warning btn-sm d-flex align-items-center justify-content-center gap-1" CommandName="Select" ToolTip="Modificar datos">
                     <i class="bi bi-pencil-fill"></i> 
                      Editar
+                </asp:LinkButton>
+            </ItemTemplate>
+        </asp:TemplateField>
+        <asp:TemplateField HeaderText="Alta/Baja">
+            <ItemTemplate>
+
+        <!-- Botón INACTIVAR (solo visible si está ACTIVO) -->
+                <asp:LinkButton ID="btnInactivar" runat="server" CommandName="Inactivar" CommandArgument='<%# Eval("IdUsuario") %>' Visible='<%# (bool)Eval("ActivoUsuario") %>' CssClass="btn btn-outline-danger btn-sm" ToolTip="Inactivar">
+                    <i class="bi bi-person-exclamation"></i>
+                </asp:LinkButton>
+
+        <!-- Botón ACTIVAR (solo visible si está INACTIVO) -->
+                <asp:LinkButton ID="btnActivar" runat="server" CommandName="Activar" CommandArgument='<%# Eval("IdUsuario") %>' Visible='<%# !(bool)Eval("ActivoUsuario") %>' CssClass="btn btn-outline-success btn-sm" ToolTip="Activar">
+                    <i class="bi bi-person-fill-check"></i>
                 </asp:LinkButton>
             </ItemTemplate>
         </asp:TemplateField>
