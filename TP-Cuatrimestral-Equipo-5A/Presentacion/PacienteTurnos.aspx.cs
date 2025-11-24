@@ -42,10 +42,10 @@ namespace Presentacion
 
             TurnoNegocio negocio = new TurnoNegocio();
 
-            repProximosTurnos.DataSource = negocio.listaTurnosPorPaciente(idPaciente).FindAll(t => t.Estado.Descripcion == "Nuevo" || t.Estado.Descripcion == "Reprogramado");
+            repProximosTurnos.DataSource = negocio.listaTurnosPorPaciente(idPaciente).FindAll(t => t.Estado.Descripcion == "Pendiente" || t.Estado.Descripcion == "Reprogramado");
             repProximosTurnos.DataBind();
 
-            dgvTurnosPasados.DataSource = negocio.listaTurnosPorPaciente(idPaciente).FindAll(t => t.Estado.Descripcion == "Cerrado" || t.Estado.Descripcion == "No Asistió");
+            dgvTurnosPasados.DataSource = negocio.listaTurnosPorPaciente(idPaciente).FindAll(t => t.Estado.Descripcion == "Finalizado" || t.Estado.Descripcion == "No Asistió");
             dgvTurnosPasados.DataBind();
 
             dgvTurnosCancelados.DataSource = negocio.listaTurnosPorPaciente(idPaciente).FindAll(t => t.Estado.Descripcion == "Cancelado");
