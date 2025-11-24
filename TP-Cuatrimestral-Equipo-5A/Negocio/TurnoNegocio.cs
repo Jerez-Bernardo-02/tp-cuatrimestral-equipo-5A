@@ -18,7 +18,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion  FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id= T.IdEspecialidad INNER JOIN Estados E ON E.Id= T.IdEstado INNER JOIN Pacientes P ON P.Id= T.IdPaciente  WHERE T.IdMedico = @idMedico ORDER BY T.Fecha ASC");
+                datos.setearConsulta("SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion  FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id= T.IdEspecialidad INNER JOIN Estados E ON E.Id= T.IdEstado INNER JOIN Pacientes P ON P.Id= T.IdPaciente  WHERE T.IdMedico = @idMedico AND CAST(T.Fecha AS date) = CAST(GETDATE() AS date) ORDER BY T.Fecha ASC");
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
@@ -125,13 +125,13 @@ namespace Negocio
             {
                 string consulta = "SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.FechaNacimiento AS FnacPaciente, P.Email AS EmailPaciente, P.Telefono AS TelefonoPaciente, P.Dni AS DniPaciente, P.UrlImagen AS UrlImagenPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id = T.IdEspecialidad INNER JOIN Estados E ON E.Id = T.IdEstado INNER JOIN Pacientes P ON P.Id = T.IdPaciente  WHERE T.IdMedico = @idMedico";
 
-                if (!string.IsNullOrEmpty(filtroNombre) )
+                if (!string.IsNullOrEmpty(filtroNombre))
                 {
                     consulta += " AND (P.Nombre LIKE '%' + @filtroNombre + '%')";
                     datos.setearParametro("@filtroNombre", filtroNombre);
                 }
-                
-                if (!string.IsNullOrEmpty (filtroApellido))
+
+                if (!string.IsNullOrEmpty(filtroApellido))
                 {
                     consulta += " AND (P.Apellido LIKE '%' + @filtroApellido + '%')";
                     datos.setearParametro("@filtroApellido", filtroApellido);
@@ -199,7 +199,7 @@ namespace Negocio
             }
         }
 
-        public List<Turno> listaFiltrada(string dni = "", DateTime ? fecha = null, int idEstado = 0, int idEspecialidad = 0)
+        public List<Turno> listaFiltrada(string dni = "", DateTime? fecha = null, int idEstado = 0, int idEspecialidad = 0)
         {
             List<Turno> lista = new List<Turno>();
             AccesoDatos datos = new AccesoDatos();
@@ -232,7 +232,7 @@ namespace Negocio
                     datos.setearParametro("@idEspecialidad", idEspecialidad);
                 }
 
-                consulta += " ORDER BY T.Fecha ASC";
+                consulta += " ORDER BY T.Fecha DESC";
 
                 datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
@@ -338,6 +338,165 @@ namespace Negocio
             }
         }
 
+        public void cancelarTurno(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
 
+            try
+            {
+                datos.setearConsulta("UPDATE Turnos SET IdEstado = 3 WHERE Id = @id");
+                datos.setearParametro("@id", id);
+                datos.ejecutarLectura();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public List<TimeSpan> ListarTurnosDiarios(int idMedico, int idEspecialidad, DateTime fecha)
+        {
+            List<TimeSpan> turnosDiarios = new List<TimeSpan>();
+            int duracionTurno = 30; // turnos de 30 minutos.
+
+            int idDiaSemana = (int)fecha.DayOfWeek;
+            if (idDiaSemana == 0)
+            {
+                idDiaSemana = 7; //Ajuste: Domingo en DayOfWeek es 0, lo forzamos a 7 para que coincida con la base de datos.
+            }
+
+            //Obtener rangos horarios del medico
+            HorarioMedicoNegocio horarioNegocio = new HorarioMedicoNegocio();
+            List<HorarioMedico> RangoDeHorarios = horarioNegocio.listarHorariosPorFecha(idMedico, idEspecialidad, idDiaSemana);
+
+            // Si no trabaja, devolvemos lista vacía
+            if (RangoDeHorarios.Count == 0)
+            {
+                return turnosDiarios;
+            }
+
+            foreach (HorarioMedico horarioMedico in RangoDeHorarios) //Itera por la cantidad de horarios distintos en un mismo dia de la semana
+            {
+                TimeSpan horaComienzo = horarioMedico.HoraEntrada;
+                TimeSpan horaSalida = horarioMedico.HoraSalida;
+
+                //Antes de la iteracion, la hora actual será la misma que la del comienzo del horario
+                TimeSpan horaActual = horaComienzo;
+                while (horaActual < horaSalida)
+                {
+                    //Se verifica que entre un nuevo turno de 30 minutos en el rango horario.
+                    if (horaActual.Add(TimeSpan.FromMinutes(duracionTurno)) <= horaSalida)
+                    {
+                        //Se agrega la hora actual como un horario de turno a la lista de timespans.
+                        turnosDiarios.Add(horaActual);
+                    }
+                    //Se le agrega 30 minutos a la hora actual.
+                    horaActual = horaActual.Add(TimeSpan.FromMinutes(duracionTurno));
+                }
+            }
+            return turnosDiarios;
+        }
+        public List<TimeSpan> ListarTurnosOcupadosPorMedico(int idMedico, DateTime fecha)
+        {
+            List<TimeSpan> lista = new List<TimeSpan>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT CAST(Fecha AS time) as Hora FROM Turnos WHERE IDMedico = @idMedico AND CAST(Fecha AS date) = @fecha AND IdEstado = 1;");
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@fecha", fecha);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    TimeSpan horarioOcupado = (TimeSpan)datos.Lector["Hora"];
+                    lista.Add(horarioOcupado);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
+
+        public void AgregarTurno(Turno nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("INSERT INTO Turnos (Fecha, Observaciones, IdPaciente, IdEstado, IdMedico, IdEspecialidad) Values (@fecha, @observaciones, @idPaciente, @idEstado, @idMedico, @idEspecialidad)");
+                datos.setearParametro("@fecha", nuevo.Fecha);
+                datos.setearParametro("@observaciones", (object)nuevo.Observaciones ?? DBNull.Value);
+                datos.setearParametro("@idPaciente", nuevo.Paciente.Id);
+                datos.setearParametro("@idEstado",nuevo.Estado.Id);
+                datos.setearParametro("@idMedico", nuevo.Medico.Id);
+                datos.setearParametro("@idEspecialidad", nuevo.Especialidad.Id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public DateTime buscarProximaFechaDisponible(int idMedico, int idEsp, DateTime fechaBase)
+        {
+            HorarioMedicoNegocio horarioNegocio = new HorarioMedicoNegocio();
+
+            //Obtengo los dias laborales del medico seleccionado
+            List<int> diasLaborales = horarioNegocio.listarDiasLaborales(idMedico, idEsp);
+
+            //Validacion si tiene horarios asignados
+            if (diasLaborales.Count == 0)
+            {
+                return DateTime.MinValue;
+            }
+            //Validacion fecha base seleccionada: Si es menor a un dia actual, la ignoramos y forzamos la fecha actual.
+            if (fechaBase < DateTime.Today)
+            {
+                fechaBase = DateTime.Today;
+            }
+
+            DateTime fechaCursor = fechaBase;
+
+            // Buscamos turnos en los proximos 365 días para poner un límite.
+            for (int i = 0; i < 365; i++)
+            {
+                fechaCursor = fechaCursor.AddDays(1); //Se agrega un dia al cursor.
+
+                // Convertimos la fecha del cursor a dia de semana, si es domingo lo forzamos para que sea 7.
+                int diaSemanaCursor = (int)fechaCursor.DayOfWeek;
+                if(diaSemanaCursor == 0)
+                {
+                    diaSemanaCursor = 7; //Ajuste: Domingo en DayOfWeek es 0, lo forzamos a 7 para que coincida con la base de datos.
+                }
+
+                //Si el medico trabaja en el dia buscado, retornamos esa fecha.
+                if (diasLaborales.Contains(diaSemanaCursor))
+                {
+                    // No se valida si ese dia todos los slots estan ocupados.
+                    return fechaCursor;
+                }
+            }
+
+            // Si llegamos aca, no encontramos nada en 2 meses.
+            return DateTime.MinValue;
+        }
     }
 }

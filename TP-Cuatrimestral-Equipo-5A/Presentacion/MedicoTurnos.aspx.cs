@@ -14,9 +14,26 @@ namespace Presentacion
         private Medico medicoLogueado;
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["usuario"] == null)
+            {
+                Response.Redirect("Login.aspx");
+                return;
+            }
+
+            if (Session["medico"] == null)
+            {
+                // Si no tengo el medico en session, lo busco en la base de datos una vez.
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+                MedicoNegocio medicoNegocio = new MedicoNegocio();
+
+                // Lo busco y lo guardo en la Session para no buscarlo nunca más
+                Session["medico"] = medicoNegocio.buscarPorIdUsuario(usuarioLogueado.Id);
+            }
             medicoLogueado = (Medico)Session["medico"];
+
             if(medicoLogueado == null )
             {
+                Session["error"] = "No tiene perfil de médico asignado.";
                 Response.Redirect("Error.aspx");
                 return;
             }
