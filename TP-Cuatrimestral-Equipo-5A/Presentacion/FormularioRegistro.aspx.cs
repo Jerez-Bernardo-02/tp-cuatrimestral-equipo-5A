@@ -27,13 +27,14 @@ namespace Presentacion
             pnlDatos.Visible = true; 
             pnlUsuario.Visible = true;
             divMatricula.Visible = false;
-
+           
+           // Session.Add("usuarioRegistrar", "Paciente");
             try
             {
                 if (!IsPostBack)
                 {
-             
-                    Session.Add("usuarioRegistrar", "Paciente");
+
+                    Session["usuarioRegistrar"] = "Paciente";
                     Usuario usuario = (Usuario)Session["usuarioModificar"] != null ? (Usuario)Session["usuarioModificar"] : null;
                   
                     if (usuario != null) // Si hay un usuario para modificar, se traen sus datos de la BD y se cargan en los txt
@@ -46,9 +47,9 @@ namespace Presentacion
                         mostrarPermisos();
                     }
 
-                    btnVolverFormulariosAdmiin(usuario);
+                    btnVolverFormulariosAdmin();
+                   
                 }
-
             }
             catch (Exception ex)
             {
@@ -57,16 +58,55 @@ namespace Presentacion
             }
 
         }
-        protected void btnVolverFormulariosAdmiin(Usuario usuario)
+        private void aplicarVisibilidadContrasenia()
+        {
+            Usuario usuarioLogueado = (Usuario)Session["usuario"];
+            Usuario usuarioModificar = (Usuario)Session["usuarioModificar"];
+            string tipoRegistrar = (string)Session["usuarioRegistrar"];
+
+            // al modificar
+            if (usuarioModificar != null)
+            {
+                lblContrasenia.Visible = true;
+                txtContrasenia.Visible = true;
+                return;
+            }
+
+            // No admin: ingresa contraseña manual
+            if (!Seguridad.esAdministrador(usuarioLogueado))
+            {
+                lblContrasenia.Visible = true;
+                txtContrasenia.Visible = true;
+                return;
+            }
+
+            // admin en modo alta: autogenera y manda por mail la contraseña. Excepto para otro admin, ya que no hay mail para enviarla.
+            if (tipoRegistrar == "Paciente" || tipoRegistrar == "Medico" || tipoRegistrar == "Recepcionista")
+            {
+                lblContrasenia.Visible = false;
+                txtContrasenia.Visible = false;
+            }
+            else if(tipoRegistrar == "Administrador")
+            {
+                // para carga manual de contraseña de nuevo admin
+                lblContrasenia.Visible = true;
+                txtContrasenia.Visible = true;
+            }
+        }
+
+
+
+        protected void btnVolverFormulariosAdmin()
         {
             try
             {
                 Usuario usuarioLogueado = (Usuario)Session["usuario"];
 
-                if (usuario != null && Seguridad.esAdministrador(usuarioLogueado))
+                if (usuarioLogueado != null && Seguridad.esAdministrador(usuarioLogueado))
                 {
                     btnVolver.Visible = true;
                 }
+     
             }
             catch(Exception ex)
             {
@@ -221,6 +261,7 @@ protected void mostrarPermisos()
                     pnlResultado.Visible = true;
                     break;
             }
+            aplicarVisibilidadContrasenia();
         }
 
         protected void BtnRegistrarse_Click(object sender, EventArgs e)
@@ -303,6 +344,9 @@ protected void mostrarPermisos()
 
             try
             {
+                Usuario usuarioLogeado = new Usuario();
+                usuarioLogeado = (Usuario)Session["usuario"];
+                string tipoUsuario = (string)Session["usuarioRegistrar"];
                 if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar
                 {
                     usuario.NombreUsuario = txtUsuario.Text;
@@ -321,11 +365,22 @@ protected void mostrarPermisos()
                 {
                     Usuario nuevo = new Usuario();
                     nuevo.NombreUsuario = txtUsuario.Text;
-                    nuevo.Clave = txtContrasenia.Text;
                     nuevo.Activo = true;
                     nuevo.Permiso = new Permiso() { Id = idPermiso };
-                   
-
+                    if (usuarioLogeado.Permiso.Id ==4 && tipoUsuario != "Administrador")
+                    {
+                        nuevo.Clave = generarClave(10);
+                    }
+                    else
+                    {
+                        nuevo.Clave = txtContrasenia.Text;
+                    }
+                    /*Usuario nuevo = new Usuario();
+                    nuevo.NombreUsuario = txtUsuario.Text;
+                    nuevo.Clave = txtContrasenia.Text;
+                    nuevo.Activo = true;
+                    nuevo.Permiso = new Permiso() { Id = idPermiso };*/
+                 
                     int id = negocio.agregar(nuevo);
                     Session.Add("UsuarioRegistrado", nuevo);
                     return id;
@@ -338,6 +393,14 @@ protected void mostrarPermisos()
                 return -1;
             }
         }
+        protected static string generarClave(int longitud = 10) // metodo para autogenerar claves al azar
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            Random random = new Random();
+            return new string(Enumerable.Repeat(chars, longitud)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
 
 
         protected void guardarPaciente(Usuario usuario = null)
@@ -369,7 +432,7 @@ protected void mostrarPermisos()
                     usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
                     string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregarPaciente(paciente);
-                    envioEmailNuevoRegistro(paciente.Nombre, paciente.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, paciente.Email);
+                    envioEmailNuevoRegistro(paciente.Nombre, paciente.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, paciente.Email, usuarioRegistrado.Clave);
                     Session.Remove("UsuarioRegistrado");
                 }
             }
@@ -409,7 +472,7 @@ protected void mostrarPermisos()
                     usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
                     string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregarMedico(medico);
-                    envioEmailNuevoRegistro(medico.Nombre, medico.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, medico.Email);
+                    envioEmailNuevoRegistro(medico.Nombre, medico.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, medico.Email, usuarioRegistrado.Clave);
                     Session.Remove("UsuarioRegistrado");
                 }
             }
@@ -447,7 +510,7 @@ protected void mostrarPermisos()
                     usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
                     string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregar(recepcionista);
-                    envioEmailNuevoRegistro(recepcionista.Nombre, recepcionista.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, recepcionista.Email);
+                    envioEmailNuevoRegistro(recepcionista.Nombre, recepcionista.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, recepcionista.Email, usuarioRegistrado.Clave);
                     Session.Remove("UsuarioRegistrado");
                 }
             }
@@ -457,7 +520,7 @@ protected void mostrarPermisos()
                 Response.Redirect("Error.aspx",false);
             }
         }
-        protected void envioEmailNuevoRegistro(string nombreUsuario, string apellidoUsuario, string tipoUsuario, string NombreUsuario, string emailUsuario)
+        protected void envioEmailNuevoRegistro(string nombreUsuario, string apellidoUsuario, string tipoUsuario, string NombreUsuario, string emailUsuario, string claveUsuario)
         {
             try
             {
@@ -472,7 +535,7 @@ protected void mostrarPermisos()
                             <b>{NombreUsuario}</b>
                           </p>
                           <p>Tu contraseña es:</p>
-                          <p style='font-size:20px; font-weight:bold; text-align:center; margin:15px 0;'>1234</p>
+                          <p style='font-size:20px; font-weight:bold; text-align:center; margin:15px 0;'>{claveUsuario} </p>
                           <p style='text-align:center;'>Ingresa y actualízala por una nueva contraseña.</p>
                           <hr style='border:none; border-top:1px solid #eee; margin:20px 0;' />
                           <p style='font-size:12px; text-align:center;'>

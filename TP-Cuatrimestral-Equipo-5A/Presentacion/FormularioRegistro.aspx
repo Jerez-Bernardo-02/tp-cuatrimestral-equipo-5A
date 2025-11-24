@@ -87,7 +87,7 @@
 
             <div class="row mb-3" id="divMatricula" runat="server" visible="false">
                 <div class="col-md-6">
-                    <label for="txtMatricula" class="form-label">Matricula</label>
+                    <label runat="server" id="lblMatricula" for="txtMatricula" class="form-label">Matricula</label>
 
                     <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="Matricula"></asp:TextBox>
                     <!--<asp:RequiredFieldValidator ID="rfvMatricula" runat="server" ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria para médicos." ForeColor="Red" Enabled="false" />
@@ -114,7 +114,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="txtContrasenia" class="form-label">Contraseña</label>
+                        <label runat="server" ID="lblContrasenia" for="txtContrasenia" class="form-label">Contraseña</label>
                         <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" placeholder="Contraseña"></asp:TextBox>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
             <div class="col-md-4">
                 <asp:Button Text="Registrarse" ID="BtnRegistrarse" OnClick="BtnRegistrarse_Click" runat="server" class="btn btn-primary" />
                 <%--<asp:Button Text="Inactivar" ID="btnInactivar" OnClick="btnInactivar_Click" runat="server" CssClass="btn btn-warning" />--%>
-                <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary"/>
+                <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary" Visible="false"/>
             </div>
 
             <div class="row mb-3">
