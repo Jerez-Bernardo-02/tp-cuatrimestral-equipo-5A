@@ -196,5 +196,41 @@ namespace Negocio
             }
 
         }
+
+        public HorarioMedico buscarHorarioMedicoPorId(int idHorarioMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT HPM.Id, HPM.IdDiaSemana, ds.Descripcion AS DiaSemana, HPM.HoraEntrada, HPM.HoraSalida, HPM.IdMedico, HPM.IdEspecialidad FROM HorariosPorMedicos HPM INNER JOIN DiasSemana DS ON IdDiaSemana = DS.Id WHERE HPM.Id = @idHorarioMedico;");
+                datos.setearParametro("@idHorarioMedico", idHorarioMedico);
+                datos.ejecutarLectura();
+                HorarioMedico nuevo = null;
+                while (datos.Lector.Read())
+                {
+                    nuevo = new HorarioMedico();
+                    nuevo.Id = (int)datos.Lector["Id"];
+                    nuevo.Dia = new DiaDeSemana();
+                    nuevo.Dia.Id = (int)datos.Lector["IdDiaSemana"];
+                    nuevo.Dia.Descripcion = (string)datos.Lector["DiaSemana"];
+                    nuevo.HoraEntrada = (TimeSpan)datos.Lector["HoraEntrada"];
+                    nuevo.HoraSalida = (TimeSpan)datos.Lector["HoraSalida"];
+                    nuevo.Medico = new Medico();
+                    nuevo.Medico.Id = (int)datos.Lector["IdMedico"];
+                    nuevo.Especialidad = new Especialidad();
+                    nuevo.Especialidad.Id = (int)datos.Lector["IdEspecialidad"];
+                }
+                return nuevo;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
