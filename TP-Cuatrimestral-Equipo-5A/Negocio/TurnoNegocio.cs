@@ -338,6 +338,25 @@ namespace Negocio
             }
         }
 
+        public void cancelarTurno(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
 
+            try
+            {
+                datos.setearConsulta("UPDATE Turnos SET IdEstado = 3 WHERE Id = @id");
+                datos.setearParametro("@id", id);
+                datos.ejecutarLectura();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
     }
 }
