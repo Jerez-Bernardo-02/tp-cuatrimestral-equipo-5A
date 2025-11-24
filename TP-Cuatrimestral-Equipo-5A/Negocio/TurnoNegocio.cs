@@ -232,7 +232,7 @@ namespace Negocio
                     datos.setearParametro("@idEspecialidad", idEspecialidad);
                 }
 
-                consulta += " ORDER BY T.Fecha ASC";
+                consulta += " ORDER BY T.Fecha DESC";
 
                 datos.setearConsulta(consulta);
                 datos.ejecutarLectura();

@@ -12,32 +12,32 @@ namespace Presentacion
     public partial class RecepcionistaTurnos : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
-        {
+        { 
             if (!IsPostBack)
             {
                 CargarFiltros();
 
                 TurnoNegocio negocio = new TurnoNegocio();
-                dgvTurnos.DataSource = negocio.listar();
+                Session.Add("listaTurnos", negocio.listaFiltrada());
+                dgvTurnos.DataSource = Session["listaTurnos"];
                 dgvTurnos.DataBind();
             }
         }
 
         private void CargarFiltros()
         {
-            EstadoNegocio estadoNegocio = new EstadoNegocio();
-
-            ddlEstado.DataSource = estadoNegocio.Listar();
-            ddlEstado.DataTextField = "Descripcion";
-            ddlEstado.DataValueField = "Id";
-            ddlEstado.DataBind();
-
             EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
 
             ddlEspecialidad.DataSource = especialidadNegocio.listar();
             ddlEspecialidad.DataTextField = "Descripcion";
             ddlEspecialidad.DataValueField = "Id";
             ddlEspecialidad.DataBind();
+            ddlEspecialidad.Items.Insert(0, new ListItem("Seleccione una Especialidad", "0"));
+        }
+
+        protected void btnNuevoPaciente_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("FormularioRegistro.aspx");
         }
 
         protected void btnNuevoTurno_Click(object sender, EventArgs e)
@@ -52,7 +52,9 @@ namespace Presentacion
 
         protected void dgvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-
+            dgvTurnos.DataSource = Session["listaTurnos"];
+            dgvTurnos.PageIndex = e.NewPageIndex;
+            dgvTurnos.DataBind();
         }
 
         protected void btnFiltrar_Click(object sender, EventArgs e)
@@ -65,26 +67,14 @@ namespace Presentacion
             }
 
             string filtroDni = txtDni.Text.Trim();
-            int idEstado = int.Parse(ddlEstado.SelectedValue);
             int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
 
             TurnoNegocio negocio = new TurnoNegocio();
 
-            List<Turno> listaFiltrada = negocio.listaFiltrada(filtroDni, filtroFecha, idEstado, idEspecialidad);
+            List<Turno> listaFiltrada = negocio.listaFiltrada(filtroDni, filtroFecha, idEspecialidad);
 
             dgvTurnos.DataSource = listaFiltrada;
             dgvTurnos.DataBind();
-        }
-
-        protected void btnVolver_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("MenuUsuarios.aspx");
-        }
-    
-        protected void btnNuevoPaciente_Click(object sender, EventArgs e)
-        {
-            Session.Add("usuarioRegistrar", "Paciente");
-            Response.Redirect("FormularioRegistro.aspx");
         }
     }
 }
