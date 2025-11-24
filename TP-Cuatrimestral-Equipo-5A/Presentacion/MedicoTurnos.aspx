@@ -9,7 +9,7 @@
 
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
 
                 <%--Fila de filtros--%>
                 <div class="row mt-4 ms-3">
