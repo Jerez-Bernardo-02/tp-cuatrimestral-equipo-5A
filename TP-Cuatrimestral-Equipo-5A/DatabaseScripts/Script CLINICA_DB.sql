@@ -145,11 +145,11 @@ GO
 
 INSERT INTO Estados (Descripcion)
 VALUES 
-('Nuevo'),
+('Pendiente'),
 ('Reprogramado'),
 ('Cancelado'),
 ('No Asistió'),
-('Cerrado');
+('Finalizado');
 GO
 
 INSERT INTO Especialidades (Descripcion)
