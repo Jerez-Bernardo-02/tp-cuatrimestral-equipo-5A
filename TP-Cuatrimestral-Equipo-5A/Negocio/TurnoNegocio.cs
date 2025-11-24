@@ -430,6 +430,49 @@ namespace Negocio
 
         }
 
+        public bool medicoConTurnosPendientes(int idMedico, int? idEspecialidad = null)
+        {  // int= idEspecialidad = null permite poner ese parametro como opcional, si se llama al metodo sin parametros se setea null por defecto.
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND IdEstado = 1 "; //Estado 1 = Pendiente
+
+                if (idEspecialidad != null)
+                {
+                    consulta += " AND IdEspecialidad = @idEspecialidad";
+                }
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idMedico", idMedico);
+                if (idEspecialidad != null)
+                {
+                    datos.setearParametro("@idEspecialidad", idEspecialidad);
+                }
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector["contador"];
+                    //Si lee algun dato y encontró registros que coinciden con el filtro y el medico tiene turnos pendientes, retorna true.
+                    if (cantidad > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
+
+
         public void AgregarTurno(Turno nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
