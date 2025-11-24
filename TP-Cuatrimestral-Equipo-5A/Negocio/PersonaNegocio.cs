@@ -103,6 +103,76 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public Persona BuscarPorIdUsuario(int idUsuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                SELECT TOP 1
+	                p.Nombre,
+	                p.Apellido,
+	                p.Dni,
+	                p.Email,
+	                p.Telefono,
+	                p.FechaNacimiento
+                FROM Pacientes p
+                WHERE p.IdUsuario = @idUsuario
+
+                UNION ALL
+
+                SELECT TOP 1
+	                m.Nombre,
+	                m.Apellido,
+	                m.Dni,
+	                m.Email,
+	                m.Telefono,
+	                m.FechaNacimiento
+                FROM Medicos m
+                WHERE m.IdUsuario = @idUsuario
+
+                UNION ALL
+
+                SELECT TOP 1
+	                r.Nombre,
+	                r.Apellido,
+	                r.Dni,
+	                r.Email,
+	                r.Telefono,
+	                r.FechaNacimiento
+                FROM Recepcionistas r
+                WHERE r.IdUsuario = @idUsuario
+        ");
+
+                datos.setearParametro("@idUsuario", idUsuario);
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    Persona persona = new Persona();
+                    persona.Nombre = (string)datos.Lector["Nombre"];
+                    persona.Apellido = (string)datos.Lector["Apellido"];
+                    persona.Dni = (string)datos.Lector["Dni"];
+                    persona.Email = (string)datos.Lector["Email"];
+                    persona.Telefono = (string)datos.Lector["Telefono"];
+                    persona.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+
+                    return persona;
+                }
+
+                return null; // No encontrado
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
 
         public bool ValidarDatosPorPermiso(Usuario usuario, string email, string documento, string matricula) //metodo para validar si cualquiera de los 3 tipos de usuarios se encuentra registrado: medico, paciente, recepcionista

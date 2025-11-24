@@ -57,6 +57,8 @@ namespace Presentacion
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
+            Session.Remove("usuarioModificar");   
+            Session.Remove("claveModificada");
             Response.Redirect("FormularioRegistro.aspx", false);// Redirigimos al formulario de registro
         }
 

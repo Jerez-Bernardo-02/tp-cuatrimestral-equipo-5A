@@ -40,6 +40,7 @@ namespace Presentacion
                     if (usuario != null) // Si hay un usuario para modificar, se traen sus datos de la BD y se cargan en los txt
                     {
                         cargarFormulario(usuario);
+                        aplicarVisibilidadContrasenia();
                         ddlTipoPermiso.Visible = false;
                     }
                     else
@@ -66,9 +67,22 @@ namespace Presentacion
 
             // al modificar
             if (usuarioModificar != null)
-            {
+            { 
                 lblContrasenia.Visible = true;
                 txtContrasenia.Visible = true;
+                // Si admin modifica a un no-admin → permitir generar
+                if (Seguridad.esAdministrador(usuarioLogueado) &&
+                    !Seguridad.esAdministrador(usuarioModificar))
+                {
+                    btnGenerarClave.Visible = true;
+                    lblContrasenia.Visible = false;
+                    txtContrasenia.Visible = false;
+                }
+                else
+                {
+                    btnGenerarClave.Visible = false;
+                }
+
                 return;
             }
 
@@ -292,7 +306,7 @@ protected void mostrarPermisos()
                     {
                         mostrarResultado(false);
                     }
-
+                    
                     mostrarResultado(true);
                     Session.Remove("usuarioModificar");
                     redireccionar();
@@ -347,10 +361,17 @@ protected void mostrarPermisos()
                 Usuario usuarioLogeado = new Usuario();
                 usuarioLogeado = (Usuario)Session["usuario"];
                 string tipoUsuario = (string)Session["usuarioRegistrar"];
+                string claveModificada = (string)Session["claveModificada"];
+
+
                 if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar
                 {
                     usuario.NombreUsuario = txtUsuario.Text;
-                    if (txtContrasenia.Text != "")
+                    if(claveModificada != null && usuarioLogeado.Permiso.Id ==4)
+                    {
+                        usuario.Clave = claveModificada;
+                    }
+                    else if (txtContrasenia.Text != "")
                     {
                         usuario.Clave = txtContrasenia.Text; //si se decide dejar sin cambios es decir txt vacio, no impacta el cambio. caso contrario si
                     }
@@ -359,6 +380,14 @@ protected void mostrarPermisos()
                     usuario.Activo = true;
 
                     negocio.modificar(usuario);
+                    if (claveModificada != null)
+                    {
+                        PersonaNegocio personaNegocio = new PersonaNegocio();
+                        Persona persona = personaNegocio.BuscarPorIdUsuario(usuario.Id);
+
+                        envioEmailCambioClave(persona.Nombre, persona.Apellido, usuario.NombreUsuario, persona.Email, claveModificada);
+                    }
+                    Session.Remove("claveModificada");
                     return usuario.Id;
                 }
                 else
@@ -385,6 +414,7 @@ protected void mostrarPermisos()
                     Session.Add("UsuarioRegistrado", nuevo);
                     return id;
                 }
+
             }
             catch (Exception ex)
             {
@@ -555,6 +585,32 @@ protected void mostrarPermisos()
                     return;
             }
         }
+        protected void envioEmailCambioClave(string nombre, string apellido, string usuarioNombre, string email, string nuevaClave)
+        {
+            try
+            {
+                EmailService emailService = new EmailService();
+                string cuerpo = $@"
+            <html>
+              <body style='font-family: Arial;'>
+                <h2>Hola {nombre} {apellido},</h2>
+                <p>Un administrador ha actualizado tu contraseña.</p>
+                <p>Tu usuario es: <b>{usuarioNombre}</b></p>
+                <p>Tu nueva contraseña es:</p>
+                <h3 style='text-align:center'>{nuevaClave}</h3>
+                <p>Te recomendamos cambiarla cuando inicies sesión.</p>
+              </body>
+            </html>";
+
+                emailService.armarCorreo(email, "Actualización de contraseña", cuerpo);
+                emailService.enviarEmail();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("Error.aspx", false);
+            }
+        }
         protected void mostrarResultado(bool resultado)
         {
             string usuarioRegistrar = (string)Session["usuarioRegistrar"];
@@ -602,8 +658,22 @@ protected void mostrarPermisos()
             {
                 Response.Redirect("AdministradorUsuarios.aspx", false);
                 Session.Remove("usuarioModificar");
+                Session.Remove("claveModificada");
             }
 
-        } 
+        }
+
+        protected void btnGenerarClave_Click(object sender, EventArgs e)
+        {
+            Usuario usuarioLogeado = new Usuario();
+            usuarioLogeado = (Usuario)Session["usuario"];
+            string tipoUsuario = (string)Session["usuarioRegistrar"];
+            if(usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
+            {
+                string claveModificada = generarClave(10);
+                Session.Add("claveModificada", claveModificada);
+            }
+
+        }
     }
 }                

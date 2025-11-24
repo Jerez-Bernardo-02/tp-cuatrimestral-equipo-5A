@@ -116,6 +116,7 @@
                     <div class="col-md-6">
                         <label runat="server" ID="lblContrasenia" for="txtContrasenia" class="form-label">Contraseña</label>
                         <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" placeholder="Contraseña"></asp:TextBox>
+                        <asp:Button ID="btnGenerarClave" runat="server" CssClass="btn btn-secondary mt-2" Text="Generar nueva contraseña" OnClick="btnGenerarClave_Click" Visible="false" />
                     </div>
                 </div>
             </div>
