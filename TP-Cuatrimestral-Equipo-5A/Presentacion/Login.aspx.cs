@@ -60,7 +60,7 @@ namespace Presentacion
                     break;
 
                 case "Medico":
-                    Response.Redirect("MedicoTurnos.aspx", false);
+                    Response.Redirect("MedicoResumen.aspx", false);
                     break;
 
                 case "Recepcionista":
