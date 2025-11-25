@@ -145,7 +145,7 @@
 
                             <asp:TemplateField>
                                 <ItemTemplate>
-                                    <span class='<%# Eval("Estado.Descripcion").ToString() == "Cerrado" ? "badge bg-success" : "badge bg-warning" %>'>
+                                    <span class='<%# Eval("Estado.Descripcion").ToString() == "Finalizado" ? "badge bg-success" : "badge bg-warning" %>'>
                                         <%# Eval("Estado.Descripcion") %>
                                     </span>
                                 </ItemTemplate>

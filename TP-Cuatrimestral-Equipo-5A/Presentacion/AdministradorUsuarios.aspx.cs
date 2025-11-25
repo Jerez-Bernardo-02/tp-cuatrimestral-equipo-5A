@@ -40,10 +40,14 @@ namespace Presentacion
             try
             {
                 int idUsuario = (int)dgvUsuarios.SelectedDataKey.Values["IdUsuario"];//guardo el idUsuario guardado en session desde el gridViewUsuarios
+                
                 UsuarioNegocio negocio = new UsuarioNegocio();
                 Usuario usuario = negocio.buscarPorId(idUsuario);
-                Session.Add("usuarioModificar", usuario); //guardo el usuario completo en session
-                                                          //Session.Remove("IdUsuario"); //luego de pasar usuario completo, limpio
+                                                         
+                Session["usuarioRegistrar"] = usuario.Permiso.Descripcion;
+                Session["usuarioModificar"] = usuario; //guardo el usuario completo en session
+                                                       //Session.Remove("IdUsuario"); //luego de pasar usuario completo, limpio
+
                 Response.Redirect("FormularioRegistro.aspx", false);
 
             }catch(Exception ex)
@@ -57,6 +61,7 @@ namespace Presentacion
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
+            Session.Remove("usuarioRegistrar");
             Session.Remove("usuarioModificar");   
             Session.Remove("claveModificada");
             Response.Redirect("FormularioRegistro.aspx", false);// Redirigimos al formulario de registro
@@ -209,12 +214,12 @@ namespace Presentacion
         {
             try
             {
-                if (e.CommandName == "Select")
+                int idUsuario = Convert.ToInt32(e.CommandArgument);
+
+                if (e.CommandName == "Select") //si viene desde el btnModificar
                 {
                     return;
                 }
-     
-                int idUsuario = Convert.ToInt32(e.CommandArgument);
 
                 if (e.CommandName == "Activar")
                 {

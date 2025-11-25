@@ -89,6 +89,12 @@ namespace Presentacion
 
         protected void btnRegistrarse_Click(object sender, EventArgs e)
         {
+            Usuario usuario = new Usuario();
+            usuario.Permiso = new Permiso();
+            usuario.Permiso.Descripcion = "Paciente";
+
+            Session["usuario"] = usuario;
+            Session["usuarioRegistrar"] = "Paciente";
             Response.Redirect("FormularioRegistro.aspx", false);// Redirigimos al formulario de registro para pacientes
         }
 

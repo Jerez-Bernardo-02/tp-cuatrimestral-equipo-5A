@@ -16,11 +16,11 @@ namespace Presentacion
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            if (Session["usuario"] == null)
+           /* if (Session["usuario"] == null)
             {
                 Response.Redirect("Login.aspx");
                 return;
-            }
+            }*/
 
             if (Session["medico"] == null)
             {
@@ -75,11 +75,11 @@ namespace Presentacion
         }
         protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int idPaciente = Convert.ToInt32(e.CommandArgument);
+            int idTurno = Convert.ToInt32(e.CommandArgument);
 
             if(e.CommandName == "VerHC")
             {
-                Response.Redirect("HistoriaClinica.aspx?idPaciente=" + idPaciente);
+                Response.Redirect("HistoriaClinica.aspx?idTurno=" + idTurno);
             }
             else if (e.CommandName == "ModificarEstado")
             {

@@ -93,97 +93,27 @@ namespace Presentacion
             ddlEspecialidad.SelectedIndex = 0; //el primer indice
 
 
-            //llamo al evento del DDL principal para que al elegir un nuevo medico se recargue la pantalla y se limpien los lbl exito y error.
-            ddlMedicos_SelectedIndexChanged(null, null);
+            //Refresco de pantalla.
+            cargarGrillaHorarios();
 
+            LimpiarMensajes();
             MostrarExito("Horario agregado con éxito!");
 
         }
 
-        private void cargarDdlMedicos(DropDownList ddlMedicos)
-        {
-            MedicoNegocio medicoNegocio = new MedicoNegocio();
-            ddlMedicos.DataSource = medicoNegocio.listar();
-            ddlMedicos.DataTextField = "NombreCompleto";
-            ddlMedicos.DataValueField = "Id";
-            ddlMedicos.DataBind();
-            ddlMedicos.Items.Insert(0, new ListItem(" Seleccione un medico", "0"));
-
-
-        }
+        //Eventos
         protected void ddlMedicos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LimpiarMensajes();
             try
             {
-                int idMedico = int.Parse(ddlMedicos.SelectedValue);
-                HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
-                List<HorarioMedico> listaHorariosPorMedico = horarioMedicoNegocio.listarHorariosPorIdMedico(idMedico);
-
-
-                //Lunes
-                repHorarioLunes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 1);
-                repHorarioLunes.DataBind();
-
-                //Martes
-                repHorarioMartes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 2);
-                repHorarioMartes.DataBind();
-
-                //Miercoles
-                repHorarioMiercoles.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 3);
-                repHorarioMiercoles.DataBind();
-
-                //Jueves
-                repHorarioJueves.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 4);
-                repHorarioJueves.DataBind();
-
-                //Viernes
-                repHorarioViernes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 5);
-                repHorarioViernes.DataBind();
-
-                //Sabado
-                repHorarioSabado.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 6);
-                repHorarioSabado.DataBind();
-
-                //Domingo
-                repHorarioDomingo.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 7);
-                repHorarioDomingo.DataBind();
-
-
-
-
-                //Cargo los DDL de todos los dias para agregar un nuevo horario
-                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioLunes, idMedico);
-                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioMartes, idMedico);
-                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioMiercoles, idMedico);
-                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioJueves, idMedico);
-                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioViernes, idMedico);
-                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioSabado, idMedico);
-                cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioDomingo, idMedico);
-
+                LimpiarMensajes();
+                cargarGrillaHorarios();
             }
             catch (Exception ex)
             {
                 MostrarError("Error al cargar datos. " + ex.ToString());
             }
-
-
-
         }
-
-        private void cargarDdlEspecialidadesPorMedico(DropDownList ddlEspecialidades, int idMedico)
-        {
-            EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
-
-            ddlEspecialidades.DataSource = especialidadNegocio.listarPorIdMedico(idMedico);
-            ddlEspecialidades.DataTextField = "Descripcion";
-            ddlEspecialidades.DataValueField = "Id";
-            ddlEspecialidades.DataBind();
-            ddlEspecialidades.Items.Insert(0, new ListItem(" Seleccione una especialidad", "0"));
-
-        }
-
-
 
         protected void repHorarioLunes_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
@@ -363,7 +293,7 @@ namespace Presentacion
             ddlEspecialidad.Enabled = false;
 
         }
-
+        // Botones de acción
         protected void btnAñadirHorario_Command(object sender, CommandEventArgs e)
         {
             try
@@ -441,12 +371,27 @@ namespace Presentacion
                 HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
                 int idHorarioAEliminar = int.Parse(e.CommandArgument.ToString());
 
+                HorarioMedico horarioMedico = horarioMedicoNegocio.buscarHorarioMedicoPorId(idHorarioAEliminar);
+
+                if (horarioMedico == null)
+                {
+                    MostrarError("No se ha encontrado el horario medico.");
+                    return;
+                }
+
+                // validar si el medico tiene turnos disponibles en el horario a borrar.
+                
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+                if (turnoNegocio.medicoConTurnosPendientesDiaYRango(horarioMedico.Medico.Id, horarioMedico.Especialidad.Id, horarioMedico.Dia.Id, horarioMedico.HoraEntrada, horarioMedico.HoraSalida))
+                {
+                    MostrarError("No se puede eliminar el horario porque el médico tiene turnos pendientes asignados. <br />Primero debe cancelarlos o finalizarlos");
+                    return;
+                }
                 horarioMedicoNegocio.eliminarPorId(idHorarioAEliminar);
 
                 //Recarga de pantalla
-                // validar si el medico tiene turnos disponibles en el horario a borrar.
-                ddlMedicos_SelectedIndexChanged(null, null);
-
+                cargarGrillaHorarios();
+                LimpiarMensajes();
                 MostrarExito("Horario eliminado correctamente.");
 
             }
@@ -454,6 +399,78 @@ namespace Presentacion
             {
                 MostrarError("No se puede eliminar el horario. " + ex.ToString());
             }
+
+        }
+
+        //Metodos Helpers
+        private void cargarGrillaHorarios()
+        {
+            int idMedico = int.Parse(ddlMedicos.SelectedValue);
+            HorarioMedicoNegocio horarioMedicoNegocio = new HorarioMedicoNegocio();
+            List<HorarioMedico> listaHorariosPorMedico = horarioMedicoNegocio.listarHorariosPorIdMedico(idMedico);
+
+
+            //Lunes
+            repHorarioLunes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 1);
+            repHorarioLunes.DataBind();
+
+            //Martes
+            repHorarioMartes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 2);
+            repHorarioMartes.DataBind();
+
+            //Miercoles
+            repHorarioMiercoles.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 3);
+            repHorarioMiercoles.DataBind();
+
+            //Jueves
+            repHorarioJueves.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 4);
+            repHorarioJueves.DataBind();
+
+            //Viernes
+            repHorarioViernes.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 5);
+            repHorarioViernes.DataBind();
+
+            //Sabado
+            repHorarioSabado.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 6);
+            repHorarioSabado.DataBind();
+
+            //Domingo
+            repHorarioDomingo.DataSource = listaHorariosPorMedico.FindAll(horarioMedico => horarioMedico.Dia.Id == 7);
+            repHorarioDomingo.DataBind();
+
+
+
+
+            //Cargo los DDL de todos los dias para agregar un nuevo horario
+            cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioLunes, idMedico);
+            cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioMartes, idMedico);
+            cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioMiercoles, idMedico);
+            cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioJueves, idMedico);
+            cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioViernes, idMedico);
+            cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioSabado, idMedico);
+            cargarDdlEspecialidadesPorMedico(ddlEspNuevoHorarioDomingo, idMedico);
+        }
+
+        private void cargarDdlMedicos(DropDownList ddlMedicos)
+        {
+            MedicoNegocio medicoNegocio = new MedicoNegocio();
+            ddlMedicos.DataSource = medicoNegocio.listar();
+            ddlMedicos.DataTextField = "NombreCompleto";
+            ddlMedicos.DataValueField = "Id";
+            ddlMedicos.DataBind();
+            ddlMedicos.Items.Insert(0, new ListItem(" Seleccione un medico", "0"));
+
+        }
+
+        private void cargarDdlEspecialidadesPorMedico(DropDownList ddlEspecialidades, int idMedico)
+        {
+            EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
+
+            ddlEspecialidades.DataSource = especialidadNegocio.listarPorIdMedico(idMedico);
+            ddlEspecialidades.DataTextField = "Descripcion";
+            ddlEspecialidades.DataValueField = "Id";
+            ddlEspecialidades.DataBind();
+            ddlEspecialidades.Items.Insert(0, new ListItem(" Seleccione una especialidad", "0"));
 
         }
 

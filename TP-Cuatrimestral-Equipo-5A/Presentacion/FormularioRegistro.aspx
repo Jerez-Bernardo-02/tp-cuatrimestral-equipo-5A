@@ -20,8 +20,10 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="rounded-circle w-100 h-100" alt="imagenPerfil" />
             </div>
 
-            <asp:DropDownList ID="ddlTipoPermiso" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlTipoPermiso_SelectedIndexChanged"></asp:DropDownList>
+            <asp:DropDownList ID="ddlTipoPermiso" runat="server" AutoPostback="true" OnSelectedIndexChanged="ddlTipoPermiso_SelectedIndexChanged" Visible="false"></asp:DropDownList>
         </div>
+
+        <asp:Label ID="lblResultado" runat="server" CssClass="alert alert-danger mt-3 d-block text-center" Visible="false"></asp:Label>
 
         <asp:Panel ID="pnlDatos" runat="server">
 
@@ -100,13 +102,6 @@
                     <!--<asp:RequiredFieldValidator ID="rfvMatricula" runat="server" ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria para médicos." ForeColor="Red" Enabled="false" />
                 -->
                 </div>
-                <div class="col-md-6" id="divEspecialidad" runat="server">
-                    <label for="txtEspecialidad" class="form-label">Especialidad</label>
-
-                    <asp:DropDownList runat="server" ID="ddlEspecialidad" CssClass="form-control">
-                        <asp:ListItem Text="Cargue una especialidad" />
-                    </asp:DropDownList>
-                </div>
 
             </div>
         </asp:Panel>
@@ -137,7 +132,7 @@
 
         <div class="row mb-3">
             <div class="col-md-4">
-                <asp:Button Text="Registrarse" ID="BtnRegistrarse" OnClick="BtnRegistrarse_Click" runat="server" class="btn btn-primary" />
+                <asp:Button Text="Guardar" ID="btnGuardar" OnClick="btnGuardar_Click" runat="server" class="btn btn-primary" />
                 <%--<asp:Button Text="Inactivar" ID="btnInactivar" OnClick="btnInactivar_Click" runat="server" CssClass="btn btn-warning" />--%>
                 <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary" Visible="false"/>
             </div>

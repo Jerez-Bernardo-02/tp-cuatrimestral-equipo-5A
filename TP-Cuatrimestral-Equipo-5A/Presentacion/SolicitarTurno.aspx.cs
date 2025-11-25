@@ -12,8 +12,45 @@ namespace Presentacion
     public partial class Turnos1 : System.Web.UI.Page
     {
         private List<TimeSpan> listaTurnosOcupados = new List<TimeSpan>();
+        Paciente pacienteLogueado;
         protected void Page_Load(object sender, EventArgs e)
         {
+            Usuario usuarioLogueado = (Usuario)Session["usuario"];
+            if (Seguridad.esPaciente(usuarioLogueado))
+            {
+
+                if (Session["paciente"] == null)
+                {
+                    // Si no tengo el paciente en session, lo busco en la base de datos una vez.
+                    usuarioLogueado = (Usuario)Session["usuario"];
+                    PacienteNegocio pacienteNegocio = new PacienteNegocio();
+
+                    // Lo busco y lo guardo en la Session para no buscarlo nunca más
+                    Session["paciente"] = pacienteNegocio.buscarPorIdUsuario(usuarioLogueado.Id);
+                    pacienteLogueado = (Paciente)Session["paciente"];
+                    txtDniPaciente.Text = pacienteLogueado.Dni;
+                    txtDniPaciente.Enabled = false;
+                    btnBuscarPaciente.Visible = false;
+                    txtNombrePaciente.Text = pacienteLogueado.NombreCompleto;
+                    txtNombrePaciente.Visible = true;
+                    lblErrorPaciente.Visible = false;
+                }
+            }
+            else if (Seguridad.esRecepcionista(usuarioLogueado))
+            {
+                //tambien se permite acceso si es recepcionista.
+            }
+            else if (!Seguridad.esRecepcionista(usuarioLogueado))
+            {
+                Session["error"] = "No tiene perfil de paciente o recepcionista asignado.";
+                Response.Redirect("Error.aspx");
+                return;
+
+            }
+
+
+
+
             if (!IsPostBack)
             {
                 CargarEspecialidades();
@@ -46,6 +83,7 @@ namespace Presentacion
                     txtNombrePaciente.Text = paciente.NombreCompleto;
                     txtNombrePaciente.Visible = true;
                     lblErrorPaciente.Visible = false;
+                    lblMensaje.Visible = false;
                 }
             }
             catch (Exception)
