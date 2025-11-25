@@ -22,7 +22,7 @@
 
         <asp:TemplateField HeaderText="Acciones">
             <ItemTemplate>
-                <asp:LinkButton runat="server" ID="lnkBtnModificarDatos" CssClass="btn btn-warning btn-sm d-flex align-items-center justify-content-center gap-1" CommandName="Select" ToolTip="Modificar datos">
+                <asp:LinkButton runat="server" ID="lnkBtnModificarDatos" CssClass="btn btn-warning btn-sm d-flex align-items-center justify-content-center gap-1" CommandName="Select" CommandArgument='<%# Eval("IdUsuario") %>' ToolTip="Modificar datos">
                     <i class="bi bi-pencil-fill"></i> 
                      Editar
                 </asp:LinkButton>

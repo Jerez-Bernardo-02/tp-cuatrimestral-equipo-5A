@@ -37,6 +37,7 @@ namespace Presentacion
 
         protected void btnNuevoPaciente_Click(object sender, EventArgs e)
         {
+            Session["usuarioRegistrar"] = "Paciente";
             Response.Redirect("FormularioRegistro.aspx");
         }
 
