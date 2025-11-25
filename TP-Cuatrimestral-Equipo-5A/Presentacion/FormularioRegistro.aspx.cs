@@ -396,7 +396,11 @@ protected void mostrarPermisos()
                     nuevo.NombreUsuario = txtUsuario.Text;
                     nuevo.Activo = true;
                     nuevo.Permiso = new Permiso() { Id = idPermiso };
-                    if (usuarioLogeado.Permiso.Id ==4 && tipoUsuario != "Administrador")
+                    if (usuarioLogeado == null)
+                    {
+                        nuevo.Clave = txtContrasenia.Text;
+                    }
+                    else if (usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
                     {
                         nuevo.Clave = generarClave(10);
                     }
@@ -404,12 +408,20 @@ protected void mostrarPermisos()
                     {
                         nuevo.Clave = txtContrasenia.Text;
                     }
+                    /* if (usuarioLogeado.Permiso.Id ==4 && tipoUsuario != "Administrador")
+                     {
+                         nuevo.Clave = generarClave(10);
+                     }
+                     else
+                     {
+                         nuevo.Clave = txtContrasenia.Text;
+                     }*/
                     /*Usuario nuevo = new Usuario();
                     nuevo.NombreUsuario = txtUsuario.Text;
                     nuevo.Clave = txtContrasenia.Text;
                     nuevo.Activo = true;
                     nuevo.Permiso = new Permiso() { Id = idPermiso };*/
-                 
+
                     int id = negocio.agregar(nuevo);
                     Session.Add("UsuarioRegistrado", nuevo);
                     return id;
