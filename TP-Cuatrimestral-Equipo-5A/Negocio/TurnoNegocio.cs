@@ -430,6 +430,89 @@ namespace Negocio
 
         }
 
+        public bool medicoConTurnosPendientes(int idMedico, int? idEspecialidad = null)
+        {  // int= idEspecialidad = null permite poner ese parametro como opcional, si se llama al metodo sin parametros se setea null por defecto.
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND IdEstado = 1 "; //Estado 1 = Pendiente
+
+                if (idEspecialidad != null)
+                {
+                    consulta += " AND IdEspecialidad = @idEspecialidad";
+                }
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idMedico", idMedico);
+                if (idEspecialidad != null)
+                {
+                    datos.setearParametro("@idEspecialidad", idEspecialidad);
+                }
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector["contador"];
+                    //Si lee algun dato y encontró registros que coinciden con el filtro y el medico tiene turnos pendientes, retorna true.
+                    if (cantidad > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
+
+        public bool medicoConTurnosPendientesDiaYRango(int idMedico, int idEspecialidad, int idDiaSemana, TimeSpan horaEntrada, TimeSpan horaSalida)
+        {  
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SET DATEFIRST 1; SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND IdEstado = 1 AND IdEspecialidad = @idEspecialidad" +
+                    " AND DATEPART(WEEKDAY, Fecha) = @idDiaSemana AND CAST(Fecha AS TIME) >= @horaEntrada AND CAST(Fecha AS TIME) < @horaSalida"; //Estado 1 = Pendiente
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.setearParametro("@idDiaSemana", idDiaSemana);
+                datos.setearParametro("@horaEntrada", horaEntrada);
+                datos.setearParametro("@horaSalida", horaSalida);
+
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector["contador"];
+                    //Si lee algun dato y encontró registros que coinciden con el filtro y el medico tiene turnos pendientes, retorna true.
+                    if (cantidad > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
+
+
         public void AgregarTurno(Turno nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -497,6 +580,72 @@ namespace Negocio
 
             // Si llegamos aca, no encontramos nada en 2 meses.
             return DateTime.MinValue;
+        }
+
+        public Turno buscarPorId(int idTurno)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT T.Id AS IdTurno, T.Fecha, T.Observaciones, T.IdPaciente AS IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, P.Dni AS DniPaciente, P.FechaNacimiento AS FechaNacPaciente, T.IdEstado AS IdEstado, T.IdMedico as IdMedico, M.Nombre as NombreMedico, M.Apellido as ApellidoMedico, T.IdEspecialidad as IdEspecialidad, E.Descripcion as Especialidad FROM Turnos T INNER JOIN Pacientes P ON T.IdPaciente = P.Id INNER JOIN Medicos M ON T.IdMedico = M.Id INNER JOIN Especialidades E ON T.IdEspecialidad = E.Id WHERE T.Id = @idTurno;");
+                datos.setearParametro("@idTurno", idTurno);
+                datos.ejecutarLectura();
+                Turno turno = null;
+                while (datos.Lector.Read())
+                {
+                    turno = new Turno();
+                    turno.Id = (int)datos.Lector["IdTurno"];
+                    turno.Fecha = (DateTime)datos.Lector["Fecha"];
+                    turno.Observaciones = datos.Lector["Observaciones"] != DBNull.Value ? (string)datos.Lector["Observaciones"] : null;
+                    turno.Paciente = new Paciente();
+                    turno.Paciente.Id = (int)datos.Lector["IdPaciente"];
+                    turno.Paciente.Nombre = (string)datos.Lector["NombrePaciente"];
+                    turno.Paciente.Apellido = (string)datos.Lector["ApellidoPaciente"];
+                    turno.Paciente.Dni = (string)datos.Lector["DniPaciente"];
+                    turno.Paciente.FechaNacimiento = (DateTime)datos.Lector["FechaNacPaciente"];
+                    turno.Estado = new Estado();
+                    turno.Estado.Id = (int)datos.Lector["IdEstado"];
+                    turno.Medico = new Medico();
+                    turno.Medico.Id = (int)datos.Lector["IdMedico"];
+                    turno.Medico.Nombre = (string)datos.Lector["NombreMedico"];
+                    turno.Medico.Apellido = (string)datos.Lector["ApellidoMedico"];
+                    turno.Especialidad = new Especialidad();
+                    turno.Especialidad.Id = (int)datos.Lector["IdEspecialidad"];
+                    turno.Especialidad.Descripcion = (string)datos.Lector["Especialidad"];
+                }
+                return turno;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void actualizarEstado(int idTurno, int idEstado)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Turnos SET IdEstado = @idEstado WHERE Id = @idTurno;");
+                datos.setearParametro("@idTurno", idTurno);
+                datos.setearParametro("@idEstado", idEstado);
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
     }
 }

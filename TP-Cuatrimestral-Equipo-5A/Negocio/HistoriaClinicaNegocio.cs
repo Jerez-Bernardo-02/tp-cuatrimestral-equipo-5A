@@ -10,6 +10,32 @@ namespace Negocio
 {
     public class HistoriaClinicaNegocio
     {
+        public void agregar(HistoriaClinica nuevaHC)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO HistoriasClinicas (Fecha, IdPaciente, Asunto, Descripcion, IdTurno, IdMedico, IdEspecialidad) VALUES (@fecha, @idPaciente, @asunto, @descripcion, @idTurno, @idMedico, @idEspecialidad);");
+                datos.setearParametro("@fecha", nuevaHC.Fecha);
+                datos.setearParametro("@idPaciente", nuevaHC.Paciente.Id);
+                datos.setearParametro("@asunto", nuevaHC.Asunto);
+                datos.setearParametro("@descripcion", nuevaHC.Descripcion);
+                datos.setearParametro("@idTurno", nuevaHC.Turno.Id);
+                datos.setearParametro("@idMedico", nuevaHC.Medico.Id);
+                datos.setearParametro("@idEspecialidad", nuevaHC.Especialidad.Id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public List<HistoriaClinica> listarHcPaciente(int idPaciente, string filtro)
         {
             AccesoDatos datos = new AccesoDatos();

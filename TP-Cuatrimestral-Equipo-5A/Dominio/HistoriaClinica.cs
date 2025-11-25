@@ -15,6 +15,7 @@ namespace Dominio
         public Medico Medico { get; set; }
         public Paciente Paciente { get; set; }
         public Especialidad Especialidad { get; set; }
+        public Turno Turno { get; set; }
 
     }
 }

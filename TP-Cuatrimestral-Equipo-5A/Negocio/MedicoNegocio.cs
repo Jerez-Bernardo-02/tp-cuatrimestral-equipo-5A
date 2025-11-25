@@ -313,5 +313,46 @@ namespace Negocio
             }
         }
 
+        public void agregarEspecialidadMedico(int idMedico, int idEspecialidad)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO EspecialidadesPorMedico (IdMedico, IdEspecialidad) Values (@idMedico, @idEspecialidad);");
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void eliminarEspecialidadMedico(int idMedico, int idEspecialidad)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("DELETE FROM EspecialidadesPorMedico WHERE IdMedico = @idMedico AND IdEspecialidad = @idEspecialidad");
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
