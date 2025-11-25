@@ -498,5 +498,101 @@ namespace Negocio
             // Si llegamos aca, no encontramos nada en 2 meses.
             return DateTime.MinValue;
         }
+
+        public List<Turno> ListarTurnosFuturosPorMedico(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Turno> lista = new List<Turno>();
+
+            try
+            {
+                datos.setearConsulta(@" SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado, E.Descripcion AS EstadoDescripcion, T.IdEspecialidad, ESP.Descripcion AS EspecialidadDescripcion, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente FROM Turnos T
+                                      INNER JOIN Pacientes P ON P.Id = T.IdPaciente
+                                      INNER JOIN Estados E ON E.Id = T.IdEstado
+                                      INNER JOIN Especialidades ESP ON ESP.Id = T.IdEspecialidad
+                                      WHERE T.IdMedico = @idMedico AND T.Fecha > GETDATE() AND E.Descripcion IN ('Nuevo', 'Reprogramado') ORDER BY T.Fecha ASC");
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Turno turno = new Turno();
+                    turno.Id = (int)datos.Lector["Id"];
+                    turno.Fecha = (DateTime)datos.Lector["Fecha"];
+                    turno.Observaciones = datos.Lector["Observaciones"] != DBNull.Value ? (string)datos.Lector["Observaciones"] : null;
+                    turno.Estado = new Estado();
+                    turno.Estado.Id = (int)datos.Lector["IdEstado"];
+                    turno.Estado.Descripcion = (string)datos.Lector["EstadoDescripcion"];
+                    turno.Especialidad = new Especialidad();
+                    turno.Especialidad.Id = (int)datos.Lector["IdEspecialidad"];
+                    turno.Especialidad.Descripcion = (string)datos.Lector["EspecialidadDescripcion"];
+                    turno.Paciente = new Paciente();
+                    turno.Paciente.Id = (int)datos.Lector["IdPaciente"];
+                    turno.Paciente.Nombre = (string)datos.Lector["NombrePaciente"];
+                    turno.Paciente.Apellido = (string)datos.Lector["ApellidoPaciente"];
+
+                    lista.Add(turno);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public List<Turno> ListarTurnosFuturosPorPaciente(int idPaciente)
+        {
+            List<Turno> lista = new List<Turno>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@" SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado, ES.Descripcion AS EstadoDescripcion, T.IdEspecialidad, E.Descripcion AS EspecialidadDescripcion, T.IdMedico, M.Nombre AS NombreMedico, M.Apellido AS ApellidoMedico FROM Turnos T
+                                      INNER JOIN Estados ES ON ES.Id = T.IdEstado
+                                      INNER JOIN Especialidades E ON E.Id = T.IdEspecialidad
+                                      INNER JOIN Medicos M ON M.Id = T.IdMedico
+                                      WHERE T.IdPaciente = @idPaciente AND T.Fecha > GETDATE() AND T.IdEstado IN (1, 2) -- Nuevo, Reprogramado ORDER BY T.Fecha ASC");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Turno turno = new Turno();
+                    turno.Id = (int)datos.Lector["Id"];
+                    turno.Fecha = (DateTime)datos.Lector["Fecha"];
+                    turno.Observaciones = datos.Lector["Observaciones"] != DBNull.Value ? (string)datos.Lector["Observaciones"] : null;
+                    turno.Estado = new Estado();
+                    turno.Estado.Id = (int)datos.Lector["IdEstado"];
+                    turno.Estado.Descripcion = (string)datos.Lector["EstadoDescripcion"];
+                    turno.Especialidad = new Especialidad();
+                    turno.Especialidad.Id = (int)datos.Lector["IdEspecialidad"];
+                    turno.Especialidad.Descripcion = (string)datos.Lector["EspecialidadDescripcion"];
+                    turno.Medico = new Medico();
+                    turno.Medico.Id = (int)datos.Lector["IdMedico"];
+                    turno.Medico.Nombre = (string)datos.Lector["NombreMedico"];
+                    turno.Medico.Apellido = (string)datos.Lector["ApellidoMedico"];
+                  
+
+                    lista.Add(turno);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }

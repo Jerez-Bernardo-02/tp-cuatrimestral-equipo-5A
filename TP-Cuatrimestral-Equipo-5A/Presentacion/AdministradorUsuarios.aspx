@@ -47,6 +47,32 @@
 
 </asp:GridView>
             </div>
+            <div class="modal fade" id="modalInactivarUsuario" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">Confirmar inactivación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>
+            Este usuario tiene turnos futuros asociados.<br />
+            Si lo inactivás, <strong>todos esos turnos serán cancelados automáticamente.</strong>
+        </p>
+        <p class="fw-bold mb-0">¿Deseás continuar?</p>
+      </div>
+
+      <div class="modal-footer">
+        <asp:Button ID="btnModalCancelar" runat="server" CssClass="btn btn-secondary" Text="Cancelar" OnClick="btnModalCancelar_Click" />
+
+        <asp:Button ID="btnModalConfirmar" runat="server" CssClass="btn btn-danger" Text="Confirmar" OnClick="btnModalConfirmar_Click" />
+      </div>
+
+    </div>
+  </div>
+</div>
 
         </div>
     </div>

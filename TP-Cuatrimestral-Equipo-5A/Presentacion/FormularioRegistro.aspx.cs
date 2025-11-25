@@ -672,8 +672,20 @@ protected void mostrarPermisos()
             {
                 string claveModificada = generarClave(10);
                 Session.Add("claveModificada", claveModificada);
+                MostrarExito("Clave autogenerada correctamente. Debe registrar cambios para confirmar.");
             }
 
+        }
+        private void MostrarExito(string mensaje)
+        {
+            LimpiarMensajes(); //se limpian y ocultan ambos mensajes.
+            lblMensajeExito.Text = mensaje; // se muestra y se llena solo el mensaje de exito
+            lblMensajeExito.Visible = true;
+        }
+        private void LimpiarMensajes()
+        {
+            lblMensajeExito.Visible = false;
+            lblMensajeExito.Text = "";
         }
     }
 }                
