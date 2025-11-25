@@ -349,7 +349,7 @@ namespace Presentacion
             MedicoNegocio medicoNegocio = new MedicoNegocio();
             int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
 
-            ddlMedicos.DataSource = medicoNegocio.listarPorIdEspecialidad(idEspecialidad);
+            ddlMedicos.DataSource = medicoNegocio.listarPorIdEspecialidad(idEspecialidad); //al no enviar un segundo parametro, se setea true por omision y se listan solo los activos.
             ddlMedicos.DataTextField = "Apellido";
             ddlMedicos.DataValueField = "Id";
             ddlMedicos.DataBind();

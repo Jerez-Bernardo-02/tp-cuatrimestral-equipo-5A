@@ -93,7 +93,7 @@ namespace Presentacion
             try
             {
                 MedicoNegocio medicoNegocio = new MedicoNegocio();
-                dgvMedicos.DataSource = medicoNegocio.listar();
+                dgvMedicos.DataSource = medicoNegocio.listar(false); //al enviar false se listan tambien los inactivos
                 dgvMedicos.DataBind();
 
             }
@@ -124,7 +124,7 @@ namespace Presentacion
             Medico medicoSeleccionado = (Medico)Session["medico"];
 
             EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
-            dgvEspecialidadesDelMedico.DataSource = especialidadNegocio.listarPorIdMedico(medicoSeleccionado.Id);
+            dgvEspecialidadesDelMedico.DataSource = especialidadNegocio.listarPorIdMedico(medicoSeleccionado.Id, false); //al enviar false se lista por mas que el medico este dado de baja 
             dgvEspecialidadesDelMedico.DataBind();
         }
 

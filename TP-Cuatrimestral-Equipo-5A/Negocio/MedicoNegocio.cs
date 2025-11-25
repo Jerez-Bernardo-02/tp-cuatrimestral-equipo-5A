@@ -113,13 +113,19 @@ namespace Negocio
         }
 
 
-        public List<Medico> listar()
+        public List<Medico> listar(bool soloActivos = true) 
         {
             AccesoDatos datos = new AccesoDatos();
             List<Medico> lista = new List<Medico>();
             try
             {
-                datos.setearConsulta("SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono, M.Dni, M.Email, M.UrlImagen, M.Matricula, M.IdUsuario, U.Activo FROM Medicos M INNER JOIN Usuarios U ON M.IdUsuario = U.Id;");
+                string consulta = "SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono, M.Dni, M.Email, M.UrlImagen, M.Matricula, M.IdUsuario, U.Activo FROM Medicos M INNER JOIN Usuarios U ON M.IdUsuario = U.Id ";
+                if (soloActivos)
+                {
+                    consulta += " WHERE U.Activo = 1 ;"; //Si se envia el segundo farametro false se listan todos, sino solo se listaran los activos.
+                }
+
+                datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -154,13 +160,18 @@ namespace Negocio
             }
         }
 
-        public List<Medico> listarPorIdEspecialidad(int idEspecialidad)
+        public List<Medico> listarPorIdEspecialidad(int idEspecialidad, bool soloActivos = true)
         {
             AccesoDatos datos = new AccesoDatos();
             List<Medico> lista = new List<Medico>();
             try
             {
-                datos.setearConsulta("SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono, M.Dni, M.Email, M.UrlImagen, M.Matricula, M.IdUsuario FROM EspecialidadesPorMedico EPM INNER JOIN Medicos M on EPM.IdMedico = M.Id WHERE EPM.IdEspecialidad = @idEspecialidad;");
+                string consulta = "SELECT M.Id, M.Nombre, M.Apellido, M.FechaNacimiento, M.Telefono, M.Dni, M.Email, M.UrlImagen, M.Matricula, M.IdUsuario FROM EspecialidadesPorMedico EPM INNER JOIN Medicos M on EPM.IdMedico = M.Id INNER JOIN Usuarios U ON M.IdUsuario = U.Id WHERE EPM.IdEspecialidad = @idEspecialidad ";
+                if (soloActivos)
+                {
+                    consulta += " AND U.Activo = 1 ;"; //Si se envia el segundo farametro false se listan todos, sino solo se listaran los activos.
+                }
+                datos.setearConsulta(consulta);
                 datos.setearParametro("@idEspecialidad", idEspecialidad);
                 datos.ejecutarLectura();
                 Medico medico = null;

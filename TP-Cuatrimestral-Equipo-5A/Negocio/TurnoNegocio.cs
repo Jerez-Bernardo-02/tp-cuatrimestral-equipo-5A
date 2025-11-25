@@ -117,7 +117,7 @@ namespace Negocio
             }
         }
         public List<Turno> ListarTurnosFiltrados(int idMedico, string filtroNombre, string filtroApellido, string filtroDni, string filtroFecha, int idEstado)
-        { //HECHO PARA PROBAR, FALTA MEJORAR EL METODO
+        { 
             AccesoDatos datos = new AccesoDatos();
             List<Turno> lista = new List<Turno>();
 
@@ -147,10 +147,10 @@ namespace Negocio
 
                 if (!string.IsNullOrEmpty(filtroFecha))
                 {
-                    consulta += " AND (T.Fecha = @filtroFecha)";
-                    datos.setearParametro("@filtroFecha", filtroFecha);
+                    consulta += " AND CAST(T.Fecha AS date) = @filtroFecha";
+                    datos.setearParametro("@filtroFecha", DateTime.Parse(filtroFecha));
                 }
-                if (idEstado > 0) // aca que hago porque estado es int, como lo valido para saber si tiene datos.
+                if (idEstado > 0) // Si estado > 0 filtro por estado, sino no (El valor de "Filtrar todos los estados" es 0 por lo que no entra en el IF.
                 {
                     consulta += " AND (T.IdEstado = @idEstado)";
                     datos.setearParametro("@idEstado", idEstado);
@@ -435,7 +435,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                string consulta = "SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND IdEstado = 1 "; //Estado 1 = Pendiente
+                string consulta = "SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND (IdEstado = 1  OR IdEstado = 2) "; //Estado 1 = Pendiente -- 2 = Reprogramado
 
                 if (idEspecialidad != null)
                 {
@@ -477,8 +477,8 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                string consulta = "SET DATEFIRST 1; SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND IdEstado = 1 AND IdEspecialidad = @idEspecialidad" +
-                    " AND DATEPART(WEEKDAY, Fecha) = @idDiaSemana AND CAST(Fecha AS TIME) >= @horaEntrada AND CAST(Fecha AS TIME) < @horaSalida"; //Estado 1 = Pendiente
+                string consulta = "SET DATEFIRST 1; SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND (IdEstado = 1 OR IdEstado = 2) AND IdEspecialidad = @idEspecialidad" +
+                    " AND DATEPART(WEEKDAY, Fecha) = @idDiaSemana AND CAST(Fecha AS TIME) >= @horaEntrada AND CAST(Fecha AS TIME) < @horaSalida"; //Estado 1 = Pendiente -- 2 = Reprogramado
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@idMedico", idMedico);
                 datos.setearParametro("@idEspecialidad", idEspecialidad);
@@ -538,6 +538,7 @@ namespace Negocio
             }
         }
 
+        // Devuelve la proxima fecha en la que ese medico atiende esa especialidad (puede que tenga todos los turnos ocupados!)
         public DateTime buscarProximaFechaDisponible(int idMedico, int idEsp, DateTime fechaBase)
         {
             HorarioMedicoNegocio horarioNegocio = new HorarioMedicoNegocio();

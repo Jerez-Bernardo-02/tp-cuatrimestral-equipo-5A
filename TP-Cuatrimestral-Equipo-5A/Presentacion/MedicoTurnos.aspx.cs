@@ -53,6 +53,8 @@ namespace Presentacion
             ddlEstadoTurno.DataTextField = "Descripcion";
             ddlEstadoTurno.DataValueField = "Id";
             ddlEstadoTurno.DataBind();
+            ddlEstadoTurno.Items.Insert(0, new ListItem("Todos", "0"));
+
         }
 
         private void CargarGrilla()
