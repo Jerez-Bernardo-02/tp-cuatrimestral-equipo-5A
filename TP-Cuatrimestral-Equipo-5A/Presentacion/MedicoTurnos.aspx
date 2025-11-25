@@ -80,7 +80,7 @@
                                         <%--Boton ver historia clinica--%>
                                         <asp:LinkButton runat="server"
                                             CommandName="VerHC"
-                                            CommandArgument='<%# Eval("Paciente.Id") %>'
+                                            CommandArgument='<%# Eval("Id") %>'
                                             CssClass="btn btn-info btn-sm"
                                             ToolTip="Ver Historia Clínica">
                                             <i class="bi bi-eye-fill"></i>

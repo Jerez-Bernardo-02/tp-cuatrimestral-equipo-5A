@@ -34,12 +34,15 @@
 
                             <asp:BoundField HeaderText="Observaciones" DataField="Observaciones" />
 
+                            <asp:BoundField HeaderText="Estado" DataField="Estado.Descripcion" />
+
+
                             <asp:TemplateField HeaderText="Acciones">
 
                                 <ItemTemplate>
                                     <asp:LinkButton runat="server"
                                         CommandName="VerHC"
-                                        CommandArgument='<%# Eval("Paciente.Id") %>'
+                                        CommandArgument='<%# Eval("Id") %>'
                                         CssClass="btn btn-info btn-sm"
                                         ToolTip="Ver Historia Clínica">
                                             <i class="bi bi-eye-fill"></i>
@@ -105,5 +108,5 @@
         </div>
 
     </div>
-    
+
 </asp:Content>
