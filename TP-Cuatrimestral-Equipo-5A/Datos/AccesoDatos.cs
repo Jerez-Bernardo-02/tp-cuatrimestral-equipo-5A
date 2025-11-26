@@ -22,7 +22,7 @@ namespace Datos
         //Constructor
         public AccesoDatos()
         {                                 //NombreServidor(el punto es genérico) ; NombreBaseDeDatos ; Forma de concetarse(Windows authentication)
-            conexion = new SqlConnection("server=.\\SQLEXPRESS; database=CLINICA_DV; integrated security=true");
+            conexion = new SqlConnection("server=.\\SQLEXPRESS; database=CLINICA_DB; integrated security=true");
             comando = new SqlCommand();                                //TENEMOS QUE PONER EL ***NOMBRE DE LA DB***
         }
 
