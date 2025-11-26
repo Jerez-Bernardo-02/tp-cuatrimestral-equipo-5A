@@ -15,24 +15,6 @@ namespace Presentacion
     {
 
         /// <summary>
-        /// Control pnlResultado.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlResultado;
-
-        /// <summary>
-        /// Control lblResultado.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblResultado;
-
-        /// <summary>
         /// Control ddlTipoPermiso.
         /// </summary>
         /// <remarks>
@@ -177,15 +159,6 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Panel pnlUsuario;
 
         /// <summary>
-        /// Control divDatosAcceso.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDatosAcceso;
-
-        /// <summary>
         /// Control txtUsuario.
         /// </summary>
         /// <remarks>
@@ -213,7 +186,7 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.TextBox txtContrasenia;
 
         /// <summary>
-        /// Control btnGuardar.
+        /// Control btnGenerarClave.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -231,13 +204,13 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Label lblMensajeExito;
 
         /// <summary>
-        /// Control BtnRegistrarse.
+        /// Control btnGuardar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button BtnRegistrarse;
+        protected global::System.Web.UI.WebControls.Button btnGuardar;
 
         /// <summary>
         /// Control btnVolver.
@@ -247,6 +220,5 @@ namespace Presentacion
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnVolver;
-        protected global::System.Web.UI.WebControls.Button btnGuardar;
     }
 }

@@ -132,14 +132,14 @@ namespace Presentacion
                 {
                     MedicoNegocio medicoNegocio = new MedicoNegocio();
                     Medico medico = medicoNegocio.buscarPorIdUsuario(idUsuario);
-                    listaTurnos = negocioTurno.ListarTurnosFuturosPorMedico(medico.Id); //traigo lista de turnos asociados
+                    //listaTurnos = negocioTurno.ListarTurnosFuturosPorMedico(medico.Id); //traigo lista de turnos asociados
                 }
 
                 if (usuario.Permiso.Id == 1) // Paciente
                 {
                     PacienteNegocio pacienteNegocio = new PacienteNegocio();
                     Paciente paciente = pacienteNegocio.buscarPorIdUsuario(idUsuario);
-                    listaTurnos = negocioTurno.ListarTurnosFuturosPorPaciente(paciente.Id);//traido lista de turnos asociados
+                    //listaTurnos = negocioTurno.ListarTurnosFuturosPorPaciente(paciente.Id);//traido lista de turnos asociados
                 }
 
                 if (listaTurnos != null && listaTurnos.Count > 0) 
