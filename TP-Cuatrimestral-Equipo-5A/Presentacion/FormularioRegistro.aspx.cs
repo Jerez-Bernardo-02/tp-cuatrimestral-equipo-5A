@@ -555,9 +555,8 @@ namespace Presentacion
                     return false;
                 }
 
-                Usuario usuarioLogeado = (Usuario)Session["usuario"];
-                string tipoRegistrar = (string)Session["usuarioRegistrar"];
-                bool esAlta = (usuarioModificar == null);
+               
+                /*bool esAlta = (usuarioModificar == null);
                 bool usuarioLogeadoEsAdmin = (usuarioLogeado != null && Seguridad.esAdministrador(usuarioLogeado));
                 bool usuarioModificarEsAdmin = (usuarioModificar != null && usuarioModificar.Permiso.Id == 4);
 
@@ -570,7 +569,7 @@ namespace Presentacion
                 // 3) Admin modifica un Admin existente
                 bool adminModificaAdmin = (usuarioLogeadoEsAdmin && !esAlta && usuarioModificarEsAdmin);
 
-                // Si corresponde validar contraseña ↓↓↓
+                // Si corresponde validar contraseña 
                 if (validarDesdeLogin || adminCreaAdmin || adminModificaAdmin)
                 {
                     if (string.IsNullOrEmpty(txtContrasenia.Text))
@@ -579,7 +578,55 @@ namespace Presentacion
                         lblResultado.Visible = true;
                         return false;
                     }
+                }*/
+                Usuario usuarioLogeado = (Usuario)Session["usuario"];
+                string tipoRegistrar = (string)Session["usuarioRegistrar"];
+
+                bool esAlta = (usuarioModificar == null);
+                bool usuarioLogeadoEsAdmin = (usuarioLogeado != null && Seguridad.esAdministrador(usuarioLogeado));
+                bool usuarioModificarEsAdmin = (usuarioModificar != null && usuarioModificar.Permiso.Id == 4);
+
+                // ===========================================================
+                // VALIDACIÓN DE CONTRASEÑA SEGÚN ESCENARIO
+                // ===========================================================
+
+                // 1) Registro Paciente desde LOGIN (sin admin logeado)
+                //    Pide contraseña
+                if (esAlta && tipoRegistrar == "Paciente" && !usuarioLogeadoEsAdmin)
+                {
+                    if (string.IsNullOrEmpty(txtContrasenia.Text))
+                    {
+                        lblResultado.Text = "Ingrese una contraseña";
+                        lblResultado.Visible = true;
+                        return false;
+                    }
                 }
+
+                // 2) Admin crea un nuevo Administrador
+                //    El Admin ingresa la contraseña manualmente
+                if (esAlta && tipoRegistrar == "Administrador" && usuarioLogeadoEsAdmin)
+                {
+                    if (string.IsNullOrEmpty(txtContrasenia.Text))
+                    {
+                        lblResultado.Text = "Ingrese una contraseña";
+                        lblResultado.Visible = true;
+                        return false;
+                    }
+                }
+
+                // 3) Admin modifica un Administrador existente
+                //    El admin ingresa contraseña manualmente
+                if (!esAlta && usuarioModificarEsAdmin && usuarioLogeadoEsAdmin)
+                {
+                    if (string.IsNullOrEmpty(txtContrasenia.Text))
+                    {
+                        lblResultado.Text = "Ingrese una contraseña";
+                        lblResultado.Visible = true;
+                        return false;
+                    }
+                }
+                //4) modo alta desde admin logueado a todos menos a un admin no valido porque autogenera
+                //5) modo modificar desde admin logueado a todos menos a un admin no valido porque autogenera
 
                 // Validar que no exista el nombre de usuario
                 List<Usuario> lista = negocio.listar();
