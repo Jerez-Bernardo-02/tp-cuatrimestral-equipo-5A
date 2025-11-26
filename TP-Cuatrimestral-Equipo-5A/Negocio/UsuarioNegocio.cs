@@ -34,14 +34,14 @@ namespace Negocio
 				}
 				return false;
             }
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-			finally
-			{
-				datos.cerrarConexion();
-			}
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
 
         public void bajaLogica(int idUsuario, bool activo = false)

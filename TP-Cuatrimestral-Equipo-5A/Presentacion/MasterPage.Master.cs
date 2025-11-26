@@ -15,7 +15,7 @@ namespace Presentacion
         public string NombreUsuario { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!(Page is Login || Page is FormularioRegistro))
+            if (!(Page is Login || Page is FormularioRegistro || Page is Error ))
             {
                 if (!Seguridad.sesionActiva(Session["usuario"]))
                 {
