@@ -206,7 +206,7 @@ namespace Negocio
             }
         }
 
-        public List<Turno> listaFiltrada(string dni = "", DateTime? fecha = null, int idEstado = 0, int idEspecialidad = 0)
+        public List<Turno> listaFiltrada(string dni = "", DateTime? fecha = null, int idEspecialidad = 0)
         {
             List<Turno> lista = new List<Turno>();
             AccesoDatos datos = new AccesoDatos();
@@ -225,12 +225,6 @@ namespace Negocio
                 {
                     consulta += " AND DATEDIFF(day, T.Fecha, @fecha) = 0";
                     datos.setearParametro("@fecha", fecha.Value);
-                }
-
-                if (idEstado > 0)
-                {
-                    consulta += " AND T.IdEstado = @idEstado";
-                    datos.setearParametro("@idEstado", idEstado);
                 }
 
                 if (idEspecialidad > 0)
@@ -334,26 +328,6 @@ namespace Negocio
                 }
 
                 return lista;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
-        public void cancelarTurno(int id)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta("UPDATE Turnos SET IdEstado = 3 WHERE Id = @id");
-                datos.setearParametro("@id", id);
-                datos.ejecutarLectura();
             }
             catch (Exception ex)
             {
@@ -689,6 +663,26 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        
+
+        public void reprogramarTurno(int idTurno, DateTime nuevaFecha)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE Turnos SET Fecha = @fecha, IdEstado = 2 WHERE Id = @idTurno");
+                datos.setearParametro("@fecha", nuevaFecha);
+                datos.setearParametro("@idTurno", idTurno);
+                datos.ejecutarAccion();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
