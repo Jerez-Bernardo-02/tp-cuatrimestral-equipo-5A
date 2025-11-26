@@ -4,7 +4,20 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
     <div class="container mt-4">
+         <%--Mensaje Exitoso o Error--%>
+        <div class="row">
+            <div class="col-12">
+                <%-- Label de ERROR (Rojo) --%>
+                <asp:Label ID="lblMensajeError" runat="server"
+                 CssClass="alert alert-danger d-block text-center" Visible="false">
+                </asp:Label>
 
+                <%-- Label de ÉXITO (Verde) --%>
+                <asp:Label ID="lblMensajeExito" runat="server"
+                 CssClass="alert alert-success d-block text-center" Visible="false">
+                </asp:Label>
+            </div>
+       </div>
         <h3 class="ms-3 mb-3">Formulario de Especialidad</h3>
         <h4 class="text-primary ms-3 mb-4">Datos de especialidad</h4>
 

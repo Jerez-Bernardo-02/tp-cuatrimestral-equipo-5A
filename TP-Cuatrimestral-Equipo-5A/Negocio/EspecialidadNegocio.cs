@@ -190,5 +190,42 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public bool EspecialidadTieneMedicos(int idEspecialidad)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"SELECT COUNT(*) AS Cantidad FROM EspecialidadesPorMedico WHERE IdEspecialidad = @idEspecialidad");
+
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.ejecutarLectura();
+
+                int cantidad = 0;
+                if (datos.Lector.Read())
+                {
+                    cantidad = (int)datos.Lector["Cantidad"];
+                    
+                }
+                if (cantidad > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+                   
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

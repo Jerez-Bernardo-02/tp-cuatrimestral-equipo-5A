@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
+    <asp:Label ID="lblResultado" runat="server" CssClass="alert alert-danger mt-3 d-block text-center" Visible="false"></asp:Label>
     <h3 class="fw-bold mb-4">Gestión Especialidades</h3>
 
     <%--Menu--%>
