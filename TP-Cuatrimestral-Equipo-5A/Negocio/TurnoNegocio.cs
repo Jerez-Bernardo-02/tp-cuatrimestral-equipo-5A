@@ -479,6 +479,7 @@ namespace Negocio
 
         }
 
+
         public bool medicoConTurnosPendientesDiaYRango(int idMedico, int idEspecialidad, int idDiaSemana, TimeSpan horaEntrada, TimeSpan horaSalida)
         {  
             AccesoDatos datos = new AccesoDatos();
@@ -519,6 +520,39 @@ namespace Negocio
 
         }
 
+        public bool pacienteConTurnosPendientes(int idPaciente)
+        {  
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SELECT COUNT(*) as contador FROM Turnos WHERE idPaciente = @idPaciente AND (IdEstado = 1  OR IdEstado = 2) "; //Estado 1 = Pendiente -- 2 = Reprogramado
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector["contador"];
+                    //Si lee algun dato y encontró registros que coinciden con el filtro y el medico tiene turnos pendientes, retorna true.
+                    if (cantidad > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
 
         public void AgregarTurno(Turno nuevo)
         {

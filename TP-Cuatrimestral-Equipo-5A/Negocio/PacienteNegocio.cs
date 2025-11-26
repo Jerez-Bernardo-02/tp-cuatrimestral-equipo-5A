@@ -47,7 +47,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT Nombre, Apellido, FechaNacimiento, Dni, Email, Telefono, UrlImagen, IdUsuario, Id FROM Pacientes WHERE Dni = @documento");
+                datos.setearConsulta("SELECT P.Nombre, P.Apellido, P.FechaNacimiento, P.Dni, P.Email, P.Telefono, P.UrlImagen, P.IdUsuario, P.Id, U.Activo FROM Pacientes P INNER JOIN Usuarios U ON P.IdUsuario = U.Id WHERE Dni = @documento");
                 datos.setearParametro("@documento", dni);
                 datos.ejecutarLectura();
 
@@ -73,6 +73,7 @@ namespace Negocio
 
                     paciente.Usuario = new Usuario();
                     paciente.Usuario.Id = (int)datos.Lector["IdUsuario"];
+                    paciente.Usuario.Activo = (bool)datos.Lector["Activo"];
                    
                    
                     //se retorna el objeto paciente encontrado y seteado

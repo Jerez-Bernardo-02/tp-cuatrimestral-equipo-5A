@@ -14,12 +14,12 @@
     <%--Mensaje Exitoso o Error--%>
     <div class="row">
         <div class="col-12">
-            <%-- Label de ERROR (Rojo) --%>
+            <%-- Label de error --%>
             <asp:Label ID="lblMensajeError" runat="server"
                 CssClass="alert alert-danger d-block text-center" Visible="false">
             </asp:Label>
 
-            <%-- Label de ÉXITO (Verde) --%>
+            <%-- Label de exito  --%>
             <asp:Label ID="lblMensajeExito" runat="server"
                 CssClass="alert alert-success d-block text-center" Visible="false">
             </asp:Label>
