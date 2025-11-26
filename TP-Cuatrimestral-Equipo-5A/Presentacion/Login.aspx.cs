@@ -93,7 +93,7 @@ namespace Presentacion
             usuario.Permiso = new Permiso();
             usuario.Permiso.Descripcion = "Paciente";
 
-            Session["usuario"] = usuario;
+            //Session["usuario"] = usuario;
             Session["usuarioRegistrar"] = "Paciente";
             Response.Redirect("FormularioRegistro.aspx", false);// Redirigimos al formulario de registro para pacientes
         }

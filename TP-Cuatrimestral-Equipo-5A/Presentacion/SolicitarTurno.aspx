@@ -16,7 +16,7 @@
             <div class="input-group">
                 <asp:TextBox ID="txtDniPaciente" runat="server" CssClass="form-control"
                     placeholder="Ingrese DNI del paciente"></asp:TextBox>
-
+                <asp:RequiredFieldValidator ErrorMessage="Debe ingresar un DNI" ControlToValidate="txtDniPaciente" runat="server" />
                 <%-- Boton de buscar paciente --%>
                 <asp:Button ID="btnBuscarPaciente" runat="server" Text="Buscar"
                     CssClass="btn btn-outline-secondary"

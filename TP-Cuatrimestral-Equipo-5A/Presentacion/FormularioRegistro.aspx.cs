@@ -44,7 +44,7 @@ namespace Presentacion
             // Session.Add("usuarioRegistrar", "Paciente");
             try
             {
-                if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esRecepcionista(Session["usuario"]) && !Seguridad.esAdministrador(Session["usuario"]))
+                if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esRecepcionista(Session["usuario"]) && !Seguridad.esAdministrador(Session["usuario"]) && Session["usuarioRegistrar"] != "Paciente")
                 {
                     Session["error"] = "No cuenta con los permisos necesarios";
                     Response.Redirect("Error.aspx");
@@ -379,7 +379,7 @@ namespace Presentacion
                     {
                         usuario.Clave = txtContrasenia.Text;
                     }
-                     if (usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
+                    else if (usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
                     {
                         usuario.Clave = generarClave(10);
                         txtContrasenia.Text = usuario.Clave;
@@ -430,7 +430,7 @@ namespace Presentacion
                     string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregarPaciente(paciente);
                     // llamar metodo envio emailNuevoRegistro
-                    if (usuarioLogeado.Permiso.Id == 4)
+                    if (usuarioLogeado!= null && usuarioLogeado.Permiso.Id == 4)
                     {
                         envioEmailNuevoRegistro(paciente.Nombre, paciente.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, paciente.Email, usuarioRegistrado.Clave);
                         Session.Remove("UsuarioRegistrado");
