@@ -92,5 +92,21 @@ namespace Presentacion
             Session.Clear();
             Response.Redirect("Login.aspx");
         }
+
+        protected void btnMiPerfil_Click(object sender, EventArgs e)
+        {
+            Usuario usuarioLogueado = (Usuario)Session["usuario"];
+
+            if (usuarioLogueado != null)
+            {
+                // Configurar session con los datos del usuario logueado para enviar el formulario de registro (editar perfil)
+                Session["usuarioModificar"] = usuarioLogueado;
+
+                Session["usuarioRegistrar"] = usuarioLogueado.Permiso.Descripcion;
+
+                // 5. Redirigir al formulario
+                Response.Redirect("FormularioRegistro.aspx");
+            }
+        }
     }
 }

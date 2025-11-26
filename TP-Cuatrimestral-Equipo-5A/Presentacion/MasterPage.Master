@@ -65,8 +65,8 @@
                         <%-- SI NO HAY NADIE LOGUEADO (Se muestra boton login) --%>
                         <a class="btn btn-outline-light me-2" href="Login.aspx">Ingresar</a>
                         <% }
-                        else
-                        { %>
+                            else
+                            { %>
                         <%-- SI ESTA LOGUEADO: --%>
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
@@ -76,7 +76,7 @@
                                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow">
                                     <%--Redireccion a editar perfil--%>
                                     <li>
-                                    <asp:Button runat="server" Text="Mi Perfil" ID="btnMiPerfil" CssClass="dropdown-item" OnClick="btnMiPerfil_Click" />
+                                        <asp:Button runat="server" Text="Mi Perfil" ID="btnMiPerfil" CssClass="dropdown-item" OnClick="btnMiPerfil_Click" />
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
