@@ -111,23 +111,90 @@ namespace Presentacion
             }
            
         }
-        protected void inactivarUsuario(int idUsuario)
+        protected bool TurnosFuturos(int idUsuario)
         {
             try
             {
                 UsuarioNegocio negocio = new UsuarioNegocio();
-                Usuario usuario = (Usuario)Session["usuario"];
-                if (usuario.Id== idUsuario)
+                TurnoNegocio negocioTurno = new TurnoNegocio();
+
+                Usuario usuario = negocio.buscarPorId(idUsuario);
+
+                List<Turno> listaTurnos = null;
+
+                
+                if (usuario.Permiso.Id == 3 || usuario.Permiso.Id == 4) //recepcionista o admin ni tienen turnos asociados
                 {
-                    return;
+                    return false;
                 }
-                negocio.bajaLogica(idUsuario);
+                 
+                if (usuario.Permiso.Id == 2) // medico
+                {
+                    MedicoNegocio medicoNegocio = new MedicoNegocio();
+                    Medico medico = medicoNegocio.buscarPorIdUsuario(idUsuario);
+                    //listaTurnos = negocioTurno.ListarTurnosFuturosPorMedico(medico.Id); //traigo lista de turnos asociados
+                }
+
+                if (usuario.Permiso.Id == 1) // Paciente
+                {
+                    PacienteNegocio pacienteNegocio = new PacienteNegocio();
+                    Paciente paciente = pacienteNegocio.buscarPorIdUsuario(idUsuario);
+                    //listaTurnos = negocioTurno.ListarTurnosFuturosPorPaciente(paciente.Id);//traido lista de turnos asociados
+                }
+
+                if (listaTurnos != null && listaTurnos.Count > 0) 
+                {
+                    Session["listaTurnosFuturo"] = listaTurnos;// si habian turnos, aca guardo la lista en la session
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
                 Session["error"] = ex.Message;
                 Response.Redirect("Error.aspx");
+                return false;
             }
+        }
+        protected void inactivarUsuario(int idUsuario)
+        {
+            try
+            {
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+
+                if (usuarioLogueado.Id == idUsuario) // el usuario no se puede autoInactivar(de todas maneras no tiene boton visible pero or las dudas controlamos)
+                {
+                    return;
+                }
+
+                if (TurnosFuturos(idUsuario))
+                {
+
+                    ScriptManager.RegisterStartupScript( //llamamos el modal
+                    this,
+                    GetType(),
+                    "ShowModal",
+                    "var modal = new bootstrap.Modal(document.getElementById('modalInactivarUsuario')); modal.show();",
+                    true
+                    );
+
+                    Session["idUsuarioAInactivar"] = idUsuario; //guardamos en al session el idUsuario a Inactivar
+                }
+                else
+                {
+                    UsuarioNegocio negocio = new UsuarioNegocio();
+                    negocio.bajaLogica(idUsuario);
+                    cargarGrilla();
+                }
+
+            }
+            catch(Exception ex)
+            {
+                Session["error"] = ex.Message;
+                Response.Redirect("Error.aspx");
+            }
+           
         }
         protected void activarUsuario(int idUsuario)
         {
@@ -155,20 +222,66 @@ namespace Presentacion
                 }
 
                 if (e.CommandName == "Activar")
+                {
                     activarUsuario(idUsuario);
+                    cargarGrilla();
+                }
 
                 if (e.CommandName == "Inactivar")
+                {
                     inactivarUsuario(idUsuario);
-
-                cargarGrilla();
-
-            }catch(Exception ex)
+                
+                    if (!TurnosFuturos(idUsuario)) // recargo grilla si no hubo modal
+                    {
+                        cargarGrilla();
+                    }
+                       
+                }
+            }
+            catch (Exception ex)
             {
                 Session["error"] = ex.Message;
                 Response.Redirect("Error.aspx");
             }
-            
+
+        }
+        protected void btnModalConfirmar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idUsuario = (int)Session["idUsuarioAInactivar"];
+
+                List<Turno> listaTurnos = (List<Turno>)Session["listaTurnosFuturo"];
+
+                TurnoNegocio negocioTurno = new TurnoNegocio();
+                UsuarioNegocio negocioUsuario = new UsuarioNegocio();
+
            
+                for (int i = 0; i< listaTurnos.Count; i++) //aca paso todos los turno a estado cancelado 
+                {
+                    negocioTurno.cancelarTurno(listaTurnos[i].Id);
+                }
+
+            
+                negocioUsuario.bajaLogica(idUsuario); //baja logica del usuario
+
+                Session.Remove("listaTurnosFuturo"); //limpio la session
+                Session.Remove("idUsuarioAInactivar");
+
+                cargarGrilla();
+            }
+            catch(Exception ex)
+            {
+                Session.Add("Error", ex);
+                Response.Redirect("Error.aspx");
+            } 
+        }
+
+        protected void btnModalCancelar_Click(object sender, EventArgs e)
+        {
+            Session.Remove("idUsuarioAInactivar"); //el btn cancelar al no impactar los cambios en la BD, limpio la session
+            Session.Remove("listaTurnosFuturo");
+            cargarGrilla();
         }
     }
 }

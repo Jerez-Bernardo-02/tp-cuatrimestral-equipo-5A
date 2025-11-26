@@ -40,8 +40,8 @@ namespace Presentacion
         //      Response.Redirect("FormularioRegistro.aspx");
 
         protected void Page_Load(object sender, EventArgs e)
-        {  
-           // Session.Add("usuarioRegistrar", "Paciente");
+        {
+            // Session.Add("usuarioRegistrar", "Paciente");
             try
             {
                 if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esRecepcionista(Session["usuario"]) && !Seguridad.esAdministrador(Session["usuario"]))
@@ -58,6 +58,8 @@ namespace Presentacion
                     // Si estoy modificando...
                     if (usuarioModificar != null)
                     {
+                        aplicarVisibilidadContrasenia();
+
                         cargarCampos(usuarioModificar);
                     }
                     else // Si NO estoy modificando...
@@ -66,24 +68,30 @@ namespace Presentacion
                         if (Seguridad.esAdministrador(Session["usuario"]))
                         {
                             ddlTipoPermiso.Visible = true;
-                            pnlDatos.Visible = false;
-                            pnlUsuario.Visible = false;
-                            btnGuardar.Visible = false;
                             cargarPermisos();
+
+                            //  admin: solo oculto paneles cuando no se selecciono nada 
+                            if (Session["tipoSeleccionado"] == null)
+                            {
+                                pnlDatos.Visible = false;
+                                pnlUsuario.Visible = false;
+                                btnGuardar.Visible = false;
+                            }
                         }
-                        else // Es cualquier otro usuario
+                        else //cualquier otro usuario
                         {
                             pnlDatos.Visible = true;
                             pnlUsuario.Visible = true;
                         }
                     }
-                    // btnVolverFormulariosAdmin();
+
+                    btnVolverFormulariosAdmin();
                 }
             }
             catch (Exception ex)
             {
                 Session.Add("Error", ex.ToString());
-                Response.Redirect("Error.aspx",false);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -96,6 +104,8 @@ namespace Presentacion
             cargarUsuario(usuario);
 
             string permiso = usuario.Permiso.Descripcion;
+
+            txtDocumento.Enabled = false; //bloqueo txt para modificar
 
             if (permiso == "Paciente")
             {
@@ -239,78 +249,10 @@ namespace Presentacion
                     lblResultado.Text = "ELIJA UNA OPCION VALIDA";
                     break;
             }
+            Session["tipoSeleccionado"] = true;
+            aplicarVisibilidadContrasenia();
         }
 
-        //private void aplicarVisibilidadContrasenia()
-        //{
-        //    Usuario usuarioLogueado = (Usuario)Session["usuario"];
-        //    Usuario usuarioModificar = (Usuario)Session["usuarioModificar"];
-        //    string tipoRegistrar = (string)Session["usuarioRegistrar"];
-
-        //    // al modificar
-        //    if (usuarioModificar != null)
-        //    { 
-        //        lblContrasenia.Visible = true;
-        //        txtContrasenia.Visible = true;
-        //        // Si admin modifica a un no-admin → permitir generar
-        //        if (Seguridad.esAdministrador(usuarioLogueado) &&
-        //            !Seguridad.esAdministrador(usuarioModificar))
-        //        {
-        //            btnGenerarClave.Visible = true;
-        //            lblContrasenia.Visible = false;
-        //            txtContrasenia.Visible = false;
-        //        }
-        //        else
-        //        {
-        //            btnGenerarClave.Visible = false;
-        //        }
-
-        //        return;
-        //    }
-
-        //    // No admin: ingresa contraseña manual
-        //    if (!Seguridad.esAdministrador(usuarioLogueado))
-        //    {
-        //        lblContrasenia.Visible = true;
-        //        txtContrasenia.Visible = true;
-        //        return;
-        //    }
-
-        //    // admin en modo alta: autogenera y manda por mail la contraseña. Excepto para otro admin, ya que no hay mail para enviarla.
-        //    if (tipoRegistrar == "Paciente" || tipoRegistrar == "Medico" || tipoRegistrar == "Recepcionista")
-        //    {
-        //        lblContrasenia.Visible = false;
-        //        txtContrasenia.Visible = false;
-        //    }
-        //    else if(tipoRegistrar == "Administrador")
-        //    {
-        //        // para carga manual de contraseña de nuevo admin
-        //        lblContrasenia.Visible = true;
-        //        txtContrasenia.Visible = true;
-        //    }
-        //}
-
-
-
-        //protected void btnVolverFormulariosAdmin()
-        //{
-        //    try
-        //    {
-        //        Usuario usuarioLogueado = (Usuario)Session["usuario"];
-
-        //        if (usuarioLogueado != null && Seguridad.esAdministrador(usuarioLogueado))
-        //        {
-        //            btnVolver.Visible = true;
-        //        }
-
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        Session.Add("error", ex);
-        //        Response.Redirect("Error.aspx",false);
-        //    }
-
-        //}
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -337,7 +279,7 @@ namespace Presentacion
                 }
                 // cargar usuario para traer id
                 guardarPaciente(usuarioModificar);
-
+                limpiarSessionsFormulario();
                 redireccionar();
                 return;
             }
@@ -352,7 +294,7 @@ namespace Presentacion
                 }
                 // cargar usuario para traer id
                 guardarMedico(usuarioModificar);
-
+                limpiarSessionsFormulario();
                 redireccionar();
                 return;
             }
@@ -367,7 +309,7 @@ namespace Presentacion
                 }
                 // cargar usuario para traer id
                 guardarRecepcionista(usuarioModificar);
-
+                limpiarSessionsFormulario();
                 redireccionar();
                 return;
             }
@@ -376,7 +318,7 @@ namespace Presentacion
             {
                 // Cargar usuario y guardar id
                 guardarUsuario(4, usuarioModificar);
-
+                limpiarSessionsFormulario();
                 redireccionar();
                 return;
             }
@@ -388,30 +330,67 @@ namespace Presentacion
         protected void guardarUsuario(int idPermiso, Usuario usuario = null)
         {
             UsuarioNegocio negocio = new UsuarioNegocio();
-
+            Usuario usuarioLogeado = new Usuario();
+            usuarioLogeado = (Usuario)Session["usuario"];
+            string tipoUsuario = (string)Session["usuarioRegistrar"];
+            string claveModificada = (string)Session["claveModificada"];
             try
             {
-                if (usuario != null)
+                if (usuario != null) // Accion de Modificar
                 {
                     usuario.NombreUsuario = txtUsuario.Text;
-                    usuario.Clave = txtContrasenia.Text;
+                    // Si es admin o recepcionista, trae lo guardado en session generado por el "btnGenerarClave"
+                    // Si es paciente, validar si esta vacio: Si esta vacio, no hacer nada (permitrir al usaurio no tener que registrar una nueva clave si no quiere)
+                    //                                        Si NO esta vadcio, guardar nueva clave
+                    if (claveModificada != null && usuarioLogeado.Permiso.Id == 4) 
+                    {
+                        usuario.Clave = claveModificada;  
+                    }
+                    else if (txtContrasenia.Text != "")
+                    {
+                        usuario.Clave = txtContrasenia.Text; //si se decide dejar sin cambios es decir txt vacio, no impacta el cambio. caso contrario si
+                    }
                     usuario.Activo = true;
                     usuario.Permiso = new Permiso();
                     usuario.Permiso.Id = idPermiso;
 
                     negocio.modificar(usuario);
+                    // envio email cambio de clave 
+                    if (claveModificada != null)
+                    {
+                        PersonaNegocio personaNegocio = new PersonaNegocio();
+                        Persona persona = personaNegocio.BuscarPorIdUsuario(usuario.Id);
+
+                        envioEmailCambioClave(persona.Nombre, persona.Apellido, usuario.NombreUsuario, persona.Email, claveModificada);
+                    }
+
+                    Session.Remove("claveModificada");
                 }
-                else
+                else // Acción de Registrar
                 {
                     usuario = new Usuario();
 
                     usuario.NombreUsuario = txtUsuario.Text;
-                    usuario.Clave = txtContrasenia.Text;
                     usuario.Activo = true;
                     usuario.Permiso = new Permiso();
                     usuario.Permiso.Id = idPermiso;
-
+                    // Si es admin o recepcionista, llama al metodo de generar clave y se asigna automaticamente
+                    if (usuarioLogeado == null)
+                    {
+                        usuario.Clave = txtContrasenia.Text;
+                    }
+                     if (usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
+                    {
+                        usuario.Clave = generarClave(10);
+                        txtContrasenia.Text = usuario.Clave;
+                    }
+                    else
+                    {
+                        usuario.Clave = txtContrasenia.Text;
+                    }
+      
                     Session["idUsuarioAgregado"] = negocio.agregar(usuario);
+                    Session["UsuarioRegistrado"] = usuario;
                 }
             }
             catch (Exception ex)
@@ -425,7 +404,7 @@ namespace Presentacion
         {
             Paciente paciente = new Paciente();
             PacienteNegocio negocio = new PacienteNegocio();
-
+            Usuario usuarioLogeado = (Usuario)Session["usuario"];
             try
             {
                 guardarUsuario(1, usuario);
@@ -438,7 +417,7 @@ namespace Presentacion
                 paciente.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
                 paciente.Usuario = new Usuario();
 
-                if(usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el paciente
+                if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el paciente
                 {
                     paciente.Usuario.Id = usuario.Id;
 
@@ -447,8 +426,16 @@ namespace Presentacion
                 else
                 {
                     paciente.Usuario.Id = (int)Session["idUsuarioAgregado"];
-
+                    Usuario usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
+                    string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregarPaciente(paciente);
+                    // llamar metodo envio emailNuevoRegistro
+                    if (usuarioLogeado.Permiso.Id == 4)
+                    {
+                        envioEmailNuevoRegistro(paciente.Nombre, paciente.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, paciente.Email, usuarioRegistrado.Clave);
+                        Session.Remove("UsuarioRegistrado");
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -462,6 +449,7 @@ namespace Presentacion
         {
             Medico medico = new Medico();
             MedicoNegocio negocio = new MedicoNegocio();
+            Usuario usuarioLogeado = (Usuario)Session["usuario"];
 
             try
             {
@@ -485,8 +473,15 @@ namespace Presentacion
                 else
                 {
                     medico.Usuario.Id = (int)Session["idUsuarioAgregado"];
-
+                    Usuario usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
+                    string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregarMedico(medico);
+                    // llamar metodo envio emailNuevoRegistro
+                    if (usuarioLogeado.Permiso.Id == 4)
+                    {
+                        envioEmailNuevoRegistro(medico.Nombre, medico.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, medico.Email, usuarioRegistrado.Clave);
+                        Session.Remove("UsuarioRegistrado");
+                    }
                 }
             }
             catch (Exception ex)
@@ -500,6 +495,7 @@ namespace Presentacion
         {
             Recepcionista recepcionista = new Recepcionista();
             RecepcionistaNegocio negocio = new RecepcionistaNegocio();
+            Usuario usuarioLogeado = (Usuario)Session["usuario"];
 
             try
             {
@@ -522,8 +518,15 @@ namespace Presentacion
                 else
                 {
                     recepcionista.Usuario.Id = (int)Session["idUsuarioAgregado"];
-
+                    Usuario usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
+                    string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregar(recepcionista);
+                    // llamar metodo envio emailNuevoRegistro
+                    if (usuarioLogeado.Permiso.Id == 4)
+                    {
+                        envioEmailNuevoRegistro(recepcionista.Nombre, recepcionista.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, recepcionista.Email, usuarioRegistrado.Clave);
+                        Session.Remove("UsuarioRegistrado");
+                    }
                 }
             }
             catch (Exception ex)
@@ -532,13 +535,6 @@ namespace Presentacion
                 Response.Redirect("Error.aspx", false);
             }
         }
-        //protected static string generarClave(int longitud = 10) // metodo para autogenerar claves al azar
-        //{
-        //    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        //    Random random = new Random();
-        //    return new string(Enumerable.Repeat(chars, longitud)
-        //        .Select(s => s[random.Next(s.Length)]).ToArray());
-        //}
 
 
 
@@ -559,11 +555,30 @@ namespace Presentacion
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(txtContrasenia.Text))
+                Usuario usuarioLogeado = (Usuario)Session["usuario"];
+                string tipoRegistrar = (string)Session["usuarioRegistrar"];
+                bool esAlta = (usuarioModificar == null);
+                bool usuarioLogeadoEsAdmin = (usuarioLogeado != null && Seguridad.esAdministrador(usuarioLogeado));
+                bool usuarioModificarEsAdmin = (usuarioModificar != null && usuarioModificar.Permiso.Id == 4);
+
+                // 1) Registro desde login (Paciente se crea solo)
+                bool validarDesdeLogin = (usuarioLogeado == null && esAlta);
+
+                // 2) Admin crea un nuevo Admin
+                bool adminCreaAdmin = (usuarioLogeadoEsAdmin && tipoRegistrar == "Administrador" && esAlta);
+
+                // 3) Admin modifica un Admin existente
+                bool adminModificaAdmin = (usuarioLogeadoEsAdmin && !esAlta && usuarioModificarEsAdmin);
+
+                // Si corresponde validar contraseña ↓↓↓
+                if (validarDesdeLogin || adminCreaAdmin || adminModificaAdmin)
                 {
-                    lblResultado.Text = "Ingrese una contraseña";
-                    lblResultado.Visible = true;
-                    return false;
+                    if (string.IsNullOrEmpty(txtContrasenia.Text))
+                    {
+                        lblResultado.Text = "Ingrese una contraseña";
+                        lblResultado.Visible = true;
+                        return false;
+                    }
                 }
 
                 // Validar que no exista el nombre de usuario
@@ -881,91 +896,190 @@ namespace Presentacion
                 ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='Login.aspx';}, 3000);", true);
             }
         }
-        //protected void envioEmailNuevoRegistro(string nombreUsuario, string apellidoUsuario, string tipoUsuario, string NombreUsuario, string emailUsuario, string claveUsuario)
-        //{
-        //    try
-        //    {
-        //        EmailService email = new EmailService();
-        //        string cuerpo = $@"
-        //            <html>
-        //              <body style='font-family: Arial, sans-serif; background-color:#f5f5f5; padding:20px; color:#000;'>
-        //                <div style='max-width:600px; margin:auto; background:#fff; border:1px solid #ddd; border-radius:8px; padding:20px;'>
-        //                  <h2 style='text-align:center;'>Gracias por registrarte en Nuestra Clínica, {nombreUsuario} {apellidoUsuario}</h2>
-        //                  <p>Tipo de usuario registrado: <b>{tipoUsuario}</b></p>
-        //                  <p>Tu usuario para ingresar es: 
-        //                    <b>{NombreUsuario}</b>
-        //                  </p>
-        //                  <p>Tu contraseña es:</p>
-        //                  <p style='font-size:20px; font-weight:bold; text-align:center; margin:15px 0;'>{claveUsuario} </p>
-        //                  <p style='text-align:center;'>Ingresa y actualízala por una nueva contraseña.</p>
-        //                  <hr style='border:none; border-top:1px solid #eee; margin:20px 0;' />
-        //                  <p style='font-size:12px; text-align:center;'>
-        //                    Este mensaje fue generado automáticamente por <b>NuestraClinica</b>.<br/>
-        //                    Por favor, no respondas a este correo.
-        //                  </p>
-        //                </div>
-        //              </body>
-        //            </html>";
-        //        email.armarCorreo(emailUsuario, "Nuevo Registro - Nuestra Clínica", cuerpo); // Se arma al estructura del correo
-        //        email.enviarEmail(); // Se envia el correo al email del cliente agregado o modificado
-        //    }
-        //    catch(Exception ex) 
-        //    {
-        //            Session.Add("error", "Error al enviar el email" + ex.ToString());
-        //            Response.Redirect("Error.aspx", false);
-        //            return;
-        //    }
-        //}
-        //protected void envioEmailCambioClave(string nombre, string apellido, string usuarioNombre, string email, string nuevaClave)
-        //{
-        //    try
-        //    {
-        //        EmailService emailService = new EmailService();
-        //        string cuerpo = $@"
-        //    <html>
-        //      <body style='font-family: Arial;'>
-        //        <h2>Hola {nombre} {apellido},</h2>
-        //        <p>Un administrador ha actualizado tu contraseña.</p>
-        //        <p>Tu usuario es: <b>{usuarioNombre}</b></p>
-        //        <p>Tu nueva contraseña es:</p>
-        //        <h3 style='text-align:center'>{nuevaClave}</h3>
-        //        <p>Te recomendamos cambiarla cuando inicies sesión.</p>
-        //      </body>
-        //    </html>";
 
-        //        emailService.armarCorreo(email, "Actualización de contraseña", cuerpo);
-        //        emailService.enviarEmail();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Session.Add("error", ex.ToString());
-        //        Response.Redirect("Error.aspx", false);
-        //    }
-        //}
+        protected void envioEmailNuevoRegistro(string nombreUsuario, string apellidoUsuario, string tipoUsuario, string NombreUsuario, string emailUsuario, string claveUsuario)
+        {
+            try
+            {
+                EmailService email = new EmailService();
+                string cuerpo = $@"
+                    <html>
+                      <body style='font-family: Arial, sans-serif; background-color:#f5f5f5; padding:20px; color:#000;'>
+                        <div style='max-width:600px; margin:auto; background:#fff; border:1px solid #ddd; border-radius:8px; padding:20px;'>
+                          <h2 style='text-align:center;'>Gracias por registrarte en Nuestra Clínica, {nombreUsuario} {apellidoUsuario}</h2>
+                          <p>Tipo de usuario registrado: <b>{tipoUsuario}</b></p>
+                          <p>Tu usuario para ingresar es: 
+                            <b>{NombreUsuario}</b>
+                          </p>
+                          <p>Tu contraseña es:</p>
+                          <p style='font-size:20px; font-weight:bold; text-align:center; margin:15px 0;'>{claveUsuario} </p>
+                          <p style='text-align:center;'>Ingresa y actualízala por una nueva contraseña.</p>
+                          <hr style='border:none; border-top:1px solid #eee; margin:20px 0;' />
+                          <p style='font-size:12px; text-align:center;'>
+                            Este mensaje fue generado automáticamente por <b>NuestraClinica</b>.<br/>
+                            Por favor, no respondas a este correo.
+                          </p>
+                        </div>
+                      </body>
+                    </html>";
+                email.armarCorreo(emailUsuario, "Nuevo Registro - Nuestra Clínica", cuerpo); // Se arma al estructura del correo
+                email.enviarEmail(); // Se envia el correo al email del cliente agregado o modificado
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", "Error al enviar el email" + ex.ToString());
+                Response.Redirect("Error.aspx", false);
+                return;
+            }
+        }
+        protected void envioEmailCambioClave(string nombre, string apellido, string usuarioNombre, string email, string nuevaClave)
+        {
+            try
+            {
+                EmailService emailService = new EmailService();
+                string cuerpo = $@"
+            <html>
+              <body style='font-family: Arial;'>
+                <h2>Hola {nombre} {apellido},</h2>
+                <p>Un administrador ha actualizado tu contraseña.</p>
+                <p>Tu usuario es: <b>{usuarioNombre}</b></p>
+                <p>Tu nueva contraseña es:</p>
+                <h3 style='text-align:center'>{nuevaClave}</h3>
+                <p>Te recomendamos cambiarla cuando inicies sesión.</p>
+              </body>
+            </html>";
 
-        //protected void btnVolver_Click(object sender, EventArgs e)
-        //{
-        //    Usuario usuario = (Usuario)Session["usuario"];
-        //    if (usuario.Permiso.Id == 4)
-        //    {
-        //        Response.Redirect("AdministradorUsuarios.aspx", false);
-        //        Session.Remove("usuarioModificar");
-        //        Session.Remove("claveModificada");
-        //    }
+                emailService.armarCorreo(email, "Actualización de contraseña", cuerpo);
+                emailService.enviarEmail();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("Error.aspx", false);
+            }
+        }
 
-        //}
+        protected void btnVolver_Click(object sender, EventArgs e)
+        {
+            Usuario usuario = (Usuario)Session["usuario"];
+            if (usuario.Permiso.Id == 4)
+            {
+                limpiarSessionsFormulario();
+                Response.Redirect("AdministradorUsuarios.aspx", false);
+            }
 
-        //protected void btnGenerarClave_Click(object sender, EventArgs e)
-        //{
-        //    Usuario usuarioLogeado = new Usuario();
-        //    usuarioLogeado = (Usuario)Session["usuario"];
-        //    string tipoUsuario = (string)Session["usuarioRegistrar"];
-        //    if(usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
-        //    {
-        //        string claveModificada = generarClave(10);
-        //        Session.Add("claveModificada", claveModificada);
-        //    }
+        }
 
-        //}
+        protected void btnGenerarClave_Click(object sender, EventArgs e)
+        {
+            Usuario usuarioLogeado = new Usuario();
+            usuarioLogeado = (Usuario)Session["usuario"];
+            string tipoUsuario = (string)Session["usuarioRegistrar"];
+            if (usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
+            {
+                string claveModificada = generarClave(10);
+                Session.Add("claveModificada", claveModificada);
+                MostrarExito("Clave autogenerada correctamente. Debe registrar cambios para confirmar.");
+            }
+
+        }
+
+        protected static string generarClave(int longitud = 10) // metodo para autogenerar claves al azar
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            Random random = new Random();
+            return new string(Enumerable.Repeat(chars, longitud)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private void MostrarExito(string mensaje)
+        {
+            LimpiarMensajes(); //se limpian y ocultan ambos mensajes.
+            lblMensajeExito.Text = mensaje; // se muestra y se llena solo el mensaje de exito
+            lblMensajeExito.Visible = true;
+        }
+        private void LimpiarMensajes()
+        {
+            lblMensajeExito.Visible = false;
+            lblMensajeExito.Text = "";
+        }
+
+        protected void btnVolverFormulariosAdmin()
+        {
+            try
+            {
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+
+                if (usuarioLogueado != null && Seguridad.esAdministrador(usuarioLogueado))
+                {
+                    btnVolver.Visible = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx", false);
+            }
+
+        }
+
+        private void aplicarVisibilidadContrasenia()
+        {
+            Usuario usuarioLogueado = (Usuario)Session["usuario"];
+            Usuario usuarioModificar = (Usuario)Session["usuarioModificar"];
+            string tipoRegistrar = (string)Session["usuarioRegistrar"];
+
+            // al modificar
+            if (usuarioModificar != null)
+            {
+                lblContrasenia.Visible = true;
+                txtContrasenia.Visible = true;
+                // Si admin modifica a un no-admin → permitir generar
+                if (Seguridad.esAdministrador(usuarioLogueado) &&
+                    !Seguridad.esAdministrador(usuarioModificar))
+                {
+                    btnGenerarClave.Visible = true;
+                    lblContrasenia.Visible = false;
+                    txtContrasenia.Visible = false;
+                }
+                else
+                {
+                    btnGenerarClave.Visible = false;
+                }
+
+                return;
+            }
+
+            // No admin: ingresa contraseña manual
+            if (!Seguridad.esAdministrador(usuarioLogueado))
+            {
+                lblContrasenia.Visible = true;
+                txtContrasenia.Visible = true;
+                return;
+            }
+
+            // admin en modo alta: autogenera y manda por mail la contraseña. Excepto para otro admin, ya que no hay mail para enviarla.
+            if (tipoRegistrar == "Paciente" || tipoRegistrar == "Medico" || tipoRegistrar == "Recepcionista")
+            {
+                lblContrasenia.Visible = false;
+                txtContrasenia.Visible = false;
+            }
+            else if (tipoRegistrar == "Administrador")
+            {
+                // para carga manual de contraseña de nuevo admin
+                lblContrasenia.Visible = true;
+                txtContrasenia.Visible = true;
+            }
+        }
+        private void limpiarSessionsFormulario()
+        {
+            Session.Remove("tipoSeleccionado");
+            Session.Remove("usuarioRegistrar");
+            Session.Remove("usuarioModificar");
+            Session.Remove("claveModificada");
+            Session.Remove("idUsuarioAgregado");
+            Session.Remove("UsuarioRegistrado");
+        }
     }
-}                
+}

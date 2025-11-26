@@ -100,7 +100,7 @@
         </asp:Panel>
 
         <asp:Panel ID="pnlUsuario" runat="server">
-            <div id="divDatosAcceso" runat="server">
+
                 <h4 class="text-primary ms-3 mb-4">Datos de acceso</h4>
                 <div class="row mb-3">
                     <div class="col-md-6">
@@ -111,18 +111,21 @@
                     <div class="col-md-6">
                         <label runat="server" ID="lblContrasenia" for="txtContrasenia" class="form-label">Contraseña</label>
                         <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" placeholder="Contraseña"></asp:TextBox>
-                        <%--<asp:Button ID="btnGenerarClave" runat="server" CssClass="btn btn-secondary mt-2" Text="Generar nueva contraseña" OnClick="btnGenerarClave_Click" Visible="false" />--%>
+                        <div class="mt-3" style="max-width: 320px;">
+                            <asp:Button ID="btnGenerarClave" runat="server" CssClass="btn btn-secondary w-100 mb-2" Text="Generar nueva contraseña" OnClick="btnGenerarClave_Click" Visible="false" />
+                            <asp:Label ID="lblMensajeExito" runat="server" CssClass="alert alert-success text-center p-2" Style="display: block; margin-top: 4px;" Visible="false">
+                            </asp:Label>
+                        </div>
+
                     </div>
                 </div>
-            </div>
 
         </asp:Panel>
 
         <div class="row mb-3">
             <div class="col-md-4">
                 <asp:Button Text="Guardar" ID="btnGuardar" OnClick="btnGuardar_Click" runat="server" class="btn btn-primary" />
-                <%--<asp:Button Text="Inactivar" ID="btnInactivar" OnClick="btnInactivar_Click" runat="server" CssClass="btn btn-warning" />--%>
-                <%--<asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary" Visible="false"/>--%>
+                <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary" Visible="false"/>
             </div>
         </div>
     </div>

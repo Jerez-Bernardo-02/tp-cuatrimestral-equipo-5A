@@ -75,7 +75,8 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow">
                                     <%--Redireccion a editar perfil--%>
-                                    <li><a class="dropdown-item" href="MiPerfil.aspx">Mi Perfil</a></li>
+                                    <li>
+                                    <asp:Button runat="server" Text="Mi Perfil" ID="btnMiPerfil" CssClass="dropdown-item" OnClick="btnMiPerfil_Click" />
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
