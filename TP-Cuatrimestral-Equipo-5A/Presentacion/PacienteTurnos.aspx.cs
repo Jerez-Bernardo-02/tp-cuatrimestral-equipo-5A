@@ -114,7 +114,7 @@ namespace Presentacion
         {
             TurnoNegocio negocio = new TurnoNegocio();
 
-            negocio.cancelarTurno((int)Session["idTurno"]);
+            negocio.actualizarEstado((int)Session["idTurno"], 3);
 
             cargarTurnos();
         }
