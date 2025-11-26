@@ -51,6 +51,15 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Panel pnlAdministrarEspecialidades;
 
         /// <summary>
+        /// Control txtDescripcionFiltro.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDescripcionFiltro;
+
+        /// <summary>
         /// Control dgvEspecialidades.
         /// </summary>
         /// <remarks>
@@ -94,6 +103,15 @@ namespace Presentacion
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMensajeExito;
+
+        /// <summary>
+        /// Control txtMatriculaMedico.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMatriculaMedico;
 
         /// <summary>
         /// Control dgvMedicos.

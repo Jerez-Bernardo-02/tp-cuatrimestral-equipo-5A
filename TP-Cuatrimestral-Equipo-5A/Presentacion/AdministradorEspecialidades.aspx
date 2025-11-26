@@ -5,6 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:Label ID="lblResultado" runat="server" CssClass="alert alert-danger mt-3 d-block text-center" Visible="false"></asp:Label>
     <h3 class="fw-bold mb-4">Gestión Especialidades</h3>
+    <%--Filtro por Descripcion especialidades--%>
 
     <%--Menu--%>
     <ul class="nav nav-tabs mt-3">
@@ -21,7 +22,13 @@
 
     <%--Panel de ABM especialidades--%>
     <asp:Panel runat="server" ID="pnlAdministrarEspecialidades">
-
+          <div class="row mt-4 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-secondary fw-semibold">Filtrar especialidades</label>
+            <asp:TextBox runat="server" ID="txtDescripcionFiltro" AutoPostBack="true" CssClass="form-control" PlaceHolder="Ej: Cardiología" OnTextChanged="txtDescripcion_TextChanged">
+            </asp:TextBox>
+        </div>
+    </div>
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -79,7 +86,13 @@
             </asp:Label>
         </div>
     </div>
-
+      <div class="row mt-4 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-secondary fw-semibold">Filtrar Médicos</label>
+            <asp:TextBox runat="server" ID="txtMatriculaMedico" AutoPostBack="true" CssClass="form-control" PlaceHolder="Ej: 1245" OnTextChanged="txtMedicosMatricula_TextChanged">
+            </asp:TextBox>
+        </div>
+    </div>
         <div class="row">
             <%-- COLUMNA IZQUIERDA: Lista de medicos --%>
             <div class="col-md-6">

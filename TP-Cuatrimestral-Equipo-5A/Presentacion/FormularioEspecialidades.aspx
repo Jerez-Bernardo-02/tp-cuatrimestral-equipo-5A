@@ -40,12 +40,10 @@
 
         <!-- Botón Eliminar -->
         <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" OnClick="btnEliminar_Click" CssClass="btn btn-danger" Visible="false" />
+         <!-- Volver -->
+        <asp:Button Text="Volver" ID="Button1" runat="server" CssClass="btn btn-outline-secondary" OnClick="btnVolver_Click" />
+    </div>
 
-    </div>
-    <!-- Volver -->
-    <div class="col-md-3 text-end">
-        <asp:Button Text="Volver" ID="btnVolver" runat="server" CssClass="btn btn-outline-secondary" OnClick="btnVolver_Click" />
-    </div>
 </div>
 <!-- confirmacion eliminacion -->
 <div class="row mb-3">

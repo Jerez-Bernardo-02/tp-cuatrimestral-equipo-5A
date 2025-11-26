@@ -375,10 +375,10 @@ namespace Presentacion
                     usuario.Permiso = new Permiso();
                     usuario.Permiso.Id = idPermiso;
                     // Si es admin o recepcionista, llama al metodo de generar clave y se asigna automaticamente
-                    if (usuarioLogeado == null)
+                    /*if (usuarioLogeado == null)
                     {
                         usuario.Clave = txtContrasenia.Text;
-                    }
+                    }*/
                      if (usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
                     {
                         usuario.Clave = generarClave(10);

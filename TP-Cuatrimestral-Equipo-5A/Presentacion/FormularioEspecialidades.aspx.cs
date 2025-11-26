@@ -14,6 +14,11 @@ namespace Presentacion
         public bool ConfirmaEliminacion { get; set; } 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["usuario"] == null || !Seguridad.esAdministrador(Session["usuario"]))
+            {
+                Session["error"] = "No cuenta con los permisos necesarios";
+                Response.Redirect("Error.aspx");
+            }
             ConfirmaEliminacion = false;
             if (!IsPostBack)
             {

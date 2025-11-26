@@ -20,7 +20,18 @@
                 </asp:Label>
             </div>
         </div>
-
+          <div class="row mt-4 mb-3">
+             <div class="col-md-4">
+               <label class="form-label text-secondary fw-semibold">Filtrar por Dni</label>
+               <asp:TextBox runat="server" ID="txtDni" AutoPostBack="true" CssClass="form-control" PlaceHolder="Ingrese Dni.." OnTextChanged="txtDni_TextChanged">
+             </asp:TextBox>
+         </div>
+         <div class="col-md-4">
+             <label class="form-label text-secondary fw-semibold">Filtrar por Rol</label>
+             <asp:TextBox runat="server" ID="txtRol" AutoPostBack="true" CssClass="form-control" PlaceHolder="Ingrese Rol.." OnTextChanged="txtRol_TextChanged">
+         </asp:TextBox>
+        </div>
+        </div>
         <div class="card shadow-sm">
             <div class="card-body">
 

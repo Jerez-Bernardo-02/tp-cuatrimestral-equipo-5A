@@ -13,6 +13,11 @@ namespace Presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["usuario"] == null || !Seguridad.esAdministrador(Session["usuario"]))
+            {
+                Session["error"] = "No cuenta con los permisos necesarios";
+                Response.Redirect("Error.aspx");
+            }
             if (!IsPostBack)
             {
                 pnlAdministrarEspecialidades.Visible = true;
@@ -56,7 +61,8 @@ namespace Presentacion
             {
                 
                 EspecialidadNegocio negocio = new EspecialidadNegocio();
-                dgvEspecialidades.DataSource = negocio.listar();
+                Session.Add("listaEspecialidades", negocio.listar());
+                dgvEspecialidades.DataSource = (List<Especialidad>)Session["listaEspecialidades"];
                 dgvEspecialidades.DataBind();
             }
             catch(Exception ex)
@@ -93,7 +99,8 @@ namespace Presentacion
             try
             {
                 MedicoNegocio medicoNegocio = new MedicoNegocio();
-                dgvMedicos.DataSource = medicoNegocio.listar(false); //al enviar false se listan tambien los inactivos
+                Session.Add("listaMedicos", medicoNegocio.listar(false));
+                dgvMedicos.DataSource = (List<Medico>)Session["listaMedicos"]; //al enviar false se listan tambien los inactivos
                 dgvMedicos.DataBind();
 
             }
@@ -213,5 +220,28 @@ namespace Presentacion
             lblMensajeExito.Text = "";
         }
 
+        protected void txtDescripcion_TextChanged(object sender, EventArgs e)
+        {
+            List<Especialidad> lista = (List<Especialidad>)Session["listaEspecialidades"];
+            List<Especialidad> listaFiltrada = lista.FindAll(x => x.Descripcion.ToUpper().Contains(txtDescripcionFiltro.Text.ToUpper()));
+            dgvEspecialidades.DataSource = listaFiltrada;
+            dgvEspecialidades.DataBind();
+
+        }
+
+        protected void txtMedicosMatricula_TextChanged(object sender, EventArgs e)
+        {
+            List<Medico> lista = (List<Medico>)Session["listaMedicos"];
+            string filtro = txtMatriculaMedico.Text.Trim();
+
+            //List<Medico> listaFiltrada = lista.FindAll(x => x.Matricula != null && x.Matricula.IndexOf(filtro, StringComparison.OrdinalIgnoreCase) >= 0);
+            List<Medico> listaFiltrada = lista.FindAll(x => x.Dni.ToUpper().Contains(txtMatriculaMedico.Text.ToUpper()));
+            dgvMedicos.DataSource = listaFiltrada;
+            dgvMedicos.DataBind();
+            //limpio el medico seleccionado guardado en la session y oculto el panel
+            pnlAccionesMedico.Visible = false;
+            Session["medico"] = null;
+            lblNombreMedico.Text = "-";
+        }
     }
 }
