@@ -38,13 +38,18 @@ namespace Negocio
         }
 
 
-        public List<Especialidad> listarPorIdMedico(int idMedico)
+        public List<Especialidad> listarPorIdMedico(int idMedico, bool soloActivos = true)
         {
             AccesoDatos datos = new AccesoDatos();
             List<Especialidad> lista = new List<Especialidad>();
             try
             {
-                datos.setearConsulta("SELECT E.Id , E.Descripcion as Especialidad FROM EspecialidadesPorMedico EPM INNER JOIN Especialidades E on EPM.IdEspecialidad = E.Id WHERE EPM.IdMedico = @idMedico;");
+                string consulta = "SELECT E.Id , E.Descripcion as Especialidad FROM EspecialidadesPorMedico EPM INNER JOIN Especialidades E on EPM.IdEspecialidad = E.Id INNER JOIN Medicos M ON EPM.IdMedico = M.Id INNER JOIN Usuarios U ON M.IdUsuario = U.Id WHERE EPM.IdMedico = @idMedico ";
+                if (soloActivos)
+                {
+                    consulta += " AND U.Activo = 1 ;"; //Si se envia el segundo farametro false se listan todos, sino solo se listaran los activos.
+                }
+                datos.setearConsulta(consulta);
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())

@@ -78,6 +78,14 @@ namespace Presentacion
                     txtNombrePaciente.Visible = false;
                     return;
                 }
+                if (!paciente.Usuario.Activo)
+                {
+                    lblErrorPaciente.Text = "El paciente se encuentra dado de baja!";
+                    lblErrorPaciente.Visible = true;
+                    txtNombrePaciente.Visible = false;
+                    txtDniPaciente.Text = null;
+                    return;
+                }
                 else //Si se encontró un paciente:
                 {
                     txtNombrePaciente.Text = paciente.NombreCompleto;
@@ -349,7 +357,7 @@ namespace Presentacion
             MedicoNegocio medicoNegocio = new MedicoNegocio();
             int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
 
-            ddlMedicos.DataSource = medicoNegocio.listarPorIdEspecialidad(idEspecialidad);
+            ddlMedicos.DataSource = medicoNegocio.listarPorIdEspecialidad(idEspecialidad); //al no enviar un segundo parametro, se setea true por omision y se listan solo los activos.
             ddlMedicos.DataTextField = "Apellido";
             ddlMedicos.DataValueField = "Id";
             ddlMedicos.DataBind();

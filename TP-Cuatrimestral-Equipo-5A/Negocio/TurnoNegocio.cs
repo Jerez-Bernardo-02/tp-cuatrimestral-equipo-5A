@@ -11,14 +11,21 @@ namespace Negocio
 {
     public class TurnoNegocio
     {
-        public List<Turno> ListarTurnosDelDia(int idMedico)
-        { //HECHO PARA PROBAR, FALTA MEJORAR EL METODO
+        public List<Turno> ListarTurnosDelDia(int idMedico, int idEstado)
+        { 
             AccesoDatos datos = new AccesoDatos();
             List<Turno> lista = new List<Turno>();
 
             try
             {
-                datos.setearConsulta("SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion  FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id= T.IdEspecialidad INNER JOIN Estados E ON E.Id= T.IdEstado INNER JOIN Pacientes P ON P.Id= T.IdPaciente  WHERE T.IdMedico = @idMedico AND CAST(T.Fecha AS date) = CAST(GETDATE() AS date) ORDER BY T.Fecha ASC");
+                string consulta = "SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion  FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id= T.IdEspecialidad INNER JOIN Estados E ON E.Id= T.IdEstado INNER JOIN Pacientes P ON P.Id= T.IdPaciente  WHERE T.IdMedico = @idMedico AND CAST(T.Fecha AS date) = CAST(GETDATE() AS date) ";
+                if (idEstado > 0)
+                {
+                    datos.setearParametro("@idEstado", idEstado);
+                    consulta += "AND T.IdEstado = @idEstado ";
+                }
+                consulta += " ORDER BY T.Fecha ASC;";
+                datos.setearConsulta(consulta);
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
@@ -117,7 +124,7 @@ namespace Negocio
             }
         }
         public List<Turno> ListarTurnosFiltrados(int idMedico, string filtroNombre, string filtroApellido, string filtroDni, string filtroFecha, int idEstado)
-        { //HECHO PARA PROBAR, FALTA MEJORAR EL METODO
+        { 
             AccesoDatos datos = new AccesoDatos();
             List<Turno> lista = new List<Turno>();
 
@@ -147,15 +154,15 @@ namespace Negocio
 
                 if (!string.IsNullOrEmpty(filtroFecha))
                 {
-                    consulta += " AND (T.Fecha = @filtroFecha)";
-                    datos.setearParametro("@filtroFecha", filtroFecha);
+                    consulta += " AND CAST(T.Fecha AS date) = @filtroFecha";
+                    datos.setearParametro("@filtroFecha", DateTime.Parse(filtroFecha));
                 }
-                if (idEstado > 0) // aca que hago porque estado es int, como lo valido para saber si tiene datos.
+                if (idEstado > 0) // Si estado > 0 filtro por estado, sino no (El valor de "Filtrar todos los estados" es 0 por lo que no entra en el IF.
                 {
                     consulta += " AND (T.IdEstado = @idEstado)";
                     datos.setearParametro("@idEstado", idEstado);
                 }
-                consulta += " ORDER BY T.Fecha ASC ";
+                consulta += " ORDER BY T.Fecha DESC ";
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
@@ -435,7 +442,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                string consulta = "SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND IdEstado = 1 "; //Estado 1 = Pendiente
+                string consulta = "SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND (IdEstado = 1  OR IdEstado = 2) "; //Estado 1 = Pendiente -- 2 = Reprogramado
 
                 if (idEspecialidad != null)
                 {
@@ -472,13 +479,14 @@ namespace Negocio
 
         }
 
+
         public bool medicoConTurnosPendientesDiaYRango(int idMedico, int idEspecialidad, int idDiaSemana, TimeSpan horaEntrada, TimeSpan horaSalida)
         {  
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                string consulta = "SET DATEFIRST 1; SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND IdEstado = 1 AND IdEspecialidad = @idEspecialidad" +
-                    " AND DATEPART(WEEKDAY, Fecha) = @idDiaSemana AND CAST(Fecha AS TIME) >= @horaEntrada AND CAST(Fecha AS TIME) < @horaSalida"; //Estado 1 = Pendiente
+                string consulta = "SET DATEFIRST 1; SELECT COUNT(*) as contador FROM Turnos WHERE IdMedico = @idMedico AND (IdEstado = 1 OR IdEstado = 2) AND IdEspecialidad = @idEspecialidad" +
+                    " AND DATEPART(WEEKDAY, Fecha) = @idDiaSemana AND CAST(Fecha AS TIME) >= @horaEntrada AND CAST(Fecha AS TIME) < @horaSalida"; //Estado 1 = Pendiente -- 2 = Reprogramado
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@idMedico", idMedico);
                 datos.setearParametro("@idEspecialidad", idEspecialidad);
@@ -512,6 +520,39 @@ namespace Negocio
 
         }
 
+        public bool pacienteConTurnosPendientes(int idPaciente)
+        {  
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SELECT COUNT(*) as contador FROM Turnos WHERE idPaciente = @idPaciente AND (IdEstado = 1  OR IdEstado = 2) "; //Estado 1 = Pendiente -- 2 = Reprogramado
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector["contador"];
+                    //Si lee algun dato y encontró registros que coinciden con el filtro y el medico tiene turnos pendientes, retorna true.
+                    if (cantidad > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
 
         public void AgregarTurno(Turno nuevo)
         {
@@ -538,6 +579,7 @@ namespace Negocio
             }
         }
 
+        // Devuelve la proxima fecha en la que ese medico atiende esa especialidad (puede que tenga todos los turnos ocupados!)
         public DateTime buscarProximaFechaDisponible(int idMedico, int idEsp, DateTime fechaBase)
         {
             HorarioMedicoNegocio horarioNegocio = new HorarioMedicoNegocio();

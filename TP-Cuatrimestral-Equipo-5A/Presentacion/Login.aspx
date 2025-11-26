@@ -31,7 +31,7 @@
                 <%-- Caja izquierda --%>
                 <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column">
                     <div class="featured-image mb-3">
-                        <img src="Imagenes/Login.jpg" class="img-fluid" style="width: 350px;" alt="Imagen de login"/>
+                        <img src="Imagenes/Logo.png" class="img-fluid" style="width: 450px;" alt="Imagen de login"/>
                     </div>
                 </div>
                 

@@ -454,7 +454,7 @@ namespace Presentacion
         private void cargarDdlMedicos(DropDownList ddlMedicos)
         {
             MedicoNegocio medicoNegocio = new MedicoNegocio();
-            ddlMedicos.DataSource = medicoNegocio.listar();
+            ddlMedicos.DataSource = medicoNegocio.listar(); //Al no enviar un parametro en listar() se listan solo los activos.
             ddlMedicos.DataTextField = "NombreCompleto";
             ddlMedicos.DataValueField = "Id";
             ddlMedicos.DataBind();
@@ -466,7 +466,7 @@ namespace Presentacion
         {
             EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
 
-            ddlEspecialidades.DataSource = especialidadNegocio.listarPorIdMedico(idMedico);
+            ddlEspecialidades.DataSource = especialidadNegocio.listarPorIdMedico(idMedico); //se listan solo los activos
             ddlEspecialidades.DataTextField = "Descripcion";
             ddlEspecialidades.DataValueField = "Id";
             ddlEspecialidades.DataBind();

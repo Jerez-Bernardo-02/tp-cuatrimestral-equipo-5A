@@ -735,7 +735,7 @@ namespace Presentacion
             try
             {
                 // Validar que no existan coincidencias de los campos en la tabla de pacientes
-                List<Medico> lista = negocio.listar();
+                List<Medico> lista = negocio.listar(false); //al enviar false se listan tambien los medicos inactivos (para validar registros iguales tambien en inactivos)
 
                 if (usuarioModificar != null)
                 {

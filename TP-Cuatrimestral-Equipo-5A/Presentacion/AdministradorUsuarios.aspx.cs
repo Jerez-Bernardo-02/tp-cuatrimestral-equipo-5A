@@ -115,38 +115,34 @@ namespace Presentacion
         {
             try
             {
-                UsuarioNegocio negocio = new UsuarioNegocio();
-                TurnoNegocio negocioTurno = new TurnoNegocio();
-
-                Usuario usuario = negocio.buscarPorId(idUsuario);
-
-                List<Turno> listaTurnos = null;
-
+                UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+                Usuario usuario = usuarioNegocio.buscarPorId(idUsuario);
                 
-                if (usuario.Permiso.Id == 3 || usuario.Permiso.Id == 4) //recepcionista o admin ni tienen turnos asociados
-                {
-                    return false;
-                }
                  
                 if (usuario.Permiso.Id == 2) // medico
                 {
                     MedicoNegocio medicoNegocio = new MedicoNegocio();
                     Medico medico = medicoNegocio.buscarPorIdUsuario(idUsuario);
-                    //listaTurnos = negocioTurno.ListarTurnosFuturosPorMedico(medico.Id); //traigo lista de turnos asociados
+                    if (turnoNegocio.medicoConTurnosPendientes(medico.Id))
+                    {
+                        MostrarError("¡No se puede dar de baja el médico! Primero debe cancelar los turnos pendientes.");
+                        return true;
+                    }
                 }
 
                 if (usuario.Permiso.Id == 1) // Paciente
                 {
                     PacienteNegocio pacienteNegocio = new PacienteNegocio();
                     Paciente paciente = pacienteNegocio.buscarPorIdUsuario(idUsuario);
-                    //listaTurnos = negocioTurno.ListarTurnosFuturosPorPaciente(paciente.Id);//traido lista de turnos asociados
-                }
+                    if (turnoNegocio.pacienteConTurnosPendientes(paciente.Id))
+                    {
+                        MostrarError("¡No se puede dar de baja el paciente! Primero debe cancelar los turnos pendientes.");
+                        return true;
 
-                if (listaTurnos != null && listaTurnos.Count > 0) 
-                {
-                    Session["listaTurnosFuturo"] = listaTurnos;// si habian turnos, aca guardo la lista en la session
-                    return true;
+                    }
                 }
+                //Si no es medico ni paciente, seran recepcionista o admins y no tienen turnos asociados.
 
                 return false;
             }
@@ -170,21 +166,13 @@ namespace Presentacion
 
                 if (TurnosFuturos(idUsuario))
                 {
-
-                    ScriptManager.RegisterStartupScript( //llamamos el modal
-                    this,
-                    GetType(),
-                    "ShowModal",
-                    "var modal = new bootstrap.Modal(document.getElementById('modalInactivarUsuario')); modal.show();",
-                    true
-                    );
-
-                    Session["idUsuarioAInactivar"] = idUsuario; //guardamos en al session el idUsuario a Inactivar
+                    return;
                 }
                 else
                 {
                     UsuarioNegocio negocio = new UsuarioNegocio();
                     negocio.bajaLogica(idUsuario);
+                    MostrarExito("Se ha dado de baja el usuario con éxito.");
                     cargarGrilla();
                 }
 
@@ -202,6 +190,7 @@ namespace Presentacion
             {
                 UsuarioNegocio negocio = new UsuarioNegocio();
                 negocio.altaLogica(idUsuario);
+                MostrarExito("Usuario dado de alta con éxito!");
             }
             catch (Exception ex)
             {
@@ -230,12 +219,6 @@ namespace Presentacion
                 if (e.CommandName == "Inactivar")
                 {
                     inactivarUsuario(idUsuario);
-                
-                    if (!TurnosFuturos(idUsuario)) // recargo grilla si no hubo modal
-                    {
-                        cargarGrilla();
-                    }
-                       
                 }
             }
             catch (Exception ex)
@@ -245,43 +228,29 @@ namespace Presentacion
             }
 
         }
-        protected void btnModalConfirmar_Click(object sender, EventArgs e)
+
+        //Metodos helpers
+        private void MostrarExito(string mensaje)
         {
-            try
-            {
-                int idUsuario = (int)Session["idUsuarioAInactivar"];
-
-                List<Turno> listaTurnos = (List<Turno>)Session["listaTurnosFuturo"];
-
-                TurnoNegocio negocioTurno = new TurnoNegocio();
-                UsuarioNegocio negocioUsuario = new UsuarioNegocio();
-
-           
-                for (int i = 0; i< listaTurnos.Count; i++) //aca paso todos los turno a estado cancelado 
-                {
-                    negocioTurno.cancelarTurno(listaTurnos[i].Id);
-                }
-
-            
-                negocioUsuario.bajaLogica(idUsuario); //baja logica del usuario
-
-                Session.Remove("listaTurnosFuturo"); //limpio la session
-                Session.Remove("idUsuarioAInactivar");
-
-                cargarGrilla();
-            }
-            catch(Exception ex)
-            {
-                Session.Add("Error", ex);
-                Response.Redirect("Error.aspx");
-            } 
+            LimpiarMensajes(); //se limpian y ocultan ambos mensajes.
+            lblMensajeExito.Text = mensaje; // se muestra y se llena solo el mensaje de exito
+            lblMensajeExito.Visible = true;
         }
 
-        protected void btnModalCancelar_Click(object sender, EventArgs e)
+        private void MostrarError(string mensaje)
         {
-            Session.Remove("idUsuarioAInactivar"); //el btn cancelar al no impactar los cambios en la BD, limpio la session
-            Session.Remove("listaTurnosFuturo");
-            cargarGrilla();
+            LimpiarMensajes(); //se limpian y ocultan ambos mensajes.
+            lblMensajeError.Text = mensaje; // se muestra y se llena solo el mensaje de Error.
+            lblMensajeError.Visible = true;
         }
+
+        private void LimpiarMensajes()
+        {
+            lblMensajeError.Visible = false;
+            lblMensajeExito.Visible = false;
+            lblMensajeError.Text = "";
+            lblMensajeExito.Text = "";
+        }
+
     }
 }

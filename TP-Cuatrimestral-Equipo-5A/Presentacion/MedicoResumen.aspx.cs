@@ -43,6 +43,7 @@ namespace Presentacion
 
             if (!IsPostBack)
             {
+                CargarFiltros();
                 CargarGrilla();
                 
             }
@@ -54,12 +55,13 @@ namespace Presentacion
             {
 
                 int idMedico = medicoLogueado.Id;
+                int idEstado = int.Parse(ddlFiltroEstado.SelectedValue);
 
                 lblNombreMedico.Text = medicoLogueado.Nombre;
 
                 TurnoNegocio TurnoNegocio = new TurnoNegocio();
 
-                List<Turno> lista = TurnoNegocio.ListarTurnosDelDia(idMedico);
+                List<Turno> lista = TurnoNegocio.ListarTurnosDelDia(idMedico, idEstado);
 
                 dgvTurnos.DataSource = lista;
                 dgvTurnos.DataBind();
@@ -76,15 +78,21 @@ namespace Presentacion
         protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int idTurno = Convert.ToInt32(e.CommandArgument);
+            TurnoNegocio turnoNegocio = new TurnoNegocio();
 
             if(e.CommandName == "VerHC")
             {
                 Response.Redirect("HistoriaClinica.aspx?idTurno=" + idTurno);
             }
-            else if (e.CommandName == "ModificarEstado")
+            else if (e.CommandName == "Finalizar")
             {
-                //pantalla o modal para modificar el turno.
+                //modificar estado a IdEstado = 5 (Finalizado)
             }
+            else if (e.CommandName == "Cancelar")
+            {
+                //modificar estado a IdEstado = 3 (Cancelado)
+            }
+
 
         }
         private void CalcularResumen(List<Turno> listaTurnos)
@@ -97,14 +105,52 @@ namespace Presentacion
             int atendidos = listaTurnos.Count(x => x.Estado.Id == 5);
             lblAtendidos.Text = atendidos.ToString();
 
-            // Pendientes (1 = nuevo)
-            int pendientes = listaTurnos.Count(x => x.Estado.Id == 1);
+            // Pendientes (1 = nuevo  2 = Reprogramados)
+            int pendientes = listaTurnos.Count(x => x.Estado.Id == 1 || x.Estado.Id == 2); // Tambien se cuentan los reprogramados.
             lblPendientes.Text = pendientes.ToString();
 
-            // Cancelados (3 = cancelado)
-            int cancelados = listaTurnos.Count(x => x.Estado.Id == 3); 
+            // Cancelados (3 = cancelado 4 = no asistió)
+            int cancelados = listaTurnos.Count(x => x.Estado.Id == 3 || x.Estado.Id == 4); 
             lblCancelados.Text = cancelados.ToString();
 
+        }
+
+        private void CargarFiltros()
+        {
+            EstadoNegocio EstadoNegocio = new EstadoNegocio();
+
+            ddlFiltroEstado.DataSource = EstadoNegocio.Listar();
+            ddlFiltroEstado.DataTextField = "Descripcion";
+            ddlFiltroEstado.DataValueField = "Id";
+            ddlFiltroEstado.DataBind();
+            ddlFiltroEstado.Items.Insert(0, new ListItem("Todos", "0"));
+
+        }
+
+        protected void ddlFiltroEstado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CargarGrilla();
+        }
+
+        protected void dgvTurnos_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //Validacion que el tipo de dato de la fila enlazado sea un dato (DataRow) y no una cabecera o pie de página.
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Turno turno = (Turno)e.Row.DataItem;
+
+                // Se buscan los botones
+                LinkButton btnFinalizar = (LinkButton)e.Row.FindControl("btnFinalizar");
+                LinkButton btnCancelar = (LinkButton)e.Row.FindControl("btnCancelar");
+
+
+                if (turno.Estado.Id != 1 && turno.Estado.Id != 2) //Si no es pendiente ni reprogramado se ocultan los botones.
+                {
+                    // Si NO está pendiente, no se puede tocar nada
+                    btnFinalizar.Visible = false;
+                    btnCancelar.Visible = false;
+                }
+            }
         }
     }
 
