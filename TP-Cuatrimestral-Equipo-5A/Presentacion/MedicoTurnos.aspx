@@ -62,7 +62,7 @@
                             OnRowCommand="dgvTurnos_RowCommand"
                             DataKeyNames="Id">
                             <Columns>
-                                <asp:BoundField HeaderText="Fecha y hora" DataField="Fecha" />
+                                <asp:BoundField HeaderText="Fecha y hora" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy HH:mm}"/>
 
                                 <asp:TemplateField HeaderText="Paciente">
                                     <ItemTemplate>

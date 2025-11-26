@@ -78,6 +78,14 @@ namespace Presentacion
                     txtNombrePaciente.Visible = false;
                     return;
                 }
+                if (!paciente.Usuario.Activo)
+                {
+                    lblErrorPaciente.Text = "El paciente se encuentra dado de baja!";
+                    lblErrorPaciente.Visible = true;
+                    txtNombrePaciente.Visible = false;
+                    txtDniPaciente.Text = null;
+                    return;
+                }
                 else //Si se encontró un paciente:
                 {
                     txtNombrePaciente.Text = paciente.NombreCompleto;

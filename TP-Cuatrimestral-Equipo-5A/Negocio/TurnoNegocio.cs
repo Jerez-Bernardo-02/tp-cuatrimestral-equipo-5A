@@ -11,14 +11,21 @@ namespace Negocio
 {
     public class TurnoNegocio
     {
-        public List<Turno> ListarTurnosDelDia(int idMedico)
-        { //HECHO PARA PROBAR, FALTA MEJORAR EL METODO
+        public List<Turno> ListarTurnosDelDia(int idMedico, int idEstado)
+        { 
             AccesoDatos datos = new AccesoDatos();
             List<Turno> lista = new List<Turno>();
 
             try
             {
-                datos.setearConsulta("SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion  FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id= T.IdEspecialidad INNER JOIN Estados E ON E.Id= T.IdEstado INNER JOIN Pacientes P ON P.Id= T.IdPaciente  WHERE T.IdMedico = @idMedico AND CAST(T.Fecha AS date) = CAST(GETDATE() AS date) ORDER BY T.Fecha ASC");
+                string consulta = "SELECT T.Id, T.Fecha, T.Observaciones, T.IdEstado AS IdEstado, T.IdEspecialidad AS IdEspecialidad, T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente, E.Descripcion AS EstadoDescripcion, ESP.Descripcion AS EspecialidadDescripcion  FROM Turnos T INNER JOIN Especialidades ESP ON ESP.Id= T.IdEspecialidad INNER JOIN Estados E ON E.Id= T.IdEstado INNER JOIN Pacientes P ON P.Id= T.IdPaciente  WHERE T.IdMedico = @idMedico AND CAST(T.Fecha AS date) = CAST(GETDATE() AS date) ";
+                if (idEstado > 0)
+                {
+                    datos.setearParametro("@idEstado", idEstado);
+                    consulta += "AND T.IdEstado = @idEstado ";
+                }
+                consulta += " ORDER BY T.Fecha ASC;";
+                datos.setearConsulta(consulta);
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
@@ -155,7 +162,7 @@ namespace Negocio
                     consulta += " AND (T.IdEstado = @idEstado)";
                     datos.setearParametro("@idEstado", idEstado);
                 }
-                consulta += " ORDER BY T.Fecha ASC ";
+                consulta += " ORDER BY T.Fecha DESC ";
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@idMedico", idMedico);
                 datos.ejecutarLectura();

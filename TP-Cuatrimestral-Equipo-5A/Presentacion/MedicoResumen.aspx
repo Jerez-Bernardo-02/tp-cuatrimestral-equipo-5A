@@ -10,17 +10,32 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <%--Card con borde y sombra: columna izquierda--%>
             <div class="card shadow-sm border-0 mb-3">
 
                 <div class="row mt-3 ms-3 me-2">
+                    <%-- BARRA DE FILTROS --%>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title mb-0">Listado de Turnos</h5>
+
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 text-muted small">Filtrar por:</label>
+                            <asp:DropDownList ID="ddlFiltroEstado" runat="server"
+                                CssClass="form-select form-select-sm"
+                                AutoPostBack="true"
+                                OnSelectedIndexChanged="ddlFiltroEstado_SelectedIndexChanged"
+                                Width="150px">
+                            </asp:DropDownList>
+                        </div>
+                    </div>
                     <%--Grilla de turnos--%>
                     <asp:GridView ID="dgvTurnos" runat="server"
                         CssClass="table table-hover"
                         AutoGenerateColumns="false"
                         OnRowCommand="dgvTurnos_RowCommand"
-                        DataKeyNames="Id">
+                        DataKeyNames="Id"
+                        OnRowDataBound="dgvTurnos_RowDataBound">
                         <Columns>
                             <asp:BoundField HeaderText="Fecha y hora" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy HH:mm}" />
 
@@ -32,15 +47,16 @@
 
                             <asp:BoundField HeaderText="Especialidad" DataField="Especialidad.Descripcion" />
 
-                            <asp:BoundField HeaderText="Observaciones" DataField="Observaciones" />
+                            <asp:BoundField HeaderText="Observaciones" DataField="Observaciones" ItemStyle-CssClass="text-break" ItemStyle-Width="30%"/>
 
                             <asp:BoundField HeaderText="Estado" DataField="Estado.Descripcion" />
 
 
                             <asp:TemplateField HeaderText="Acciones">
 
+                                <%--Boton ver historia clinica--%>
                                 <ItemTemplate>
-                                    <asp:LinkButton runat="server"
+                                    <asp:LinkButton ID="btnVerHC" runat="server"
                                         CommandName="VerHC"
                                         CommandArgument='<%# Eval("Id") %>'
                                         CssClass="btn btn-info btn-sm"
@@ -48,14 +64,27 @@
                                             <i class="bi bi-eye-fill"></i>
                                     </asp:LinkButton>
 
-                                    <asp:LinkButton runat="server"
-                                        CommandName="ModificarEstado"
+                                    <%-- Boton finalizar --%>
+                                    <asp:LinkButton ID="btnFinalizar" runat="server"
+                                        CommandName="Finalizar"
                                         CommandArgument='<%# Eval("Id") %>'
-                                        CssClass="btn btn-warning btn-sm"
-                                        ToolTip="Modificar Estado / Ver Observaciones">
-                                            <i class="bi bi-pencil-fill"></i>
-                                    </asp:LinkButton>
+                                        CssClass="btn btn-success btn-sm ms-1"
+                                        ToolTip="Finalizar Turno (Atendido)"
+                                        OnClientClick="return confirm('¿Confirmar que el paciente fue atendido?');">
+                                         <i class="bi bi-check-lg"></i>
+                                     </asp:LinkButton>
+
+                                    <%-- Boton cancelar--%>
+                                    <asp:LinkButton ID="btnCancelar" runat="server"
+                                        CommandName="Cancelar"
+                                        CommandArgument='<%# Eval("Id") %>'
+                                        CssClass="btn btn-danger btn-sm ms-1"
+                                        ToolTip="Cancelar Turno"
+                                        OnClientClick="return confirm('¿Está seguro de cancelar este turno?');">
+                                         <i class="bi bi-x-circle"></i>
+                                     </asp:LinkButton>
                                 </ItemTemplate>
+
                             </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
@@ -64,7 +93,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <%--Card con borde y sombra: columna derecha--%>
             <div class="card shadow-sm border-0 mb-3">
                 <div class="card-body">
