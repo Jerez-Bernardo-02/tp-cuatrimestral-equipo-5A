@@ -36,25 +36,25 @@
                         <%-- MENU ADMINISTRADOR --%>
                         <% if (Negocio.Seguridad.esAdministrador(Session["usuario"]))
                             { %>
-                        <a class="nav-link" href="AdministradorEspecialidades.aspx">Gestión Especialidades</a>
-                        <a class="nav-link" href="AdministradorUsuarios.aspx">Gestión Usuarios</a>
-                        <a class="nav-link" href="MedicoHorarios.aspx">Medico Horarios Médicos</a>
+                        <a class="btn btn-dark text-start ps-3" href="AdministradorEspecialidades.aspx">Gestión Especialidades</a>
+                        <a class="btn btn-dark text-start ps-3" href="AdministradorUsuarios.aspx">Gestión Usuarios</a>
+                        <a class="btn btn-dark text-start ps-3" href="MedicoHorarios.aspx">Medico Horarios Médicos</a>
                         <% } %>
                         <%-- MENU MEDICO --%>
                         <% if (Negocio.Seguridad.esMedico(Session["usuario"]))
                             { %>
-                        <a class="nav-link" href="MedicoResumen.aspx">Resumen</a>
-                        <a class="nav-link" href="MedicoTurnos.aspx">Turnos totales</a>
+                        <a class="btn btn-dark text-start ps-3" href="MedicoResumen.aspx">Resumen</a>
+                        <a class="btn btn-dark text-start ps-3" href="MedicoTurnos.aspx">Turnos totales</a>
                         <% } %>
                         <%-- MENU PACIENTE --%>
                         <% if (Negocio.Seguridad.esPaciente(Session["usuario"]))
                             { %>
-                        <a class="nav-link" href="PacienteTurnos.aspx">Turnos</a>
+                        <a class="btn btn-dark text-start ps-3" href="PacienteTurnos.aspx">Turnos</a>
                         <% } %>
                         <%--MENU RECEPCIONISTA--%>
                         <% if (Negocio.Seguridad.esRecepcionista(Session["usuario"]))
                             { %>
-                        <a class="nav-link" href="RecepcionistaTurnos.aspx">Recepcionista Turnos</a>
+                        <a class="btn btn-dark text-start ps-3" href="RecepcionistaTurnos.aspx">Recepcionista Turnos</a>
                         <% } %>
                     </div>
 
