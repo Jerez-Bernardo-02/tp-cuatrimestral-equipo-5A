@@ -15,12 +15,14 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary py-1">
 
             <div class="container-fluid ">
-                <a class="navbar-brand" href="#">
-                    <img src="https://img.icons8.com/?size=100&id=9522&format=png&color=000000" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-                    Nombre Clínica
+                <%--LOGO--%>
+                <a class="navbar-brand d-flex align-items-center fw-bold">
+                    <img src="Imagenes/LogoSF.png" alt="Logo"
+                        style="height: 40px; width: auto;"
+                        class="d-inline-block align-text-top me-2 object-fit-contain">
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,36 +32,66 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav me-auto">
                         <!-- REDIRECCIONAR A PAGINA CON INFORMACION ACERCA DE LA CLINICA -->
-                        <a class="nav-link" href="#">Nosotros</a>
-                        <!-- REDIRECCIONAR A PAGINA CON INFORMACION DE CONTACTO -->
-                        <a class="nav-link" href="#">Contacto</a>
+
+                        <%-- MENU ADMINISTRADOR --%>
+                        <% if (Negocio.Seguridad.esAdministrador(Session["usuario"]))
+                            { %>
                         <a class="nav-link" href="AdministradorEspecialidades.aspx">Gestión Especialidades</a>
                         <a class="nav-link" href="AdministradorUsuarios.aspx">Gestión Usuarios</a>
-                        <a class="nav-link" href="MedicoHoarios.aspx">Gestión Horarios Médicos</a>
-                        <a class="nav-link" href="#">Configuraciones</a>
-                        <a class="nav-link" href="MedicoResumen.aspx">Medicos Resumen</a>
-                        <a class="nav-link" href="MedicoHorarios.aspx">Medico Horarios</a>
-                        <a class="nav-link" href="MedicoTurnos.aspx">Medico Turnos</a>
-                        <a class="nav-link" href="MenuPaciente.aspx">Menu Pacientes</a>
-                        <a class="nav-link" href="MenuRecepcionista.aspx">Menu Recepcionistas</a>
-                        <a class="nav-link" href="RecepcionistaPacientes.aspx">Recepcionista Pacientes</a>
-                        <a class="nav-link" href="RecepcionistaMedicos.aspx">Recepcionista Medicos</a>
+                        <a class="nav-link" href="MedicoHorarios.aspx">Medico Horarios Médicos</a>
+                        <% } %>
+                        <%-- MENU MEDICO --%>
+                        <% if (Negocio.Seguridad.esMedico(Session["usuario"]))
+                            { %>
+                        <a class="nav-link" href="MedicoResumen.aspx">Resumen</a>
+                        <a class="nav-link" href="MedicoTurnos.aspx">Turnos totales</a>
+                        <% } %>
+                        <%-- MENU PACIENTE --%>
+                        <% if (Negocio.Seguridad.esPaciente(Session["usuario"]))
+                            { %>
+                        <a class="nav-link" href="PacienteTurnos.aspx">Turnos</a>
+                        <% } %>
+                        <%--MENU RECEPCIONISTA--%>
+                        <% if (Negocio.Seguridad.esRecepcionista(Session["usuario"]))
+                            { %>
                         <a class="nav-link" href="RecepcionistaTurnos.aspx">Recepcionista Turnos</a>
-
+                        <% } %>
                     </div>
-                    <!-- REDIRECCIONAR A PAGINA DE LOGIN -->
-                    <%if (!Negocio.Seguridad.sesionActiva(Session["usuario"]))
-                      { %>
-                        <a class="btn btn-primary" href="Login.aspx" role="button">Ingresar</a>
-                    <%}
-                      else
-                      { %>
-                        <asp:Button runat="server" Text="Salir" ID="btnSalir" CssClass="btn btn-primary" OnClick="btnSalir_Click"/>
-                    <%} %>
+
+                    <%-- ZONA DE USUARIO ALINEADO A LA DERECHA --%>
+                    <div class="d-flex align-items-center ms-auto">
+                        <% if (!Negocio.Seguridad.sesionActiva(Session["usuario"]))
+                            { %>
+                        <%-- SI NO HAY NADIE LOGUEADO (Se muestra boton login) --%>
+                        <a class="btn btn-outline-light me-2" href="Login.aspx">Ingresar</a>
+                        <% }
+                        else
+                        { %>
+                        <%-- SI ESTA LOGUEADO: --%>
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="text-light"><%= NombreUsuario %></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow">
+                                    <%--Redireccion a editar perfil--%>
+                                    <li><a class="dropdown-item" href="MiPerfil.aspx">Mi Perfil</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <%--Redireccion por servidor a login, limpieza de session--%>
+                                        <asp:Button runat="server" Text="Cerrar Sesión" ID="btnSalir" CssClass="dropdown-item text-danger" OnClick="btnSalir_Click" />
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <% } %>
+                    </div>
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container mt-4">
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>
         </div>

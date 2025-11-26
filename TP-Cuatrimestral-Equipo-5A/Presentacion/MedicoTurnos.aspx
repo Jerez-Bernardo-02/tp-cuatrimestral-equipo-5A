@@ -4,8 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <div class="container-fluid" style="padding-top: 40px;">
-        <h2 class="card-title mb-5">Gestion de turnos</h2>
+        <h2 class="card-title">Gestion de turnos</h2>
 
 
         <div class="row">
@@ -105,5 +104,4 @@
                 </div>
             </div>
         </div>
-    </div>
 </asp:Content>
