@@ -212,10 +212,18 @@ namespace Presentacion
                 }
                 Turno turno = new Turno();
                 turno.Medico = new Medico();
+                MedicoNegocio negocio = new MedicoNegocio();
+                Medico medico = new Medico();
 
                 turno.Medico.Id = int.Parse(ddlMedicos.SelectedValue);
+                medico = negocio.buscarPorId(turno.Medico.Id);
+
                 turno.Especialidad = new Especialidad();
                 turno.Especialidad.Id = int.Parse(ddlEspecialidad.SelectedValue);
+                EspecialidadNegocio negocioE = new EspecialidadNegocio();
+                Especialidad especialidad = new Especialidad();
+                especialidad = negocioE.BuscarPorId(turno.Especialidad.Id);
+
                 TimeSpan horaTurno = TimeSpan.Parse(Session["HoraTurno"].ToString());
                 turno.Fecha = DateTime.Parse(txtFecha.Text).Add(horaTurno); //Se pasa la fecha por un lado y se le agrega la hora.
                 turno.Paciente = new Paciente();
@@ -226,6 +234,8 @@ namespace Presentacion
 
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
                 turnoNegocio.AgregarTurno(turno);
+                //se envia mail de nuevo turno registrado
+                envioEmailNuevoTurno(paciente.Nombre, paciente.Apellido, paciente.Email, turno.Fecha.ToString("dd/MM/yyyy"), horaTurno.ToString(@"hh\:mm") , medico.NombreCompleto, especialidad.Descripcion);
 
                 lblMensaje.Text = "Turno confirmado correctamente!";
                 lblMensaje.CssClass = "alert alert-success mt-3 d-block text-center";
@@ -474,6 +484,49 @@ namespace Presentacion
                 ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='PacienteTurnos.aspx'; }, 3000);", true);
             }
 
+        }
+
+        protected void envioEmailNuevoTurno(string nombrePaciente, string apellidoPaciente, string emailUsuario, string fechaTurno, string horaTurno, string nombreMedico, string especialidad)
+        {
+            try
+            {
+                EmailService email = new EmailService();
+                string cuerpo = $@"
+                    <html>
+                      <body style='font-family: Arial, sans-serif; background-color:#f5f5f5; padding:20px; color:#000;'>
+                        <div style='max-width:600px; margin:auto; background:#fff; border:1px solid #ddd; border-radius:8px; padding:20px;'>
+                          <h2 style='text-align:center;'>¡Hola {nombrePaciente} {apellidoPaciente}!</h2>
+                          <p style='font-size:16px;'>
+                            Te informamos que tu <b>nuevo turno</b> fue registrado exitosamente en <b>Nuestra Clínica</b>.
+                          </p>
+                          <p><b>Detalles del turno:</b></p>
+                          <ul style='font-size:15px; line-height:24px;'>
+                            <li><b>Fecha:</b> {fechaTurno}</li>
+                            <li><b>Hora:</b> {horaTurno}</li>
+                            <li><b>Médico:</b> {nombreMedico}</li>
+                            <li><b>Especialidad:</b> {especialidad}</li>
+                          </ul>
+                          <p style='font-size:15px;'>
+                            Por favor, llegá con unos minutos de anticipación.<br/>
+                            Si necesitás cancelar o reprogramar el turno, podés hacerlo desde tu perfil o comunicándote con recepción.
+                          </p>
+                          <hr style='border:none; border-top:1px solid #eee; margin:20px 0;' />
+                          <p style='font-size:12px; text-align:center;'>
+                            Este mensaje fue generado automáticamente por <b>Nuestra Clínica</b>.<br/>
+                            Por favor, no respondas a este correo.
+                          </p>
+                        </div>
+                      </body>
+                    </html>";
+
+                email.armarCorreo(emailUsuario, "Confirmación de nuevo turno - Nuestra Clínica", cuerpo);
+                email.enviarEmail();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", "Error al enviar el email: " + ex.ToString());
+                Response.Redirect("Error.aspx", false);
+            }
         }
 
     }
