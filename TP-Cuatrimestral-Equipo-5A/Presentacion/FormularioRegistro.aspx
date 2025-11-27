@@ -22,8 +22,8 @@
 
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <div class="position-relative" style="width: 80px; height: 80px;">
-                        <asp:Image ID="imgPerfil" ImageUrl="https://cdn-icons-png.flaticon.com/512/847/847969.png" runat="server" CssClass="img-fluid mb-3 mx-auto d-block" />
+                    <div class="d-flex justify-content-center align-items-center" style="width: 100px; height: 100px;">
+                        <asp:Image ID="imgPerfil" ImageUrl="https://cdn-icons-png.flaticon.com/512/847/847969.png" runat="server" CssClass="img-fluid w-100 h-100 object-fit-cover rounded-circle" />
                     </div>
 
                     <label class="form-label mt-3">Imagen Perfil</label>

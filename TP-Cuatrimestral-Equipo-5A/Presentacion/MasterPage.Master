@@ -88,6 +88,9 @@
                             </li>
                         </ul>
                         <% } %>
+                        <div class="d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                            <asp:Image ID="imgPerfil" ImageUrl="https://cdn-icons-png.flaticon.com/512/847/847969.png" runat="server" CssClass="img-fluid w-100 h-100 object-fit-cover rounded-circle" />
+                        </div>
                     </div>
                 </div>
             </div>

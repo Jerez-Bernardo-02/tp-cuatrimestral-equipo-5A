@@ -45,6 +45,8 @@ namespace Presentacion
                     if (medico != null)
                     {
                         NombreUsuario = medico.Nombre + " " + medico.Apellido;
+
+                        imgPerfil.ImageUrl = string.IsNullOrEmpty(medico.UrlImagen) ? "https://cdn-icons-png.flaticon.com/512/847/847969.png" : "~/FotosPerfil/" + medico.UrlImagen; // Si no tiene imagen, muestra la default
                     }
                 }
                 else if (Seguridad.esPaciente(usuario))
@@ -54,6 +56,8 @@ namespace Presentacion
                     if (paciente != null) 
                     {
                         NombreUsuario = paciente.Nombre + " " + paciente.Apellido;
+
+                        imgPerfil.ImageUrl = string.IsNullOrEmpty(paciente.UrlImagen) ? "https://cdn-icons-png.flaticon.com/512/847/847969.png" : "~/FotosPerfil/" + paciente.UrlImagen; // Si no tiene imagen, muestra la default
                     }
                 }
                 else if (Seguridad.esRecepcionista(usuario))
@@ -63,6 +67,8 @@ namespace Presentacion
                     if (recepcionista != null)
                     {
                         NombreUsuario = recepcionista.Nombre + " " + recepcionista.Apellido;
+
+                        imgPerfil.ImageUrl = string.IsNullOrEmpty(recepcionista.UrlImagen) ? "https://cdn-icons-png.flaticon.com/512/847/847969.png" : "~/FotosPerfil/" + recepcionista.UrlImagen; // Si no tiene imagen, muestra la default
                     }
                 }
             }
