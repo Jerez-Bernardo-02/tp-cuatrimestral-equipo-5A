@@ -42,16 +42,11 @@ namespace Presentacion
                         lblErrorPaciente.Visible = false;
                     }
                 }
-                else if (Seguridad.esRecepcionista(usuarioLogueado))
-                {
-                    //tambien se permite acceso si es recepcionista.
-                }
                 else if (!Seguridad.esRecepcionista(usuarioLogueado))
                 {
                     Session["error"] = "No tiene perfil de paciente o recepcionista asignado.";
-                    Response.Redirect("Error.aspx");
+                    Response.Redirect("Error.aspx", false);
                     return;
-
                 }
 
                 if (!IsPostBack)

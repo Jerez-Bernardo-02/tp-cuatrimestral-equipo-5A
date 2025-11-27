@@ -15,37 +15,45 @@ namespace Presentacion
         private Medico medicoLogueado;
         protected void Page_Load(object sender, EventArgs e)
         {
-
-           /* if (Session["usuario"] == null)
+            try
             {
-                Response.Redirect("Login.aspx");
-                return;
-            }*/
+                if (Session["usuario"] == null)
+                {
+                    Response.Redirect("Login.aspx", false);
+                    return;
+                }
 
-            if (Session["medico"] == null)
-            {
-                // Si no tengo el medico en session, lo busco en la base de datos una vez.
-                Usuario usuarioLogueado = (Usuario)Session["usuario"];
-                MedicoNegocio medicoNegocio = new MedicoNegocio();
+                if (Session["medico"] == null)
+                {
+                    // Si no tengo el medico en session, lo busco en la base de datos una vez.
+                    Usuario usuarioLogueado = (Usuario)Session["usuario"];
+                    MedicoNegocio medicoNegocio = new MedicoNegocio();
 
-                // Lo busco y lo guardo en la Session para no buscarlo nunca más
-                Session["medico"] = medicoNegocio.buscarPorIdUsuario(usuarioLogueado.Id);
-            }
-            medicoLogueado = (Medico)Session["medico"];
+                    // Lo busco y lo guardo en la Session para no buscarlo nunca más
+                    Session["medico"] = medicoNegocio.buscarPorIdUsuario(usuarioLogueado.Id);
+                }
+                medicoLogueado = (Medico)Session["medico"];
 
-            if (medicoLogueado == null)
-            {
-                Session["error"] = "No tiene perfil de médico asignado.";
-                Response.Redirect("Error.aspx");
-                return;
-            }
+                if (medicoLogueado == null)
+                {
+                    Session["error"] = "No tiene perfil de médico asignado.";
+                    Response.Redirect("Error.aspx");
+                    return;
+                }
 
 
-            if (!IsPostBack)
-            {
-                CargarFiltros();
-                CargarGrilla();
+                if (!IsPostBack)
+                {
+                    CargarFiltros();
+                    CargarGrilla();
                 
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = "Error al cargar resumen médico " + ex;
+                Response.Redirect("Error.aspx");
             }
         }
 
@@ -97,35 +105,53 @@ namespace Presentacion
         }
         private void CalcularResumen()
         {
-            TurnoNegocio TurnoNegocio = new TurnoNegocio();
-            List<Turno> listaTurnos = TurnoNegocio.ListarTurnosDelDia(medicoLogueado.Id, 0);
+            try
+            {
+                TurnoNegocio TurnoNegocio = new TurnoNegocio();
+                List<Turno> listaTurnos = TurnoNegocio.ListarTurnosDelDia(medicoLogueado.Id, 0);
 
-            int total = listaTurnos.Count();
-            lblTotalTurnos.Text = total.ToString();
+                int total = listaTurnos.Count();
+                lblTotalTurnos.Text = total.ToString();
 
-            // Atendidos (5 = Finalizado)
-            int atendidos = listaTurnos.Count(x => x.Estado.Id == 5);
-            lblAtendidos.Text = atendidos.ToString();
+                // Atendidos (5 = Finalizado)
+                int atendidos = listaTurnos.Count(x => x.Estado.Id == 5);
+                lblAtendidos.Text = atendidos.ToString();
 
-            // Pendientes (1 = nuevo  2 = Reprogramados)
-            int pendientes = listaTurnos.Count(x => x.Estado.Id == 1 || x.Estado.Id == 2); // Tambien se cuentan los reprogramados.
-            lblPendientes.Text = pendientes.ToString();
+                // Pendientes (1 = nuevo  2 = Reprogramados)
+                int pendientes = listaTurnos.Count(x => x.Estado.Id == 1 || x.Estado.Id == 2); // Tambien se cuentan los reprogramados.
+                lblPendientes.Text = pendientes.ToString();
 
-            // Cancelados (3 = cancelado 4 = no asistió)
-            int cancelados = listaTurnos.Count(x => x.Estado.Id == 3 || x.Estado.Id == 4); 
-            lblCancelados.Text = cancelados.ToString();
+                // Cancelados (3 = cancelado 4 = no asistió)
+                int cancelados = listaTurnos.Count(x => x.Estado.Id == 3 || x.Estado.Id == 4); 
+                lblCancelados.Text = cancelados.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = "Error al cargar resumen " + ex;
+                Response.Redirect("Error.aspx");
+            }
 
         }
 
         private void CargarFiltros()
         {
-            EstadoNegocio EstadoNegocio = new EstadoNegocio();
+            try
+            {
+                EstadoNegocio EstadoNegocio = new EstadoNegocio();
 
-            ddlFiltroEstado.DataSource = EstadoNegocio.Listar();
-            ddlFiltroEstado.DataTextField = "Descripcion";
-            ddlFiltroEstado.DataValueField = "Id";
-            ddlFiltroEstado.DataBind();
-            ddlFiltroEstado.Items.Insert(0, new ListItem("Todos", "0"));
+                ddlFiltroEstado.DataSource = EstadoNegocio.Listar();
+                ddlFiltroEstado.DataTextField = "Descripcion";
+                ddlFiltroEstado.DataValueField = "Id";
+                ddlFiltroEstado.DataBind();
+                ddlFiltroEstado.Items.Insert(0, new ListItem("Todos", "0"));
+
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = "Error al cargar estados " + ex;
+                Response.Redirect("Error.aspx");
+            }
 
         }
 

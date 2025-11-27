@@ -14,18 +14,27 @@ namespace Presentacion
         public bool ConfirmaEliminacion { get; set; } 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["usuario"] == null || !Seguridad.esAdministrador(Session["usuario"]))
+            try
             {
-                Session["error"] = "No cuenta con los permisos necesarios";
+                if (Session["usuario"] == null || !Seguridad.esAdministrador(Session["usuario"]))
+                {
+                    Session["error"] = "No cuenta con los permisos necesarios";
+                    Response.Redirect("Error.aspx");
+                }
+                ConfirmaEliminacion = false;
+                if (!IsPostBack)
+                {
+                    traerRegistro();
+                
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = "Error al cargar el formulario de especialidades " + ex;
                 Response.Redirect("Error.aspx");
             }
-            ConfirmaEliminacion = false;
-            if (!IsPostBack)
-            {
-                traerRegistro();
-                
-            }
-            
+
         }
         private void traerRegistro()
         {
@@ -47,7 +56,7 @@ namespace Presentacion
                 }
             }catch(Exception ex)
             {
-                Session.Add("error",ex);
+                Session.Add("error", ex.ToString());
             }
         }
 

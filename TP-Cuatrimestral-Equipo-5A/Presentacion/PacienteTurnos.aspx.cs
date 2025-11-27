@@ -13,6 +13,19 @@ namespace Presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Usuario usuarioLogueado = (Usuario)Session["usuario"];
+            if (usuarioLogueado == null)
+            {
+                Response.Redirect("Login.aspx", false);
+                return;
+            }
+            if (!Seguridad.esPaciente(usuarioLogueado))
+            {
+                Session["error"] = "No tiene perfil de paciente asignado.";
+                Response.Redirect("Error.aspx", false);
+                return;
+            }
+
             if (!IsPostBack)
             {
                 pnlTurnosProximos.Visible = true;
