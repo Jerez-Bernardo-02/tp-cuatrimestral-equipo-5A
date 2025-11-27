@@ -38,19 +38,12 @@ namespace Presentacion
                     }
                     else // Si NO estoy modificando...
                     {
-                        // Si entra un administradr, deja la ventana en blanco para poder seleccionar desde el ddl
+                        // Si entra un administrador, deja la ventana en blanco para poder seleccionar desde el ddl
                         if (Seguridad.esAdministrador(Session["usuario"]))
                         {
                             ddlTipoPermiso.Visible = true;
+                            btnVolver.Visible = true;
                             cargarPermisos();
-
-                            //  admin: solo oculto paneles cuando no se selecciono nada 
-                            if (Session["tipoSeleccionado"] == null)
-                            {
-                                pnlDatos.Visible = false;
-                                pnlUsuario.Visible = false;
-                                btnGuardar.Visible = false;
-                            }
                         }
                         else //cualquier otro usuario
                         {
@@ -58,8 +51,6 @@ namespace Presentacion
                             pnlUsuario.Visible = true;
                         }
                     }
-
-                    btnVolverFormulariosAdmin();
                 }
             }
             catch (Exception ex)
@@ -111,7 +102,6 @@ namespace Presentacion
 
             txtUsuario.Text = usuario.NombreUsuario;
             txtContrasenia.Text = usuario.Clave;
-
         }
 
         private void cargarPersona(Persona persona) // Se cargan los txt comunes entre los Pacientes, Medicos o Recepcionista
@@ -122,6 +112,11 @@ namespace Presentacion
             txtEmail.Text = persona.Email;
             txtTelefono.Text = persona.Telefono;
             txtFechaNacimiento.Text = persona.FechaNacimiento.ToString("yyyy-MM-dd");
+
+            // En el video se muestra solo desde la Master Page. En este caso tengo que ir desde la Master Page hasta esta ventana
+            ContentPlaceHolder cph = (ContentPlaceHolder)Master.FindControl("ContentPlaceHolder1");
+            Image img = (Image)cph.FindControl("imgPerfil");
+            img.ImageUrl = string.IsNullOrEmpty(persona.UrlImagen) ? "https://cdn-icons-png.flaticon.com/512/847/847969.png" : "~/FotosPerfil/" + persona.UrlImagen; // Si no tiene imagen, muestra la default
 
             pnlDatos.Visible = true;
         }
@@ -232,7 +227,7 @@ namespace Presentacion
             Session["tipoSeleccionado"] = true;
             aplicarVisibilidadContrasenia();
         }
-
+        // https://cdn-icons-png.flaticon.com/512/847/847969.png
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -396,23 +391,50 @@ namespace Presentacion
                 paciente.Apellido = txtApellido.Text;
                 paciente.Dni = txtDocumento.Text;
                 paciente.Email = txtEmail.Text;
-                paciente.Telefono = txtTelefono.Text;
                 paciente.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
+                paciente.Telefono = string.IsNullOrWhiteSpace(txtTelefono.Text) ? null : txtTelefono.Text; // Valido si el telefono esta vacio
                 paciente.Usuario = new Usuario();
+                
+                string ruta = Server.MapPath("./FotosPerfil/");
 
                 if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el paciente
                 {
                     paciente.Usuario.Id = usuario.Id;
+
+                    // Valido que la imagen no este vacia o nula. Sino, envio null a la BD
+                    if (txtImagenPerfil.PostedFile != null && txtImagenPerfil.PostedFile.ContentLength > 0)
+                    {
+                        txtImagenPerfil.PostedFile.SaveAs(ruta + "perfil-" + paciente.Usuario.Id + ".jpg");
+                        paciente.UrlImagen = "perfil-" + paciente.Usuario.Id + ".jpg";
+                    }
+                    else
+                    {
+                        paciente.UrlImagen = null;
+                    }
 
                     negocio.modificar(paciente);
                 }
                 else
                 {
                     paciente.Usuario.Id = (int)Session["idUsuarioAgregado"];
+
+                    // Valido que la imagen no este vacia o nula. Sino, envio null a la BD
+                    if (txtImagenPerfil.PostedFile != null && txtImagenPerfil.PostedFile.ContentLength > 0)
+                    {
+                        txtImagenPerfil.PostedFile.SaveAs(ruta + "perfil-" + paciente.Usuario.Id + ".jpg");
+                        paciente.UrlImagen = "perfil-" + paciente.Usuario.Id + ".jpg";
+                    }
+                    else
+                    {
+                        paciente.UrlImagen = null;
+                    }
+
+                    negocio.agregarPaciente(paciente);
+
+                    // Envio de Email
                     Usuario usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
                     string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
-                    negocio.agregarPaciente(paciente);
-                    // llamar metodo envio emailNuevoRegistro
+                    
                     if (usuarioLogeado!= null && usuarioLogeado.Permiso.Id == 4)
                     {
                         envioEmailNuevoRegistro(paciente.Nombre, paciente.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, paciente.Email, usuarioRegistrado.Clave);
@@ -442,24 +464,51 @@ namespace Presentacion
                 medico.Apellido = txtApellido.Text;
                 medico.Dni = txtDocumento.Text;
                 medico.Email = txtEmail.Text;
-                medico.Telefono = txtTelefono.Text;
                 medico.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
                 medico.Matricula = txtMatricula.Text;
+                medico.Telefono = string.IsNullOrWhiteSpace(txtTelefono.Text) ? null : txtTelefono.Text; // Valido si el telefono esta vacio
                 medico.Usuario = new Usuario();
+
+                string ruta = Server.MapPath("./FotosPerfil/");
 
                 if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el medico
                 {
                     medico.Usuario.Id = usuario.Id;
+
+                    // Valido que la imagen no este vacia o nula. Sino, envio null a la BD
+                    if(txtImagenPerfil.PostedFile != null && txtImagenPerfil.PostedFile.ContentLength > 0)
+                    {
+                        txtImagenPerfil.PostedFile.SaveAs(ruta + "perfil-" + medico.Usuario.Id + ".jpg");
+                        medico.UrlImagen = "perfil-" + medico.Usuario.Id + ".jpg";
+                    }
+                    else
+                    {
+                        medico.UrlImagen = null;
+                    }
 
                     negocio.modificar(medico);
                 }
                 else
                 {
                     medico.Usuario.Id = (int)Session["idUsuarioAgregado"];
+
+                    // Valido que la imagen no este vacia o nula. Sino, envio null a la BD
+                    if (txtImagenPerfil.PostedFile != null && txtImagenPerfil.PostedFile.ContentLength > 0)
+                    {
+                        txtImagenPerfil.PostedFile.SaveAs(ruta + "perfil-" + medico.Usuario.Id + ".jpg");
+                        medico.UrlImagen = "perfil-" + medico.Usuario.Id + ".jpg";
+                    }
+                    else
+                    {
+                        medico.UrlImagen = null;
+                    }
+
+                    negocio.agregarMedico(medico);
+
+                    // Envio de Email
                     Usuario usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
                     string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
-                    negocio.agregarMedico(medico);
-                    // llamar metodo envio emailNuevoRegistro
+                    
                     if (usuarioLogeado.Permiso.Id == 4)
                     {
                         envioEmailNuevoRegistro(medico.Nombre, medico.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, medico.Email, usuarioRegistrado.Clave);
@@ -488,23 +537,51 @@ namespace Presentacion
                 recepcionista.Apellido = txtApellido.Text;
                 recepcionista.Dni = txtDocumento.Text;
                 recepcionista.Email = txtEmail.Text;
-                recepcionista.Telefono = txtTelefono.Text;
                 recepcionista.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
+                recepcionista.Telefono = string.IsNullOrWhiteSpace(txtTelefono.Text) ? null : txtTelefono.Text; // Valido si el telefono esta vacio
                 recepcionista.Usuario = new Usuario();
+
+                string ruta = Server.MapPath("./FotosPerfil/");
 
                 if (usuario != null) // Si el usuario no es nulo, quiere decir que se debe modificar el recepcionista
                 {
                     recepcionista.Usuario.Id = usuario.Id;
+
+                    // Valido que la imagen no este vacia o nula. Sino, envio null a la BD
+                    if (txtImagenPerfil.PostedFile != null && txtImagenPerfil.PostedFile.ContentLength > 0)
+                    {
+                        txtImagenPerfil.PostedFile.SaveAs(ruta + "perfil-" + recepcionista.Usuario.Id + ".jpg");
+                        recepcionista.UrlImagen = "perfil-" + recepcionista.Usuario.Id + ".jpg";
+                    }
+                    else
+                    {
+                        recepcionista.UrlImagen = null;
+                    }
 
                     negocio.modificar(recepcionista);
                 }
                 else
                 {
                     recepcionista.Usuario.Id = (int)Session["idUsuarioAgregado"];
+
+                    // Valido que la imagen no este vacia o nula. Sino, envio null a la BD
+                    if (txtImagenPerfil.PostedFile != null && txtImagenPerfil.PostedFile.ContentLength > 0)
+                    {
+                        txtImagenPerfil.PostedFile.SaveAs(ruta + "perfil-" + recepcionista.Usuario.Id + ".jpg");
+                        recepcionista.UrlImagen = "perfil-" + recepcionista.Usuario.Id + ".jpg";
+                    }
+                    else
+                    {
+                        recepcionista.UrlImagen = null;
+                    }
+
+                    negocio.agregar(recepcionista);
+                    
+
+                    // Envio de Email
                     Usuario usuarioRegistrado = (Usuario)Session["UsuarioRegistrado"];
                     string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
-                    negocio.agregar(recepcionista);
-                    // llamar metodo envio emailNuevoRegistro
+
                     if (usuarioLogeado.Permiso.Id == 4)
                     {
                         envioEmailNuevoRegistro(recepcionista.Nombre, recepcionista.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, recepcionista.Email, usuarioRegistrado.Clave);
@@ -1010,26 +1087,6 @@ namespace Presentacion
             lblMensajeExito.Text = "";
         }
 
-        protected void btnVolverFormulariosAdmin()
-        {
-            try
-            {
-                Usuario usuarioLogueado = (Usuario)Session["usuario"];
-
-                if (usuarioLogueado != null && Seguridad.esAdministrador(usuarioLogueado))
-                {
-                    btnVolver.Visible = true;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Session.Add("error", ex);
-                Response.Redirect("Error.aspx", false);
-            }
-
-        }
-
         private void aplicarVisibilidadContrasenia()
         {
             Usuario usuarioLogueado = (Usuario)Session["usuario"];
@@ -1086,6 +1143,19 @@ namespace Presentacion
             Session.Remove("claveModificada");
             Session.Remove("idUsuarioAgregado");
             Session.Remove("UsuarioRegistrado");
+        }
+
+        protected void cvFechaNacimiento_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            DateTime fecha;
+
+            if (!DateTime.TryParse(txtFechaNacimiento.Text, out fecha))
+            {
+                args.IsValid = false;
+                return;
+            }
+
+            args.IsValid = fecha <= DateTime.Today;
         }
     }
 }

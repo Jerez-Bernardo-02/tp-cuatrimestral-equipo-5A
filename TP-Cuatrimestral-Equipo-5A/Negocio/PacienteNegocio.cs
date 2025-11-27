@@ -17,7 +17,7 @@ namespace Negocio
             try
             {
                 // Parametros (@Clave, valor) clave seria el nombre de la columna y valor el lo que tiene el objeto recibido por parametro en cada atributo
-                datos.setearConsulta(@"INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Dni, Email, Telefono, IdUsuario) VALUES (@nombre, @apellido, @fechaNacimiento, @dni, @email, @telefono, @idUsuario)");
+                datos.setearConsulta(@"INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Dni, Email, Telefono, UrlImagen, IdUsuario) VALUES (@nombre, @apellido, @fechaNacimiento, @dni, @email, @telefono, @urlImagen, @idUsuario)");
                 //seteamos parametros  (@Clave, valor)
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@apellido", nuevo.Apellido);
