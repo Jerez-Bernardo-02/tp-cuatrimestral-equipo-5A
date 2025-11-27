@@ -15,78 +15,62 @@ namespace Presentacion
         public string NombreUsuario { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!(Page is Login || Page is FormularioRegistro || Page is Error || Page is OlvideMiClave))
+            if (!Seguridad.sesionActiva(Session["usuario"]))
             {
-                if (!Seguridad.sesionActiva(Session["usuario"]))
+                //Si no hay session activa y no es ninguna de estas paginas (que son excepciones) redirigimos a login.
+                if (!(Page is Login || Page is FormularioRegistro || Page is Error || Page is OlvideMiClave))
                 {
                     Response.Redirect("Login.aspx", false);
                 }
-                else
-                {
-                    // Recuperamos el usuario de la sesión
-                    Usuario usuario = (Usuario)Session["usuario"];
-
-                    // Por defecto es el nombre de usuario (para el admin)
-                    NombreUsuario = usuario.NombreUsuario;
-
-                    // Generamos una imagen con sus iniciales (opcional)
-
-
-                    if (Seguridad.esMedico(usuario))
-                    {
-                        MedicoNegocio medicoNegocio = new MedicoNegocio();
-                        try
-                        {
-                            Medico medico = medicoNegocio.buscarPorIdUsuario(usuario.Id);
-                            if (medico != null)
-                            {
-                                NombreUsuario = medico.Nombre + " " + medico.Apellido; 
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-                    else if (Seguridad.esPaciente(usuario))
-                    {
-                        PacienteNegocio pacienteNegocio = new PacienteNegocio();
-                        try
-                        {
-                            Paciente paciente = pacienteNegocio.buscarPorIdPaciente(usuario.Id);
-                            if (paciente != null)
-                            {
-                                NombreUsuario = paciente.Nombre + " " + paciente.Apellido;
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
-                    }
-                    else if (Seguridad.esRecepcionista(usuario))
-                    {
-                        RecepcionistaNegocio recepcionistaNegocio = new RecepcionistaNegocio();
-                        try
-                        {
-                            Recepcionista recepcionista = recepcionistaNegocio.buscarPorIdUsuario(usuario.Id);
-                            if (recepcionista != null)
-                            {
-                                NombreUsuario = recepcionista.Nombre + " " + recepcionista.Apellido;
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
-                    }
-
-                }
+            }
+            else
+            {
+                //Si hay session, cargamos el nombre.
+                CargarNombreEnNavbar();
             }
         }
 
+        private void CargarNombreEnNavbar()
+        {
+            try
+            {
+                Usuario usuario = (Usuario)Session["usuario"];
+                NombreUsuario = usuario.NombreUsuario; //Por defecto el nombre seá el del usuario (para el admin), para el resto luego cambia por el nombre y apellido.
+
+
+                if (Seguridad.esMedico(usuario))
+                {
+                    MedicoNegocio medicoNegocio = new MedicoNegocio();
+                    Medico medico = medicoNegocio.buscarPorIdUsuario(usuario.Id);
+                    if (medico != null)
+                    {
+                        NombreUsuario = medico.Nombre + " " + medico.Apellido;
+                    }
+                }
+                else if (Seguridad.esPaciente(usuario))
+                {
+                    PacienteNegocio pacienteNegocio = new PacienteNegocio(); 
+                    Paciente paciente = pacienteNegocio.buscarPorIdUsuario(usuario.Id);
+                    if (paciente != null) 
+                    {
+                        NombreUsuario = paciente.Nombre + " " + paciente.Apellido;
+                    }
+                }
+                else if (Seguridad.esRecepcionista(usuario))
+                {
+                    RecepcionistaNegocio recepcionistaNegocio = new RecepcionistaNegocio();
+                    Recepcionista recepcionista = recepcionistaNegocio.buscarPorIdUsuario(usuario.Id);
+                    if (recepcionista != null)
+                    {
+                        NombreUsuario = recepcionista.Nombre + " " + recepcionista.Apellido;
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
         protected void btnSalir_Click(object sender, EventArgs e)
         {
             Session.Clear();
