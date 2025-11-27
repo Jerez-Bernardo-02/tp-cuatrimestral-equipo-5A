@@ -4,104 +4,117 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-        <h2 class="card-title">Gestion de turnos</h2>
+    <h2 class="card-title">Gestion de turnos</h2>
 
 
-        <div class="row">
-            <div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
 
-                <%--Fila de filtros--%>
-                <div class="row mt-4 ms-3">
-                    <%--Filtro Nombre--%>
-                    <div class="col-md-2">
-                        <asp:TextBox runat="server" ID="txtDniPaciente" CssClass="form-control" Placeholder="DNI"></asp:TextBox>
-                    </div>
+            <%--Fila de filtros--%>
+            <div class="row mt-4 ms-3">
+                <%--Filtro Nombre--%>
+                <div class="col-md-2">
+                    <asp:TextBox runat="server" ID="txtDniPaciente" CssClass="form-control" Placeholder="DNI"></asp:TextBox>
+                </div>
 
-                    <%--Filtro Nombre--%>
-                    <div class="col-md-2">
-                        <asp:TextBox runat="server" ID="txtNombrePaciente" CssClass="form-control" Placeholder="Nombre"></asp:TextBox>
-                    </div>
-                    <%--Filtro Apellido--%>
-                    <div class="col-md-2">
-                        <asp:TextBox runat="server" ID="txtApellidoPaciente" CssClass="form-control" Placeholder="Apellido"></asp:TextBox>
-                    </div>
-                    <%--Filtro Estado--%>
-                    <div class="col-md-2">
-                        <asp:DropDownList ID="ddlEstadoTurno" runat="server" CssClass="form-select">
-                            <asp:ListItem Text="Estado" Value="" />
-                        </asp:DropDownList>
-                    </div>
-                    <%--Filtro Fecha--%>
-                    <div class="col-md-2">
-                        <asp:TextBox ID="txtFechaTurno" runat="server" TextMode="Date"
-                            CssClass="form-control">
-                             </asp:TextBox>
+                <%--Filtro Nombre--%>
+                <div class="col-md-2">
+                    <asp:TextBox runat="server" ID="txtNombrePaciente" CssClass="form-control" Placeholder="Nombre"></asp:TextBox>
+                </div>
+                <%--Filtro Apellido--%>
+                <div class="col-md-2">
+                    <asp:TextBox runat="server" ID="txtApellidoPaciente" CssClass="form-control" Placeholder="Apellido"></asp:TextBox>
+                </div>
+                <%--Filtro Estado--%>
+                <div class="col-md-2">
+                    <asp:DropDownList ID="ddlEstadoTurno" runat="server" CssClass="form-select">
+                        <asp:ListItem Text="Estado" Value="" />
+                    </asp:DropDownList>
+                </div>
+                <%--Filtro Fecha--%>
+                <div class="col-md-2">
+                    <asp:TextBox ID="txtFechaTurno" runat="server" TextMode="Date"
+                        CssClass="form-control">
+                    </asp:TextBox>
 
-                    </div>
+                </div>
 
-                    <%--Botron aplicar filtros--%>
-                    <div class="col-md-1">
-                        <asp:Button runat="server" ID="btnFiltrar" Text="Filtrar" CssClass="btn btn-primary w-100"
-                            OnClick="btnFiltrar_Click" />
-                    </div>
+                <%--Botron aplicar filtros--%>
+                <div class="col-md-1">
+                    <asp:Button runat="server" ID="btnFiltrar" Text="Filtrar" CssClass="btn btn-primary w-100"
+                        OnClick="btnFiltrar_Click" />
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="row mt-3 ms-3 me-2">
-            <div class="col-12">
-                <%--Card con borde y sombra para la grilla --%>
-                <div class="card shadow-sm border-0 mb-3">
-                    <div class="card-body">
+    <div class="row mt-3 ms-3 me-2">
+        <div class="col-12">
+            <%--Card con borde y sombra para la grilla --%>
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-body">
 
-                        <%--Grilla de turnos--%>
-                        <asp:GridView ID="dgvTurnos" runat="server"
-                            CssClass="table table-hover"
-                            AutoGenerateColumns="false"
-                            OnRowCommand="dgvTurnos_RowCommand"
-                            DataKeyNames="Id">
-                            <Columns>
-                                <asp:BoundField HeaderText="Fecha y hora" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy HH:mm}"/>
+                    <%--Grilla de turnos--%>
+                    <asp:GridView ID="dgvTurnos" runat="server"
+                        CssClass="table table-hover"
+                        AutoGenerateColumns="false"
+                        OnRowCommand="dgvTurnos_RowCommand"
+                        DataKeyNames="Id"
+                        AllowPaging="true"
+                        PageSize="10"
+                        OnRowDataBound="dgvTurnos_RowDataBound"
+                        OnPageIndexChanging="dgvTurnos_PageIndexChanging">
+                        <Columns>
+                            <asp:BoundField HeaderText="Fecha y hora" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy HH:mm}" />
 
-                                <asp:TemplateField HeaderText="Paciente">
-                                    <ItemTemplate>
-                                        <asp:Label runat="server" Text='<%# Eval("Paciente.Nombre") + " " + Eval("Paciente.Apellido") %>'></asp:Label>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Paciente">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("Paciente.Nombre") + " " + Eval("Paciente.Apellido") %>'></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
 
-                                <asp:BoundField HeaderText="Especialidad" DataField="Especialidad.Descripcion" />
+                            <asp:BoundField HeaderText="Especialidad" DataField="Especialidad.Descripcion" />
 
-                                <asp:BoundField HeaderText="Estado" DataField="Estado.Descripcion" />
+                            <asp:BoundField HeaderText="Estado" DataField="Estado.Descripcion" />
 
-                                <asp:TemplateField HeaderText="Acciones">
+                            <asp:TemplateField HeaderText="Acciones">
 
-                                    <ItemTemplate>
-                                        <%--Boton ver historia clinica--%>
-                                        <asp:LinkButton runat="server"
-                                            CommandName="VerHC"
-                                            CommandArgument='<%# Eval("Id") %>'
-                                            CssClass="btn btn-info btn-sm"
-                                            ToolTip="Ver Historia Clínica">
+                                <ItemTemplate>
+                                    <%--Boton ver historia clinica--%>
+                                    <asp:LinkButton runat="server"
+                                        CommandName="VerHC"
+                                        CommandArgument='<%# Eval("Id") %>'
+                                        CssClass="btn btn-info btn-sm"
+                                        ToolTip="Ver Historia Clínica">
                                             <i class="bi bi-eye-fill"></i>
-                                        </asp:LinkButton>
+                                    </asp:LinkButton>
 
-                                        <%--Boton modificar estado del turno--%>
-                                        <asp:LinkButton runat="server"
-                                            CommandName="ModificarEstado"
-                                            CommandArgument='<%# Eval("Id") %>'
-                                            CssClass="btn btn-warning btn-sm"
-                                            ToolTip="Modificar Estado / Ver Observaciones">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </asp:LinkButton>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
+                                    <%-- Boton finalizar --%>
+                                    <asp:LinkButton ID="btnFinalizar" runat="server"
+                                        CommandName="Finalizar"
+                                        CommandArgument='<%# Eval("Id") %>'
+                                        CssClass="btn btn-success btn-sm ms-1"
+                                        ToolTip="Finalizar Turno (Atendido)">
+                                         <i class="bi bi-check-lg"></i>
+                                    </asp:LinkButton>
 
-                            </Columns>
+                                    <%-- Boton cancelar--%>
+                                    <asp:LinkButton ID="btnCancelar" runat="server"
+                                        CommandName="Cancelar"
+                                        CommandArgument='<%# Eval("Id") %>'
+                                        CssClass="btn btn-danger btn-sm ms-1"
+                                        ToolTip="Cancelar Turno">
+                                         <i class="bi bi-x-circle"></i>
+                                    </asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
 
-                        </asp:GridView>
+                        </Columns>
 
-                    </div>
+                    </asp:GridView>
+
                 </div>
             </div>
         </div>
+    </div>
 </asp:Content>

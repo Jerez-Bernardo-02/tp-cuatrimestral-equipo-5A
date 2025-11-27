@@ -87,21 +87,55 @@ namespace Presentacion
         protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int idTurno = Convert.ToInt32(e.CommandArgument);
+            TurnoNegocio turnoNegocio = new TurnoNegocio();
 
             if (e.CommandName == "VerHC")
             {
                 Response.Redirect("HistoriaClinica.aspx?idTurno=" + idTurno);
             }
-            else if (e.CommandName == "ModificarEstado")
+            else if (e.CommandName == "Finalizar")
             {
-                //pantalla o modal para modificar el turno.
+                turnoNegocio.actualizarEstado(idTurno, 5);// IdTurno 5 = Finalizado
             }
+            else if (e.CommandName == "Cancelar")
+            {
+                turnoNegocio.actualizarEstado(idTurno, 3); // IdTurno 3 = Cancelado
+            }
+            CargarGrilla();
 
         }
 
         protected void btnFiltrar_Click(object sender, EventArgs e)
         {
             CargarGrilla();
+        }
+
+        protected void dgvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvTurnos.PageIndex = e.NewPageIndex;
+            CargarGrilla();
+        }
+
+        protected void dgvTurnos_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //Validacion que el tipo de dato de la fila enlazado sea un dato (DataRow) y no una cabecera o pie de página.
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Turno turno = (Turno)e.Row.DataItem;
+
+                // Se buscan los botones
+                LinkButton btnFinalizar = (LinkButton)e.Row.FindControl("btnFinalizar");
+                LinkButton btnCancelar = (LinkButton)e.Row.FindControl("btnCancelar");
+
+
+                if (turno.Estado.Id != 1 && turno.Estado.Id != 2) //Si no es pendiente ni reprogramado se ocultan los botones.
+                {
+                    // Si NO está pendiente, no se puede tocar nada
+                    btnFinalizar.Visible = false;
+                    btnCancelar.Visible = false;
+                }
+            }
+
         }
     }
 }

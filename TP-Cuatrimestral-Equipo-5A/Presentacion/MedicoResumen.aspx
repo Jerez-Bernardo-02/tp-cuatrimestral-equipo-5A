@@ -69,8 +69,7 @@
                                         CommandName="Finalizar"
                                         CommandArgument='<%# Eval("Id") %>'
                                         CssClass="btn btn-success btn-sm ms-1"
-                                        ToolTip="Finalizar Turno (Atendido)"
-                                        OnClientClick="return confirm('¿Confirmar que el paciente fue atendido?');">
+                                        ToolTip="Finalizar Turno (Atendido)">
                                          <i class="bi bi-check-lg"></i>
                                      </asp:LinkButton>
 
@@ -79,8 +78,7 @@
                                         CommandName="Cancelar"
                                         CommandArgument='<%# Eval("Id") %>'
                                         CssClass="btn btn-danger btn-sm ms-1"
-                                        ToolTip="Cancelar Turno"
-                                        OnClientClick="return confirm('¿Está seguro de cancelar este turno?');">
+                                        ToolTip="Cancelar Turno">
                                          <i class="bi bi-x-circle"></i>
                                      </asp:LinkButton>
                                 </ItemTemplate>
