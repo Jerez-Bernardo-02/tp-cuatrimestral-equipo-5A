@@ -82,6 +82,7 @@ namespace Presentacion
             hdnFldIdTurno.Value = turno.Id.ToString();
             hdnFldIdMedico.Value = turno.Medico.Id.ToString();
             hdnFldIdEspecialidad.Value = turno.Especialidad.Id.ToString();
+            hdnFldIdEstado.Value = turno.Estado.Id.ToString();
             hdnFldPacienteDni.Value = turno.Paciente.Dni;
 
             if (!string.IsNullOrEmpty(turno.Observaciones))
@@ -199,6 +200,43 @@ namespace Presentacion
             }
         }
 
+        private void ActualizarEstadoBotonGuardar()
+        {
+            int idEstadoTurno = int.Parse(hdnFldIdEstado.Value);
+            int idEstadoSeleccionado = int.Parse(ddlEstados.SelectedValue);
+
+            // Valores por defecto
+            btnGuardar.Enabled = false;
+            pnlReprogramar.Visible = false;
+
+            // Habilitar Guardar solo si seleccionó un estado distinto al actual
+            if (idEstadoTurno != idEstadoSeleccionado)
+            {
+                btnGuardar.Enabled = true;
+            }
+
+            // Si el estado actual es 3, 4 o 5 -> nada se permite
+            if (idEstadoTurno == 3 || idEstadoTurno == 4 || idEstadoTurno == 5)
+            {
+                btnGuardar.Enabled = false;
+                return;
+            }
+
+            // Si el seleccionado es 0 -> no se muestra ni habilita nada
+            if (idEstadoSeleccionado == 0)
+            {
+                btnGuardar.Enabled = false;
+                return;
+            }
+
+            // Mostrar panel SOLO si el seleccionado es 2
+            if (idEstadoSeleccionado == 2)
+            {
+                pnlReprogramar.Visible = true;
+                btnGuardar.Enabled = false;
+            }
+        }
+
         // ===============================================
         //             Data Grid View - Turnos
         // ===============================================
@@ -241,28 +279,14 @@ namespace Presentacion
                     repHorarios.DataSource = null;
                     repHorarios.DataBind();
                 }
+
+                ActualizarEstadoBotonGuardar();
             }
         }
 
         protected void ddlEstados_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int idEstado = int.Parse(ddlEstados.SelectedValue);
-
-            if (idEstado == 2)
-            {
-                pnlReprogramar.Visible = true;
-                btnGuardar.Enabled = false;
-            }
-            else if (idEstado == 0)
-            {
-                pnlReprogramar.Visible = false;
-                btnGuardar.Enabled = false;
-            }
-            else
-            {
-                pnlReprogramar.Visible = false;
-                btnGuardar.Enabled = true;
-            }
+            ActualizarEstadoBotonGuardar();
         }
 
         // ==============================================
@@ -274,13 +298,13 @@ namespace Presentacion
             if (e.CommandName == "Seleccionar")
             {
                 string horaSeleccionada = e.CommandArgument.ToString();
-                Button btn = (Button)e.Item.FindControl("btnHorario");
-                btn.CssClass = "btn btn-info w-100 btn-sm";
-
                 Session.Add("HoraTurno", horaSeleccionada);
-            }
 
-            btnGuardar.Enabled = true;
+                lblHora.Text = DateTime.Parse(horaSeleccionada).ToString("HH:mm");
+                btnGuardar.Enabled = true;
+
+                cargarHorarios();
+            }
         }
 
         protected void repHorarios_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -363,6 +387,7 @@ namespace Presentacion
                 }
                 //Si se encontró una fecha, se asigna al textbox del calendario y se carga la grilla
                 txtCalendario.Text = proximaFecha.ToString("yyyy-MM-dd");
+                lblFecha.Text = proximaFecha.ToString("dddd dd 'de' MMMM 'de' yyyy");
                 txtCalendario_TextChanged(null, null);
             }
             catch (Exception ex)
@@ -373,6 +398,11 @@ namespace Presentacion
         }
 
         protected void txtCalendario_TextChanged(object sender, EventArgs e)
+        {
+            cargarHorarios();
+        }
+
+        private void cargarHorarios()
         {
             LimpiarMensajes();
             repHorarios.DataSource = null;
@@ -415,6 +445,7 @@ namespace Presentacion
             repHorarios.DataSource = turnosDiarios;
             repHorarios.DataBind();
         }
+
         private void MostrarError(string mensaje)
         {
             lblMensaje.Text = mensaje;

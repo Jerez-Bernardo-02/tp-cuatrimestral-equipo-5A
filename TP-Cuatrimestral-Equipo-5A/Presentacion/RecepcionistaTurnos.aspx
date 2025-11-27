@@ -108,6 +108,7 @@
         </div>
 
         <div class="col-4">
+            <%--Detalle del Turno--%>
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-4">
@@ -121,6 +122,7 @@
                     <asp:HiddenField ID="hdnFldIdTurno" runat="server" />
                     <asp:HiddenField ID="hdnFldIdMedico" runat="server" />
                     <asp:HiddenField ID="hdnFldIdEspecialidad" runat="server" />
+                    <asp:HiddenField ID="hdnFldIdEstado" runat="server" />
                     <asp:HiddenField ID="hdnFldPacienteDni" runat="server" />
 
                     <p>
