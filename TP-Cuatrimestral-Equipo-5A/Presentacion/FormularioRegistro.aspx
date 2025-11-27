@@ -152,7 +152,7 @@
         <div class="row mb-3">
             <div class="col-md-4">
                 <asp:Button Text="Guardar" ID="btnGuardar" OnClick="btnGuardar_Click" runat="server" class="btn btn-primary" />
-                <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary" Visible="false" />
+                <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary" Visible="false" CausesValidation="false" />
             </div>
         </div>
     </div>
