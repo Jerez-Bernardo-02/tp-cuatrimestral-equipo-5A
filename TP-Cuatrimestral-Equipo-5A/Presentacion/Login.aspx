@@ -55,7 +55,11 @@
                         <asp:RequiredFieldValidator  runat="server" ErrorMessage="* Complete el campo" ControlToValidate="txtPassword" CssClass="validacion"/>
 
                         <asp:CustomValidator ID="cvLogin" runat="server" CssClass="validacion"></asp:CustomValidator>
-
+                        <div class="text-end mb-2">
+                            <a href="OlvideMiClave.aspx" class="text-decoration-none">
+                                ¿Olvidé mi contraseña?
+                            </a>
+                        </div>
                         <div class="input-group mb-3">
 
                             <%--<div class="form-check">
