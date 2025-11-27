@@ -593,7 +593,6 @@ namespace Negocio
                     return fechaCursor;
                 }
             }
-
             // Si llegamos aca, no encontramos nada en 2 meses.
             return DateTime.MinValue;
         }
