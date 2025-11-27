@@ -4,7 +4,20 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
     <div class="container mt-4">
+         <%--Mensaje Exitoso o Error--%>
+        <div class="row">
+            <div class="col-12">
+                <%-- Label de ERROR (Rojo) --%>
+                <asp:Label ID="lblMensajeError" runat="server"
+                 CssClass="alert alert-danger d-block text-center" Visible="false">
+                </asp:Label>
 
+                <%-- Label de ÉXITO (Verde) --%>
+                <asp:Label ID="lblMensajeExito" runat="server"
+                 CssClass="alert alert-success d-block text-center" Visible="false">
+                </asp:Label>
+            </div>
+       </div>
         <h3 class="ms-3 mb-3">Formulario de Especialidad</h3>
         <h4 class="text-primary ms-3 mb-4">Datos de especialidad</h4>
 
@@ -27,12 +40,10 @@
 
         <!-- Botón Eliminar -->
         <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" OnClick="btnEliminar_Click" CssClass="btn btn-danger" Visible="false" />
+         <!-- Volver -->
+        <asp:Button Text="Volver" ID="Button1" runat="server" CssClass="btn btn-outline-secondary" OnClick="btnVolver_Click" />
+    </div>
 
-    </div>
-    <!-- Volver -->
-    <div class="col-md-3 text-end">
-        <asp:Button Text="Volver" ID="btnVolver" runat="server" CssClass="btn btn-outline-secondary" OnClick="btnVolver_Click" />
-    </div>
 </div>
 <!-- confirmacion eliminacion -->
 <div class="row mb-3">

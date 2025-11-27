@@ -12,5 +12,13 @@ namespace Presentacion
         protected void Application_Start(object sender, EventArgs e)
         {
         }
+
+        void Application_Error(object sender, EventArgs e)
+        {
+            Exception exc = Server.GetLastError();
+
+            Session.Add("Error", exc.ToString());
+            Server.Transfer("Error.aspx");
+        }  
     }
 }

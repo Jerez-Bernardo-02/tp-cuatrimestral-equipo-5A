@@ -80,7 +80,7 @@ namespace Presentacion
             }
             catch (Exception ex)
             {
-                Session["error"] = ex;
+                Session["error"] = "Error al cargar turnos " + ex;
                 Response.Redirect("Error.aspx");
             }
         }

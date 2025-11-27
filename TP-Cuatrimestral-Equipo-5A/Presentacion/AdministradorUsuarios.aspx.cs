@@ -13,6 +13,11 @@ namespace Presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["usuario"] == null || !Seguridad.esAdministrador(Session["usuario"]))
+            {
+                Session["error"] = "No cuenta con los permisos necesarios";
+                Response.Redirect("Error.aspx");
+            }
             if (!IsPostBack)
             {
                 cargarGrilla();
@@ -24,7 +29,8 @@ namespace Presentacion
             try
             {
                 PersonaNegocio negocio = new PersonaNegocio();
-                dgvUsuarios.DataSource = negocio.listarPersonaRol();
+                Session.Add("listaPersonas", negocio.listarPersonaRol());
+                dgvUsuarios.DataSource = (List<Persona>)Session["listaPersonas"];
                 dgvUsuarios.DataBind();
 
             }catch(Exception ex)
@@ -252,5 +258,21 @@ namespace Presentacion
             lblMensajeExito.Text = "";
         }
 
+        protected void txtDni_TextChanged(object sender, EventArgs e)
+        {
+            List<Persona> lista = (List<Persona>)Session["listaPersonas"];
+            List<Persona> listaFiltrada = lista.FindAll(x => x.Dni.ToUpper().Contains(txtDni.Text.ToUpper()));
+            dgvUsuarios.DataSource = listaFiltrada;
+            dgvUsuarios.DataBind();
+
+        }
+
+        protected void txtRol_TextChanged(object sender, EventArgs e)
+        {
+            List<Persona> lista = (List<Persona>)Session["listaPersonas"];
+            List<Persona> listaFiltrada = lista.FindAll(x => x.Rol.ToUpper().Contains(txtRol.Text.ToUpper()));
+            dgvUsuarios.DataSource = listaFiltrada;
+            dgvUsuarios.DataBind();
+        }
     }
 }

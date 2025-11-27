@@ -13,7 +13,7 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="rounded-circle w-100 h-100" alt="imagenPerfil" />
             </div>
 
-            <asp:DropDownList ID="ddlTipoPermiso" runat="server" AutoPostback="true" OnSelectedIndexChanged="ddlTipoPermiso_SelectedIndexChanged" Visible="false"></asp:DropDownList>
+            <asp:DropDownList ID="ddlTipoPermiso" runat="server" AutoPostBack="true" CssClass="ms-3" OnSelectedIndexChanged="ddlTipoPermiso_SelectedIndexChanged" Visible="false"></asp:DropDownList>
         </div>
 
         <asp:Label ID="lblResultado" runat="server" CssClass="alert alert-danger mt-3 d-block text-center" Visible="false"></asp:Label>
@@ -23,52 +23,52 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="txtNombre" class="form-label">Nombre</label>
-                    <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" placeholder="Nombre"></asp:TextBox>
-                    <!--
-                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre" ErrorMessage="El nombre es obligatorio." ForeColor="Red"/>
-                    <asp:RegularExpressionValidator runat="server" ControlToValidate="txtNombre" ErrorMessage="El nombre solo puede contener letras." ValidationExpression="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" ForeColor="Red"/>
-                    -->
+                    <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" placeholder="Nombre" MaxLength="30" ></asp:TextBox>
+
+                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre" ErrorMessage="El nombre es obligatorio." ForeColor="Red" />
+                    <asp:RegularExpressionValidator runat="server" ControlToValidate="txtNombre" ErrorMessage="El nombre solo puede contener letras." ValidationExpression="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" ForeColor="Red" />
+
                 </div>
 
                 <div class="col-md-6">
                     <label for="txtApellido" class="form-label">Apellido</label>
-                    <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" placeholder="Apellido"></asp:TextBox>
-                    <!--
+                    <asp:TextBox runat="server" ID="txtApellido" CssClass="form-control" placeholder="Apellido" MaxLength="30" ></asp:TextBox>
+
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="txtApellido" ErrorMessage="El apellido es obligatorio." ForeColor="Red" />
-                    <asp:RegularExpressionValidator runat="server" ControlToValidate="txtApellido" ErrorMessage="El apellido solo puede contener letras." ValidationExpression="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" ForeColor="Red"/>
-                    -->
+                    <asp:RegularExpressionValidator runat="server" ControlToValidate="txtApellido" ErrorMessage="El apellido solo puede contener letras." ValidationExpression="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" ForeColor="Red" />
+
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="txtFechaNacimiento" class="form-label">Fecha de nacimiento</label>
                 <asp:TextBox ID="txtFechaNacimiento" runat="server" CssClass="form-control" TextMode="Date"></asp:TextBox>
-                <!--
+
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="txtFechaNacimiento" ErrorMessage="La fecha de nacimiento es obligatoria." ForeColor="Red" />
                 <asp:CustomValidator ID="cvFechaNacimiento" runat="server" ControlToValidate="txtFechaNacimiento" ErrorMessage="La fecha de nacimiento no puede ser futura." ForeColor="Red" Display="Dynamic" />
-                -->
+
             </div>
 
             <div class="mb-3">
                 <label for="txtEmail" class="form-label">Email</label>
                 <div class="input-group">
                     <span class="input-group-text">@</span>
-                    <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control"></asp:TextBox>
+                    <asp:TextBox runat="server" ID="txtEmail" CssClass="form-control" MaxLength="50"></asp:TextBox>
                 </div>
-                <!--
-                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtEmail" ErrorMessage="El email es obligatorio." ForeColor="Red"/>
+
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtEmail" ErrorMessage="El email es obligatorio." ForeColor="Red" />
                 <asp:RegularExpressionValidator runat="server" ControlToValidate="txtEmail" ErrorMessage="Email inválido." ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$" ForeColor="Red" />
-                -->
+
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="txtDocumento" class="form-label">Documento</label>
-                    <asp:TextBox runat="server" ID="txtDocumento" CssClass="form-control" placeholder="Documento"></asp:TextBox>
-                    <!--
+                    <asp:TextBox runat="server" ID="txtDocumento" CssClass="form-control" placeholder="Documento" MaxLength="8"></asp:TextBox>
+
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="txtDocumento" ErrorMessage="El documento es obligatorio." ForeColor="Red" />
                     <asp:RegularExpressionValidator runat="server" ControlToValidate="txtDocumento" ErrorMessage="Sólo números (entre 7 y 8 dígitos)" ValidationExpression="^\d{7,8}$" ForeColor="Red" />
-                    -->
+
                 </div>
 
                 <div class="col-12 mt-2">
@@ -79,11 +79,11 @@
 
                 <div class="col-md-6">
                     <label for="txtTelefono" class="form-label">Teléfono</label>
-                    <asp:TextBox runat="server" ID="txtTelefono" CssClass="form-control" placeholder="Teléfono"></asp:TextBox>
-                    <!--
+                    <asp:TextBox runat="server" ID="txtTelefono" CssClass="form-control" placeholder="Teléfono" MaxLength="20"></asp:TextBox>
+
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="txtTelefono" ErrorMessage="El teléfono es obligatorio." ForeColor="Red" />
                     <asp:RegularExpressionValidator runat="server" ControlToValidate="txtTelefono" ErrorMessage="El teléfono debe tener 10 números." ValidationExpression="^\d{10}$" ForeColor="Red" />
-                    -->
+
                 </div>
             </div>
 
@@ -91,9 +91,9 @@
                 <div class="col-md-6">
                     <label runat="server" id="lblMatricula" for="txtMatricula" class="form-label">Matricula</label>
 
-                    <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="Matricula"></asp:TextBox>
-                    <!--<asp:RequiredFieldValidator ID="rfvMatricula" runat="server" ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria para médicos." ForeColor="Red" Enabled="false" />
-                -->
+                    <asp:TextBox runat="server" ID="txtMatricula" CssClass="form-control" placeholder="Matricula" MaxLength="20" ></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvMatricula" runat="server" ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria para médicos." ForeColor="Red" Enabled="false" />
+
                 </div>
 
             </div>
@@ -101,31 +101,32 @@
 
         <asp:Panel ID="pnlUsuario" runat="server">
 
-                <h4 class="text-primary ms-3 mb-4">Datos de acceso</h4>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="txtUsuario" class="form-label">Usuario</label>
-                        <asp:TextBox runat="server" ID="txtUsuario" CssClass="form-control" placeholder="Nombre de usuario"></asp:TextBox>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label runat="server" ID="lblContrasenia" for="txtContrasenia" class="form-label">Contraseña</label>
-                        <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" placeholder="Contraseña"></asp:TextBox>
-                        <div class="mt-3" style="max-width: 320px;">
-                            <asp:Button ID="btnGenerarClave" runat="server" CssClass="btn btn-secondary w-100 mb-2" Text="Generar nueva contraseña" OnClick="btnGenerarClave_Click" Visible="false" />
-                            <asp:Label ID="lblMensajeExito" runat="server" CssClass="alert alert-success text-center p-2" Style="display: block; margin-top: 4px;" Visible="false">
-                            </asp:Label>
-                        </div>
-
-                    </div>
+            <h4 class="text-primary ms-3 mb-4">Datos de acceso</h4>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="txtUsuario" class="form-label">Usuario</label>
+                    <asp:TextBox runat="server" ID="txtUsuario" CssClass="form-control" placeholder="Nombre de usuario" MaxLength="20"></asp:TextBox>
+                    <asp:RequiredFieldValidator ErrorMessage="El usuario es obligatorio" ControlToValidate="txtUsuario" ForeColor="Red" runat="server" />
                 </div>
+
+                <div class="col-md-6">
+                    <label runat="server" id="lblContrasenia" for="txtContrasenia" class="form-label">Contraseña</label>
+                    <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" placeholder="Contraseña" MaxLength="100"></asp:TextBox>
+                    <div class="mt-3" style="max-width: 320px;">
+                        <asp:Button ID="btnGenerarClave" runat="server" CssClass="btn btn-secondary w-100 mb-2" Text="Generar nueva contraseña" OnClick="btnGenerarClave_Click" Visible="false" />
+                        <asp:Label ID="lblMensajeExito" runat="server" CssClass="alert alert-success text-center p-2" Style="display: block; margin-top: 4px;" Visible="false">
+                        </asp:Label>
+                    </div>
+
+                </div>
+            </div>
 
         </asp:Panel>
 
         <div class="row mb-3">
             <div class="col-md-4">
                 <asp:Button Text="Guardar" ID="btnGuardar" OnClick="btnGuardar_Click" runat="server" class="btn btn-primary" />
-                <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary" Visible="false"/>
+                <asp:Button ID="btnVolver" runat="server" Text="Volver" OnClick="btnVolver_Click" CssClass="btn btn-primary" Visible="false" />
             </div>
         </div>
     </div>

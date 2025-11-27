@@ -12,39 +12,13 @@ namespace Presentacion
 {
     public partial class FormularioRegistro : System.Web.UI.Page
     {
-        // Para registrar desde el login:
-        //
-        //      Usuario usuario = new Usuario();
-        //      usuario.Permiso = new Permiso();
-        //      usuario.Permiso.Descripcion = "Paciente";
-        //      Session["usuario"] = usuario;
-        //      Session["usuarioRegistrar"] = "Paciente";
-        //
-        //      Response.Redirect("FormularioRegistro.aspx");
-
-        // Para registrar desde el perfil de recepcionista:
-        //
-        //      Session["usuarioRegistrar"] = "Paciente"
-        //
-        //      Response.Redirect("FormularioRegistro.aspx");
-
-        // Para registrar desde el perfil de Administrador, solo basta con redireccionar al formulario (Con el ddl se selecciona el tipo de usuario)
-        //
-        //      Response.Redirect("FormularioRegistro.aspx");
-
-        // Para modificar desde el perfil de paciente o administrador:
-        //      
-        //      Session["usuarioRegistrar"] = "Nombre de la entidad" (Paciente, Medico, Recepcionista, Administrador)
-        //      Session["usuarioModificar"] = usuario <--- !!!En este caso se debe guardar un objeto de la clase usuario, con TODOS los atrubutos CARGADOS!!!
-        //
-        //      Response.Redirect("FormularioRegistro.aspx");
 
         protected void Page_Load(object sender, EventArgs e)
         {
             // Session.Add("usuarioRegistrar", "Paciente");
             try
             {
-                if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esRecepcionista(Session["usuario"]) && !Seguridad.esAdministrador(Session["usuario"]))
+                if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esRecepcionista(Session["usuario"]) && !Seguridad.esAdministrador(Session["usuario"]) && !Seguridad.esMedico(Session["usuario"]) && Session["usuarioRegistrar"] != "Paciente")
                 {
                     Session["error"] = "No cuenta con los permisos necesarios";
                     Response.Redirect("Error.aspx");
@@ -106,6 +80,12 @@ namespace Presentacion
             string permiso = usuario.Permiso.Descripcion;
 
             txtDocumento.Enabled = false; //bloqueo txt para modificar
+            txtUsuario.Enabled = false;
+            if (!Seguridad.esAdministrador(Session["usuario"]))
+            {
+                txtFechaNacimiento.Enabled = false;
+                lblContrasenia.InnerText += " (Opcional)";
+            }
 
             if (permiso == "Paciente")
             {
@@ -256,6 +236,10 @@ namespace Presentacion
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
+            if (!Page.IsValid)
+            {
+                return;
+            }
             Usuario usuarioModificar = Session["usuarioModificar"] != null ? (Usuario)Session["usuarioModificar"] : null;
 
             // validar campos de usuario
@@ -351,7 +335,6 @@ namespace Presentacion
                         usuario.Clave = txtContrasenia.Text; //si se decide dejar sin cambios es decir txt vacio, no impacta el cambio. caso contrario si
                     }
                     usuario.Activo = true;
-                    usuario.Permiso = new Permiso();
                     usuario.Permiso.Id = idPermiso;
 
                     negocio.modificar(usuario);
@@ -379,7 +362,7 @@ namespace Presentacion
                     {
                         usuario.Clave = txtContrasenia.Text;
                     }
-                     if (usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
+                    else if (usuarioLogeado.Permiso.Id == 4 && tipoUsuario != "Administrador")
                     {
                         usuario.Clave = generarClave(10);
                         txtContrasenia.Text = usuario.Clave;
@@ -430,7 +413,7 @@ namespace Presentacion
                     string tipoUsuarioRegistrar = (string)Session["usuarioRegistrar"];
                     negocio.agregarPaciente(paciente);
                     // llamar metodo envio emailNuevoRegistro
-                    if (usuarioLogeado.Permiso.Id == 4)
+                    if (usuarioLogeado!= null && usuarioLogeado.Permiso.Id == 4)
                     {
                         envioEmailNuevoRegistro(paciente.Nombre, paciente.Apellido, tipoUsuarioRegistrar, usuarioRegistrado.NombreUsuario, paciente.Email, usuarioRegistrado.Clave);
                         Session.Remove("UsuarioRegistrado");
@@ -555,23 +538,21 @@ namespace Presentacion
                     return false;
                 }
 
+               
                 Usuario usuarioLogeado = (Usuario)Session["usuario"];
                 string tipoRegistrar = (string)Session["usuarioRegistrar"];
+
                 bool esAlta = (usuarioModificar == null);
                 bool usuarioLogeadoEsAdmin = (usuarioLogeado != null && Seguridad.esAdministrador(usuarioLogeado));
                 bool usuarioModificarEsAdmin = (usuarioModificar != null && usuarioModificar.Permiso.Id == 4);
 
-                // 1) Registro desde login (Paciente se crea solo)
-                bool validarDesdeLogin = (usuarioLogeado == null && esAlta);
+                // ===========================================================
+                // VALIDACIÓN DE CONTRASEÑA SEGÚN ESCENARIO
+                // ===========================================================
 
-                // 2) Admin crea un nuevo Admin
-                bool adminCreaAdmin = (usuarioLogeadoEsAdmin && tipoRegistrar == "Administrador" && esAlta);
-
-                // 3) Admin modifica un Admin existente
-                bool adminModificaAdmin = (usuarioLogeadoEsAdmin && !esAlta && usuarioModificarEsAdmin);
-
-                // Si corresponde validar contraseña ↓↓↓
-                if (validarDesdeLogin || adminCreaAdmin || adminModificaAdmin)
+                // 1) Registro Paciente desde LOGIN (sin admin logeado)
+                //    Pide contraseña
+                if (esAlta && tipoRegistrar == "Paciente" && !usuarioLogeadoEsAdmin)
                 {
                     if (string.IsNullOrEmpty(txtContrasenia.Text))
                     {
@@ -580,6 +561,32 @@ namespace Presentacion
                         return false;
                     }
                 }
+
+                // 2) Admin crea un nuevo Administrador
+                //    El Admin ingresa la contraseña manualmente
+                if (esAlta && tipoRegistrar == "Administrador" && usuarioLogeadoEsAdmin)
+                {
+                    if (string.IsNullOrEmpty(txtContrasenia.Text))
+                    {
+                        lblResultado.Text = "Ingrese una contraseña";
+                        lblResultado.Visible = true;
+                        return false;
+                    }
+                }
+
+                // 3) Admin modifica un Administrador existente
+                //    El admin ingresa contraseña manualmente
+                if (!esAlta && usuarioModificarEsAdmin && usuarioLogeadoEsAdmin)
+                {
+                    if (string.IsNullOrEmpty(txtContrasenia.Text))
+                    {
+                        lblResultado.Text = "Ingrese una contraseña";
+                        lblResultado.Visible = true;
+                        return false;
+                    }
+                }
+                //4) modo alta desde admin logueado a todos menos a un admin no valido porque autogenera
+                //5) modo modificar desde admin logueado a todos menos a un admin no valido porque autogenera
 
                 // Validar que no exista el nombre de usuario
                 List<Usuario> lista = negocio.listar();
@@ -839,36 +846,26 @@ namespace Presentacion
             // Validar campos vacios
             if (string.IsNullOrEmpty(txtNombre.Text))
             {
-                lblResultado.Text = "Ingrese un nombre";
-                lblResultado.Visible = true;
                 return false;
             }
 
             if (string.IsNullOrEmpty(txtApellido.Text))
             {
-                lblResultado.Text = "Ingrese un apellido";
-                lblResultado.Visible = true;
                 return false;
             }
 
             if (string.IsNullOrEmpty(txtDocumento.Text))
             {
-                lblResultado.Text = "Ingrese un DNI";
-                lblResultado.Visible = true;
                 return false;
             }
 
             if (string.IsNullOrEmpty(txtEmail.Text))
             {
-                lblResultado.Text = "Ingrese un email";
-                lblResultado.Visible = true;
                 return false;
             }
 
             if (string.IsNullOrEmpty(txtFechaNacimiento.Text))
             {
-                lblResultado.Text = "Ingrese una fecha de nacimiento";
-                lblResultado.Visible = true;
                 return false;
             }
 
@@ -891,6 +888,15 @@ namespace Presentacion
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='AdministradorUsuarios.aspx'; }, 3000);", true);
             }
+            else if (Seguridad.esMedico(Session["usuario"]))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='MedicoResumen.aspx'; }, 3000);", true);
+            }
+            else if (Seguridad.esPaciente(Session["usuario"]))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='PacienteTurnos.aspx'; }, 3000);", true);
+            }
+
             else
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='Login.aspx';}, 3000);", true);

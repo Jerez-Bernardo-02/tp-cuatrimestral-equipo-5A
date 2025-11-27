@@ -34,14 +34,14 @@ namespace Negocio
 				}
 				return false;
             }
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-			finally
-			{
-				datos.cerrarConexion();
-			}
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
 
         public void bajaLogica(int idUsuario, bool activo = false)
@@ -247,6 +247,46 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public Usuario buscarPorEmail(string email)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@" SELECT TOP 1 U.Id, U.Usuario, U.Clave, U.Activo, U.IdPermiso FROM Usuarios U LEFT JOIN Pacientes Pa ON Pa.IdUsuario = U.Id LEFT JOIN Medicos Me ON Me.IdUsuario = U.Id LEFT JOIN Recepcionistas Re ON Re.IdUsuario = U.Id WHERE Pa.Email = @Email OR Me.Email = @Email OR Re.Email = @Email;");
+
+                datos.setearParametro("@Email", email);
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    Usuario usuario = new Usuario();
+                    usuario.Id = (int)datos.Lector["Id"];
+                    usuario.NombreUsuario = (string)datos.Lector["Usuario"];
+                    usuario.Clave = (string)datos.Lector["Clave"];
+                    usuario.Activo = (bool)datos.Lector["Activo"];
+
+                    usuario.Permiso = new Permiso();
+                    usuario.Permiso.Id = (int)datos.Lector["IdPermiso"];
+
+                    return usuario;
+                }
+
+                return null; // no se encontró nada
+            }
+            catch (Exception ex)
+            {
+                throw ex; // lo manejás desde Error.aspx
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
     }
 
 }

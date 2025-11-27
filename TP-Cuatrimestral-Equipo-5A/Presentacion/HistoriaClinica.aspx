@@ -99,7 +99,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Asunto</label>
-                        <asp:TextBox ID="txtAsunto" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtAsunto" runat="server" CssClass="form-control" MaxLength="80" ></asp:TextBox>
                     </div>
 
                     <div class="mb-3">
@@ -114,7 +114,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Descripción</label>
-                        <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                        <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" MaxLength="180"></asp:TextBox>
                     </div>
 
                     <div class="d-flex justify-content-center gap-2">

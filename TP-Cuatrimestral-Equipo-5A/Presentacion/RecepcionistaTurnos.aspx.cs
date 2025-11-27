@@ -17,11 +17,33 @@ namespace Presentacion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            try
             {
-                CargarEspecialidades();
-                cargarEstados();
-                cargarTurnos();
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+                if (usuarioLogueado == null)
+                {
+                    Response.Redirect("Login.aspx", false);
+                    return;
+                }
+                if (!Seguridad.esRecepcionista(usuarioLogueado))
+                {
+                    Session["error"] = "No tiene perfil de recepcionista asignado.";
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+
+                if (!IsPostBack)
+                {
+                    CargarEspecialidades();
+                    cargarEstados();
+                    cargarTurnos();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = "Error al cargar turnos " + ex;
+                Response.Redirect("Error.aspx");
             }
         }
 
