@@ -39,22 +39,22 @@ VALUES
 ('admin', 'admin123', 4, 1);    -- IdUsuario 9 (Admin)
 GO
 
-INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Email, Telefono, Dni, IdUsuario)
+INSERT INTO Pacientes (Nombre, Apellido, FechaNacimiento, Email, Telefono, Dni, UrlImagen, IdUsuario)
 VALUES
-('Juan', 'Pérez', '1990-05-10', 'juan.perez@mail.com', '1122334455', '40123456', 1),
-('María', 'Gómez', '1985-07-22', 'maria.gomez@mail.com', '1199887766', '37222444', 2),
-('Martín', 'López', '2005-01-15', 'martin.lopez@mail.com', '1155667788', '45111222', 3),
-('Ana', 'Sánchez', '1998-11-30', 'ana.sanchez@mail.com', '1177889900', '41555666', 4);
+('Juan', 'Pérez', '1990-05-10', 'juan.perez@mail.com', '1122334455', '40123456', 'perfil-1.jpg', 1),
+('María', 'Gómez', '1985-07-22', 'maria.gomez@mail.com', '1199887766', '37222444', 'perfil-2.jpg', 2),
+('Martín', 'López', '2005-01-15', 'martin.lopez@mail.com', '1155667788', '45111222', 'perfil-3.jpg', 3),
+('Ana', 'Sánchez', '1998-11-30', 'ana.sanchez@mail.com', '1177889900', '41555666', 'perfil-4.jpg', 4);
 GO
-INSERT INTO Medicos (Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, Matricula, IdUsuario)
+INSERT INTO Medicos (Nombre, Apellido, FechaNacimiento, Telefono, Dni, Email, Matricula, UrlImagen, IdUsuario)
 VALUES
-('Carlos', 'Ruiz', '1978-09-14', '1144556677', '30111222', 'carlos.ruiz@clinicadb.com', 'M-12345', 5),
-('Lucía', 'Fernández', '1982-03-30', '1133445566', '28333444', 'lucia.fernandez@clinicadb.com', 'M-67890', 6),
-('Diego', 'Moreno', '1980-06-20', '1122334411', '31555888', 'diego.moreno@clinicadb.com', 'M-54321', 7);
+('Carlos', 'Ruiz', '1978-09-14', '1144556677', '30111222', 'carlos.ruiz@clinicadb.com', 'M-12345', 'perfil-5.jpg', 5),
+('Lucía', 'Fernández', '1982-03-30', '1133445566', '28333444', 'lucia.fernandez@clinicadb.com', 'M-67890', 'perfil-6.jpg', 6),
+('Diego', 'Moreno', '1980-06-20', '1122334411', '31555888', 'diego.moreno@clinicadb.com', 'M-54321', 'perfil-7.jpg', 7);
 GO
-INSERT INTO Recepcionistas (Nombre, Apellido, FechaNacimiento, Email, Telefono, Dni, IdUsuario)
+INSERT INTO Recepcionistas (Nombre, Apellido, FechaNacimiento, Email, Telefono, Dni, UrlImagen, IdUsuario)
 VALUES
-('Paula', 'Martínez', '1995-10-02', 'paula.martinez@clinicadb.com', '1145678910', '35999888', 8);
+('Paula', 'Martínez', '1995-10-02', 'paula.martinez@clinicadb.com', '1145678910', '35999888', 'perfil-8.jpg', 8);
 GO
 
 INSERT INTO EspecialidadesPorMedico (IdMedico, IdEspecialidad)
