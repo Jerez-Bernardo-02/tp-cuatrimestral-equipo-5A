@@ -235,7 +235,7 @@ namespace Presentacion
             string filtro = txtMatriculaMedico.Text.Trim();
 
             //List<Medico> listaFiltrada = lista.FindAll(x => x.Matricula != null && x.Matricula.IndexOf(filtro, StringComparison.OrdinalIgnoreCase) >= 0);
-            List<Medico> listaFiltrada = lista.FindAll(x => x.Dni.ToUpper().Contains(txtMatriculaMedico.Text.ToUpper()));
+            List<Medico> listaFiltrada = lista.FindAll(x => x.Matricula.ToUpper().Contains(txtMatriculaMedico.Text.ToUpper()));
             dgvMedicos.DataSource = listaFiltrada;
             dgvMedicos.DataBind();
             //limpio el medico seleccionado guardado en la session y oculto el panel

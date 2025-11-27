@@ -16,12 +16,12 @@
             <div class="input-group">
                 <asp:TextBox ID="txtDniPaciente" runat="server" CssClass="form-control"
                     placeholder="Ingrese DNI del paciente"></asp:TextBox>
-                <asp:RequiredFieldValidator ErrorMessage="Debe ingresar un DNI" ControlToValidate="txtDniPaciente" runat="server" />
                 <%-- Boton de buscar paciente --%>
                 <asp:Button ID="btnBuscarPaciente" runat="server" Text="Buscar"
                     CssClass="btn btn-outline-secondary"
                     OnClick="btnBuscarPaciente_Click" />
             </div>
+                <asp:RequiredFieldValidator ErrorMessage="Debe ingresar un DNI" ControlToValidate="txtDniPaciente" runat="server" ForeColor="Red" />
 
             <%-- Nombre del paciente encontrado --%>
             <div class="mt-2">
@@ -109,7 +109,7 @@
                                 TextMode="MultiLine" Rows="3"
                                 CssClass="form-control"
                                 placeholder="Ingrese motivo de consulta o notas adicionales..."
-                                AutoPostBack="true"
+                                AutoPostBack="true" MaxLength="30"
                                 OnTextChanged="txtObservaciones_TextChanged"></asp:TextBox>
                         </div>
                     </div>

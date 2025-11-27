@@ -42,24 +42,6 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Label lblMensajeExito;
 
         /// <summary>
-        /// Control chkNoDisponibleLunes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleLunes;
-
-        /// <summary>
-        /// Control lblLunes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblLunes;
-
-        /// <summary>
         /// Control repHorarioLunes.
         /// </summary>
         /// <remarks>
@@ -103,24 +85,6 @@ namespace Presentacion
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAñadirHorarioLunes;
-
-        /// <summary>
-        /// Control chkNoDisponibleMartes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleMartes;
-
-        /// <summary>
-        /// Control lblMartes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMartes;
 
         /// <summary>
         /// Control repHorarioMartes.
@@ -168,24 +132,6 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Button btnAñadirHorarioMartes;
 
         /// <summary>
-        /// Control chkNoDisponibleMiercoles.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleMiercoles;
-
-        /// <summary>
-        /// Control lblMiercoles.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMiercoles;
-
-        /// <summary>
         /// Control repHorarioMiercoles.
         /// </summary>
         /// <remarks>
@@ -229,24 +175,6 @@ namespace Presentacion
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAñadirHorarioMiercoles;
-
-        /// <summary>
-        /// Control chkNoDisponibleJueves.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleJueves;
-
-        /// <summary>
-        /// Control lblJueves.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblJueves;
 
         /// <summary>
         /// Control repHorarioJueves.
@@ -294,24 +222,6 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Button btnAñadirHorarioJueves;
 
         /// <summary>
-        /// Control chkNoDisponibleViernes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleViernes;
-
-        /// <summary>
-        /// Control lblViernes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblViernes;
-
-        /// <summary>
         /// Control repHorarioViernes.
         /// </summary>
         /// <remarks>
@@ -357,24 +267,6 @@ namespace Presentacion
         protected global::System.Web.UI.WebControls.Button btnAñadirHorarioViernes;
 
         /// <summary>
-        /// Control chkNoDisponibleSabado.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleSabado;
-
-        /// <summary>
-        /// Control lblSabado.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSabado;
-
-        /// <summary>
         /// Control repHorarioSabado.
         /// </summary>
         /// <remarks>
@@ -418,24 +310,6 @@ namespace Presentacion
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAñadirHorarioSabado;
-
-        /// <summary>
-        /// Control chkNoDisponibleDomingo.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkNoDisponibleDomingo;
-
-        /// <summary>
-        /// Control lblDomingo.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDomingo;
 
         /// <summary>
         /// Control repHorarioDomingo.

@@ -34,14 +34,6 @@
             <div class="card shadow-sm mb-3">
                 <h4 class="card-title ms-3 mt-2 mb-2">Lunes</h4>
 
-                <%--Checkbox Dia no disponible--%>
-                <div class="form-check ms-3 mb-2">
-                    <asp:CheckBox ID="chkNoDisponibleLunes" runat="server"
-                        CssClass="form-check-input" AutoPostBack="true" />
-
-                    <asp:Label ID="lblLunes" runat="server" Text="Marcar como no disponible"
-                        CssClass="form-check-label" />
-                </div>
                 <%-- Tarjeta para CADA bloque --%>
                 <div class="card-body">
                     <%--      REPEATER     --%>
@@ -106,14 +98,6 @@
             <div class="card shadow-sm mb-3">
                 <h4 class="card-title ms-3 mt-2 mb-2">Martes</h4>
 
-                <%--Checkbox Dia no disponible--%>
-                <div class="form-check ms-3 mb-2">
-                    <asp:CheckBox ID="chkNoDisponibleMartes" runat="server"
-                        CssClass="form-check-input" AutoPostBack="true" />
-
-                    <asp:Label ID="lblMartes" runat="server" Text="Marcar como no disponible"
-                        CssClass="form-check-label" />
-                </div>
                 <%-- Tarjeta para CADA bloque --%>
                 <div class="card-body">
                     <%--REPEATER--%>
@@ -180,14 +164,6 @@
             <div class="card shadow-sm mb-3">
                 <h4 class="card-title ms-3 mt-2 mb-2">Miercoles</h4>
 
-                <%--Checkbox Dia no disponible--%>
-                <div class="form-check ms-3 mb-2">
-                    <asp:CheckBox ID="chkNoDisponibleMiercoles" runat="server"
-                        CssClass="form-check-input" AutoPostBack="true" />
-
-                    <asp:Label ID="lblMiercoles" runat="server" Text="Marcar como no disponible"
-                        CssClass="form-check-label" />
-                </div>
                 <%-- Tarjeta para CADA bloque --%>
                 <div class="card-body">
                     <%--REPEATER--%>
@@ -255,14 +231,6 @@
             <div class="card shadow-sm mb-3">
                 <h4 class="card-title ms-3 mt-2 mb-2">Jueves</h4>
 
-                <%--Checkbox Dia no disponible--%>
-                <div class="form-check ms-3 mb-2">
-                    <asp:CheckBox ID="chkNoDisponibleJueves" runat="server"
-                        CssClass="form-check-input" AutoPostBack="true" />
-
-                    <asp:Label ID="lblJueves" runat="server" Text="Marcar como no disponible"
-                        CssClass="form-check-label" />
-                </div>
                 <%-- Tarjeta para CADA bloque --%>
                 <div class="card-body">
                     <%--REPEATER--%>
@@ -331,14 +299,6 @@
             <div class="card shadow-sm mb-3">
                 <h4 class="card-title ms-3 mt-2 mb-2">Viernes</h4>
 
-                <%--Checkbox Dia no disponible--%>
-                <div class="form-check ms-3 mb-2">
-                    <asp:CheckBox ID="chkNoDisponibleViernes" runat="server"
-                        CssClass="form-check-input" AutoPostBack="true" />
-
-                    <asp:Label ID="lblViernes" runat="server" Text="Marcar como no disponible"
-                        CssClass="form-check-label" />
-                </div>
                 <%-- Tarjeta para CADA bloque --%>
                 <div class="card-body">
                     <%--REPEATER--%>
@@ -407,14 +367,6 @@
             <div class="card shadow-sm mb-3">
                 <h4 class="card-title ms-3 mt-2 mb-2">Sabado</h4>
 
-                <%--Checkbox Dia no disponible--%>
-                <div class="form-check ms-3 mb-2">
-                    <asp:CheckBox ID="chkNoDisponibleSabado" runat="server"
-                        CssClass="form-check-input" AutoPostBack="true" />
-
-                    <asp:Label ID="lblSabado" runat="server" Text="Marcar como no disponible"
-                        CssClass="form-check-label" />
-                </div>
                 <%-- Tarjeta para CADA bloque --%>
                 <div class="card-body">
                     <%--REPEATER--%>
@@ -482,14 +434,6 @@
             <div class="card shadow-sm mb-3">
                 <h4 class="card-title ms-3 mt-2 mb-2">Domingo</h4>
 
-                <%--Checkbox Dia no disponible--%>
-                <div class="form-check ms-3 mb-2">
-                    <asp:CheckBox ID="chkNoDisponibleDomingo" runat="server"
-                        CssClass="form-check-input" AutoPostBack="true" />
-
-                    <asp:Label ID="lblDomingo" runat="server" Text="Marcar como no disponible"
-                        CssClass="form-check-label" />
-                </div>
                 <%-- Tarjeta para CADA bloque --%>
                 <div class="card-body">
                     <%--REPEATER--%>

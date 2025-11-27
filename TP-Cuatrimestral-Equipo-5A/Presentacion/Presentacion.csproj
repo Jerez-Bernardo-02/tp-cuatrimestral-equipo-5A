@@ -73,6 +73,7 @@
     <Content Include="FormularioRegistro.aspx" />
     <Content Include="HistoriaClinica.aspx" />
     <Content Include="MedicoHorarios.aspx" />
+    <Content Include="OlvideMiClave.aspx" />
     <Content Include="PacienteTurnos.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
@@ -125,6 +126,13 @@
     </Compile>
     <Compile Include="MedicoHorarios.aspx.designer.cs">
       <DependentUpon>MedicoHorarios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OlvideMiClave.aspx.cs">
+      <DependentUpon>OlvideMiClave.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OlvideMiClave.aspx.designer.cs">
+      <DependentUpon>OlvideMiClave.aspx</DependentUpon>
     </Compile>
     <Compile Include="PacienteTurnos.aspx.cs">
       <DependentUpon>PacienteTurnos.aspx</DependentUpon>

@@ -234,6 +234,10 @@ namespace Presentacion
                 //Bloqueo de boton para que no se confirme y se limpia la hora de la session.
                 btnConfirmar.Enabled = false;
                 Session["HoraTurno"] = null;
+                //limpiar botones y fecha y todo,...
+
+                redireccionar();
+
             }
             catch (Exception ex)
             {
@@ -455,5 +459,22 @@ namespace Presentacion
                 lblInfoHorarios.Visible = true;
             }
         }
+
+        protected void redireccionar()
+        {
+
+            // Se redirecciona a la ventana respsectiva al usuario ingreso al formulario
+
+            if (Seguridad.esRecepcionista(Session["usuario"]))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='RecepcionistaTurnos.aspx'; }, 3000);", true);
+            }
+            else if (Seguridad.esPaciente(Session["usuario"]))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "redirigir", "setTimeout(function(){ window.location='PacienteTurnos.aspx'; }, 3000);", true);
+            }
+
+        }
+
     }
 }
