@@ -66,7 +66,7 @@ namespace Presentacion
                 dgvTurnos.DataSource = lista;
                 dgvTurnos.DataBind();
 
-                CalcularResumen(lista);
+                CalcularResumen();
 
             }
             catch (Exception ex)
@@ -86,22 +86,24 @@ namespace Presentacion
             }
             else if (e.CommandName == "Finalizar")
             {
-                //modificar estado a IdEstado = 5 (Finalizado)
+                turnoNegocio.actualizarEstado(idTurno, 5);// IdTurno 5 = Finalizado
             }
             else if (e.CommandName == "Cancelar")
             {
-                //modificar estado a IdEstado = 3 (Cancelado)
+                turnoNegocio.actualizarEstado(idTurno, 3); // IdTurno 3 = Cancelado
             }
 
-
+            CargarGrilla();
         }
-        private void CalcularResumen(List<Turno> listaTurnos)
+        private void CalcularResumen()
         {
-            // Total
-            int total = listaTurnos.Count;
+            TurnoNegocio TurnoNegocio = new TurnoNegocio();
+            List<Turno> listaTurnos = TurnoNegocio.ListarTurnosDelDia(medicoLogueado.Id, 0);
+
+            int total = listaTurnos.Count();
             lblTotalTurnos.Text = total.ToString();
 
-            // Atendidos (5 = Cerrado)
+            // Atendidos (5 = Finalizado)
             int atendidos = listaTurnos.Count(x => x.Estado.Id == 5);
             lblAtendidos.Text = atendidos.ToString();
 

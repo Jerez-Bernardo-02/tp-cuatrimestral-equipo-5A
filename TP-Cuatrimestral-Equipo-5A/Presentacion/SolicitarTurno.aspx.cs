@@ -15,46 +15,56 @@ namespace Presentacion
         Paciente pacienteLogueado;
         protected void Page_Load(object sender, EventArgs e)
         {
-            Usuario usuarioLogueado = (Usuario)Session["usuario"];
-            if (Seguridad.esPaciente(usuarioLogueado))
+            try
             {
-
-                if (Session["paciente"] == null)
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+                if (usuarioLogueado == null)
                 {
-                    // Si no tengo el paciente en session, lo busco en la base de datos una vez.
-                    usuarioLogueado = (Usuario)Session["usuario"];
-                    PacienteNegocio pacienteNegocio = new PacienteNegocio();
+                    Response.Redirect("Login.aspx", false);
+                    return;
+                }
+                if (Seguridad.esPaciente(usuarioLogueado))
+                {
+                    if (Session["paciente"] == null)
+                    {
+                        // Si no tengo el paciente en session, lo busco en la base de datos una vez.
+                        usuarioLogueado = (Usuario)Session["usuario"];
+                        PacienteNegocio pacienteNegocio = new PacienteNegocio();
 
-                    // Lo busco y lo guardo en la Session para no buscarlo nunca más
-                    Session["paciente"] = pacienteNegocio.buscarPorIdUsuario(usuarioLogueado.Id);
-                    pacienteLogueado = (Paciente)Session["paciente"];
-                    txtDniPaciente.Text = pacienteLogueado.Dni;
-                    txtDniPaciente.Enabled = false;
-                    btnBuscarPaciente.Visible = false;
-                    txtNombrePaciente.Text = pacienteLogueado.NombreCompleto;
-                    txtNombrePaciente.Visible = true;
-                    lblErrorPaciente.Visible = false;
+                        // Lo busco y lo guardo en la Session para no buscarlo nunca más
+                        Session["paciente"] = pacienteNegocio.buscarPorIdUsuario(usuarioLogueado.Id);
+                        pacienteLogueado = (Paciente)Session["paciente"];
+                        txtDniPaciente.Text = pacienteLogueado.Dni;
+                        txtDniPaciente.Enabled = false;
+                        btnBuscarPaciente.Visible = false;
+                        txtNombrePaciente.Text = pacienteLogueado.NombreCompleto;
+                        txtNombrePaciente.Visible = true;
+                        lblErrorPaciente.Visible = false;
+                    }
+                }
+                else if (Seguridad.esRecepcionista(usuarioLogueado))
+                {
+                    //tambien se permite acceso si es recepcionista.
+                }
+                else if (!Seguridad.esRecepcionista(usuarioLogueado))
+                {
+                    Session["error"] = "No tiene perfil de paciente o recepcionista asignado.";
+                    Response.Redirect("Error.aspx");
+                    return;
+
+                }
+
+                if (!IsPostBack)
+                {
+                    CargarEspecialidades();
                 }
             }
-            else if (Seguridad.esRecepcionista(usuarioLogueado))
+            catch (Exception ex)
             {
-                //tambien se permite acceso si es recepcionista.
-            }
-            else if (!Seguridad.esRecepcionista(usuarioLogueado))
-            {
-                Session["error"] = "No tiene perfil de paciente o recepcionista asignado.";
-                Response.Redirect("Error.aspx");
-                return;
-
+                Session["error"] = "Error al inicializar la página de turnos: " + ex.Message;
+                Response.Redirect("Error.aspx", false);
             }
 
-
-
-
-            if (!IsPostBack)
-            {
-                CargarEspecialidades();
-            }
         }
 
         protected void btnBuscarPaciente_Click(object sender, EventArgs e)
@@ -94,91 +104,127 @@ namespace Presentacion
                     lblMensaje.Visible = false;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                lblErrorPaciente.Text = "Error al buscar.";
+                lblErrorPaciente.Text = "Error al buscar: " + ex.Message;
                 lblErrorPaciente.Visible = true;
             }
         }
 
         protected void ddlEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CargarMedicos();
-            repHorarios.DataSource = null;
-            repHorarios.DataBind();
+            try
+            {
+                CargarMedicos();
+                repHorarios.DataSource = null;
+                repHorarios.DataBind();
 
-            lblInfoHorarios.Text = "Seleccione una fecha para ver los horarios disponibles.";
-            lblInfoHorarios.Visible = true;
-            lblInfoHorarios.CssClass = "text-muted";
-            btnConfirmar.Enabled = false;
-            btnProximaFechaTurno.Enabled = false;
+                lblInfoHorarios.Text = "Seleccione una fecha para ver los horarios disponibles.";
+                lblInfoHorarios.Visible = true;
+                lblInfoHorarios.CssClass = "text-muted";
+                btnConfirmar.Enabled = false;
+                btnProximaFechaTurno.Enabled = false;
+
+            }
+            catch (Exception ex)
+            {
+
+                MostrarError("Error al cargar médicos: " + ex.Message);
+            }
 
         }
 
         protected void ddlMedicos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtFecha.Text = "";
-            repHorarios.DataSource = null;
-            repHorarios.DataBind();
+            try
+            {
+                txtFecha.Text = "";
+                repHorarios.DataSource = null;
+                repHorarios.DataBind();
 
-            lblInfoHorarios.Text = "Seleccione una fecha para ver los horarios disponibles.";
-            lblInfoHorarios.Visible = true;
-            lblInfoHorarios.CssClass = "text-muted";
-            btnConfirmar.Enabled = false;
-            btnProximaFechaTurno.Enabled = true;
+                lblInfoHorarios.Text = "Seleccione una fecha para ver los horarios disponibles.";
+                lblInfoHorarios.Visible = true;
+                lblInfoHorarios.CssClass = "text-muted";
+                btnConfirmar.Enabled = false;
+                btnProximaFechaTurno.Enabled = true;
+
+            }
+            catch (Exception ex)
+            {
+
+                MostrarError("Error al seleccionar médicos: " + ex.Message);
+            }
         }
 
         protected void txtFecha_TextChanged(object sender, EventArgs e)
         {
-            LimpiarMensajes();
-            repHorarios.DataSource = null;
-            repHorarios.DataBind();
-
-            if (!ValidarSeleccionPrevia())
+            try
             {
-                return;
-            }
+                LimpiarMensajes();
+                repHorarios.DataSource = null;
+                repHorarios.DataBind();
 
-            DateTime fecha = DateTime.Parse(txtFecha.Text);
-            //Validacion eleccion fecha pasada.
-            if (fecha < DateTime.Today)
+                if (!ValidarSeleccionPrevia())
+                {
+                    return;
+                }
+
+                DateTime fecha = DateTime.Parse(txtFecha.Text);
+                //Validacion eleccion fecha pasada.
+                if (fecha < DateTime.Today)
+                {
+                    lblInfoHorarios.Text = "No se pueden reservar turnos en fechas pasadas.";
+                    lblInfoHorarios.CssClass = "text-danger";
+                    lblInfoHorarios.Visible = true;
+                    return;
+                }
+
+                int idMedico = int.Parse(ddlMedicos.SelectedValue);
+                int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
+
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+                List<TimeSpan> turnosDiarios = turnoNegocio.ListarTurnosDiarios(idMedico, idEspecialidad, fecha);
+
+                //Validacion si el medico con esa especialidad no tiene horarios asignados en el dia seleccionado:
+                if (turnosDiarios.Count == 0)
+                {
+                    lblInfoHorarios.Text = "El médico no atiende en la fecha seleccionada.";
+                    lblInfoHorarios.Visible = true;
+                    return;
+                }
+
+
+                //lista de turnos ocupados para desactivar los horarios no disponibles.
+                listaTurnosOcupados = turnoNegocio.ListarTurnosOcupadosPorMedico(idMedico, DateTime.Parse(txtFecha.Text));
+
+                repHorarios.DataSource = turnosDiarios;
+                repHorarios.DataBind();
+
+            }
+            catch (Exception ex)
             {
-                lblInfoHorarios.Text = "No se pueden reservar turnos en fechas pasadas.";
-                lblInfoHorarios.CssClass = "text-danger";
-                lblInfoHorarios.Visible = true;
-                return;
+
+                MostrarError("Error al cargar los turnos del médico: " + ex.Message);
             }
-
-            int idMedico = int.Parse(ddlMedicos.SelectedValue);
-            int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
-
-            TurnoNegocio turnoNegocio = new TurnoNegocio();
-            List<TimeSpan> turnosDiarios = turnoNegocio.ListarTurnosDiarios(idMedico, idEspecialidad, fecha);
-
-            //Validacion si el medico con esa especialidad no tiene horarios asignados en el dia seleccionado:
-            if (turnosDiarios.Count == 0)
-            {
-                lblInfoHorarios.Text = "El médico no atiende en la fecha seleccionada.";
-                lblInfoHorarios.Visible = true;
-                return;
-            }
-
-
-            //lista de turnos ocupados para desactivar los horarios no disponibles.
-            listaTurnosOcupados = turnoNegocio.ListarTurnosOcupadosPorMedico(idMedico, DateTime.Parse(txtFecha.Text));
-
-            repHorarios.DataSource = turnosDiarios;
-            repHorarios.DataBind();
         }
         protected void repHorarios_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            if (e.CommandName == "Seleccionar")
+            try
             {
-                string horaSeleccionada = e.CommandArgument.ToString();
-                Session.Add("HoraTurno", horaSeleccionada);
+                if (e.CommandName == "Seleccionar")
+                {
+                    string horaSeleccionada = e.CommandArgument.ToString();
+                    Session.Add("HoraTurno", horaSeleccionada);
+                }
+                ActualizarResumen();
+                btnConfirmar.Enabled = true;
+
             }
-            ActualizarResumen();
-            btnConfirmar.Enabled = true;
+            catch (Exception ex)
+            {
+
+                MostrarError("Error al seleccionar horario: " + ex.Message);
+            }
         }
 
         protected void btnConfirmar_Click(object sender, EventArgs e)
@@ -241,40 +287,59 @@ namespace Presentacion
                 lblMensaje.CssClass = "alert alert-success mt-3 d-block text-center";
                 lblMensaje.Visible = true;
 
+
+                repHorarios.DataSource = null;
+                repHorarios.DataBind();
                 //Bloqueo de boton para que no se confirme y se limpia la hora de la session.
                 btnConfirmar.Enabled = false;
                 Session["HoraTurno"] = null;
-                //limpiar botones y fecha y todo,...
 
                 redireccionar();
 
             }
             catch (Exception ex)
             {
-
                 MostrarError("Error al confirmar turno: " + ex.Message);
             }
         }
 
         protected void repHorarios_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-
-            Button btnHora = (Button)e.Item.FindControl("btnHorario");
-            TimeSpan horaSlot = (TimeSpan)e.Item.DataItem;
-
-            //formato horas y minutos (se quitan los segundos)
-            btnHora.Text = horaSlot.ToString(@"hh\:mm");
-
-
-            //Validacion oturno ocupado.
-            foreach (TimeSpan horario in listaTurnosOcupados)
+            try
             {
-                if (horario == horaSlot) 
+                Button btnHora = (Button)e.Item.FindControl("btnHorario");
+                TimeSpan horaSlot = (TimeSpan)e.Item.DataItem;
+
+                //formato horas y minutos (se quitan los segundos)
+                btnHora.Text = horaSlot.ToString(@"hh\:mm");
+
+                //Validacion oturno ocupado.
+                foreach (TimeSpan horario in listaTurnosOcupados)
                 {
-                    btnHora.Enabled = false;
-                    btnHora.CssClass = "btn btn-secondary w-100 btn-sm";
-                    btnHora.Style.Add("text-decoration", "line-through");
+                    if (horario == horaSlot) 
+                    {
+                        btnHora.Enabled = false;
+                        btnHora.CssClass = "btn btn-secondary w-100 btn-sm";
+                        btnHora.Style.Add("text-decoration", "line-through");
+                    }
                 }
+                //Validacion, el dia selecionado en el calendario es hoy y ademas es una hora menor a la actual se deshabilitan los botones
+                if (DateTime.Parse(txtFecha.Text) == DateTime.Today)
+                {
+                    if (horaSlot < DateTime.Now.TimeOfDay)
+                    {
+                        btnHora.Enabled = false;
+                        btnHora.CssClass = "btn btn-secondary w-100 btn-sm";
+                        btnHora.Style.Add("text-decoration", "line-through");
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = "Error al inicializar la página de turnos: " + ex.Message;
+                Response.Redirect("Error.aspx");
             }
 
         }
@@ -465,7 +530,7 @@ namespace Presentacion
             }
             catch (Exception ex)
             {
-                lblInfoHorarios.Text = ex.Message; // "No hay turnos cercanos..."
+                lblInfoHorarios.Text = "Error al buscar próxima fecha: " + ex.Message; // "No hay turnos cercanos..."
                 lblInfoHorarios.Visible = true;
             }
         }
